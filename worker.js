@@ -1,12 +1,20 @@
+const SESSION_TTL_SECONDS = 7 * 24 * 60 * 60;
+const PASSWORD_ITERATIONS = 100000;
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers":
+    "Content-Type, Authorization"
+};
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type"
-    };
+    // =========================================
+    // CORS
+    // =========================================
 
     if (request.method === "OPTIONS") {
       return new Response(null, {
@@ -15,36 +23,446 @@ export default {
       });
     }
 
-    // HEALTH
-    if (url.pathname === "/api/health") {
-      return json({
-        success: true,
-        status: "online",
-        service: "Global Link Reports"
-      }, 200, corsHeaders);
-    }
+    try {
 
-    // REPORT A LINK
-    if (url.pathname === "/api/report" && request.method === "POST") {
-      try {
+      // =========================================
+      // HEALTH
+      // =========================================
+
+      if (
+        url.pathname === "/api/health" &&
+        request.method === "GET"
+      ) {
+        return json({
+          success: true,
+          status: "online",
+          service: "Global Link Reports + Accounts"
+        });
+      }
+
+
+      // =========================================
+      // ONE-TIME ADMIN SETUP
+      // =========================================
+
+      if (
+        url.pathname === "/api/admin/setup" &&
+        request.method === "POST"
+      ) {
         const data = await request.json();
+
+        const setupKey =
+          typeof data.setupKey === "string"
+            ? data.setupKey
+            : "";
+
+        const email =
+          typeof data.email === "string"
+            ? data.email.trim().toLowerCase()
+            : "";
+
+        if (!setupKey || !email) {
+          return json({
+            success: false,
+            error: "Missing setup information"
+          }, 400);
+        }
+
+        if (
+          !env.ADMIN_SETUP_KEY ||
+          setupKey !== env.ADMIN_SETUP_KEY
+        ) {
+          return json({
+            success: false,
+            error: "Invalid setup key"
+          }, 403);
+        }
+
+        // Only allow the first admin to be created here.
+        const existingAdmin =
+          await findAdmin(env);
+
+        if (existingAdmin) {
+          return json({
+            success: false,
+            error: "An admin already exists"
+          }, 409);
+        }
+
+        const user =
+          await env.USERS.get(
+            `email:${email}`,
+            "json"
+          );
+
+        if (!user) {
+          return json({
+            success: false,
+            error: "Account not found"
+          }, 404);
+        }
+
+        user.role = "admin";
+
+        await saveUser(env, user);
+
+        return json({
+          success: true,
+          message: "Account promoted to admin"
+        });
+      }
+
+
+      // =========================================
+      // REGISTER
+      // =========================================
+
+      if (
+        url.pathname === "/api/register" &&
+        request.method === "POST"
+      ) {
+        const data = await request.json();
+
+        const username =
+          normalizeUsername(
+            data.username
+          );
+
+        const displayName =
+          typeof data.displayName === "string"
+            ? data.displayName.trim().slice(0, 80)
+            : "";
+
+        const realName =
+          typeof data.realName === "string"
+            ? data.realName.trim().slice(0, 120)
+            : "";
+
+        const email =
+          typeof data.email === "string"
+            ? data.email.trim().toLowerCase().slice(0, 200)
+            : "";
+
+        const password =
+          typeof data.password === "string"
+            ? data.password
+            : "";
+
+        if (
+          !username ||
+          !displayName ||
+          !realName ||
+          !email ||
+          !password
+        ) {
+          return json({
+            success: false,
+            error: "Missing required information"
+          }, 400);
+        }
+
+        if (
+          username.length < 3 ||
+          username.length > 30
+        ) {
+          return json({
+            success: false,
+            error: "Username must be 3-30 characters"
+          }, 400);
+        }
+
+        if (!/^[a-z0-9_]+$/.test(username)) {
+          return json({
+            success: false,
+            error:
+              "Username may only contain letters, numbers, and underscores"
+          }, 400);
+        }
+
+        if (
+          password.length < 8 ||
+          password.length > 200
+        ) {
+          return json({
+            success: false,
+            error:
+              "Password must be between 8 and 200 characters"
+          }, 400);
+        }
+
+        if (!isValidEmail(email)) {
+          return json({
+            success: false,
+            error: "Invalid email"
+          }, 400);
+        }
+
+        const existingEmail =
+          await env.USERS.get(
+            `email:${email}`,
+            "json"
+          );
+
+        if (existingEmail) {
+          return json({
+            success: false,
+            error:
+              "An account with that email already exists"
+          }, 409);
+        }
+
+        const existingUsername =
+          await env.USERS.get(
+            `username:${username}`,
+            "json"
+          );
+
+        if (existingUsername) {
+          return json({
+            success: false,
+            error:
+              "That username is already taken"
+          }, 409);
+        }
+
+        // We flag duplicate real names instead of
+        // automatically blocking the account.
+        const normalizedRealName =
+          normalizeRealName(realName);
+
+        const realNameMatch =
+          await env.USERS.get(
+            `realname:${normalizedRealName}`
+          );
+
+        const passwordData =
+          await hashPassword(password);
+
+        const id =
+          crypto.randomUUID();
+
+        const user = {
+          id,
+          username,
+          displayName,
+          realName,
+          email,
+
+          passwordHash:
+            passwordData.hash,
+
+          passwordSalt:
+            passwordData.salt,
+
+          createdAt:
+            new Date().toISOString(),
+
+          status: "active",
+          role: "user",
+
+          realNameConflict:
+            Boolean(realNameMatch)
+        };
+
+        await saveUser(env, user);
+
+        // Store the real-name marker if this is
+        // the first account using that normalized name.
+        if (!realNameMatch) {
+          await env.USERS.put(
+            `realname:${normalizedRealName}`,
+            JSON.stringify({
+              firstUserId: id
+            })
+          );
+        }
+
+        return json({
+          success: true,
+          message: "Account created",
+          user: publicUser(user)
+        });
+      }
+
+
+      // =========================================
+      // LOGIN
+      // =========================================
+
+      if (
+        url.pathname === "/api/login" &&
+        request.method === "POST"
+      ) {
+        const data = await request.json();
+
+        const email =
+          typeof data.email === "string"
+            ? data.email.trim().toLowerCase()
+            : "";
+
+        const password =
+          typeof data.password === "string"
+            ? data.password
+            : "";
+
+        if (!email || !password) {
+          return json({
+            success: false,
+            error: "Missing email or password"
+          }, 400);
+        }
+
+        const user =
+          await env.USERS.get(
+            `email:${email}`,
+            "json"
+          );
+
+        if (!user) {
+          return json({
+            success: false,
+            error: "Invalid credentials"
+          }, 401);
+        }
+
+        if (
+          user.status === "blocked" ||
+          user.status === "banned"
+        ) {
+          return json({
+            success: false,
+            error:
+              "This account cannot access the service"
+          }, 403);
+        }
+
+        const valid =
+          await verifyPassword(
+            password,
+            user.passwordHash,
+            user.passwordSalt
+          );
+
+        if (!valid) {
+          return json({
+            success: false,
+            error: "Invalid credentials"
+          }, 401);
+        }
+
+        const token =
+          randomToken();
+
+        const expiresAt =
+          Date.now() +
+          SESSION_TTL_SECONDS * 1000;
+
+        const session = {
+          userId: user.id,
+          createdAt:
+            new Date().toISOString(),
+          expiresAt
+        };
+
+        await env.SESSIONS.put(
+          `session:${token}`,
+          JSON.stringify(session),
+          {
+            expirationTtl:
+              SESSION_TTL_SECONDS
+          }
+        );
+
+        return json({
+          success: true,
+          message: "Login successful",
+          token,
+          expiresAt,
+          user: publicUser(user)
+        });
+      }
+
+
+      // =========================================
+      // LOGOUT
+      // =========================================
+
+      if (
+        url.pathname === "/api/logout" &&
+        request.method === "POST"
+      ) {
+        const token =
+          getToken(request);
+
+        if (token) {
+          await env.SESSIONS.delete(
+            `session:${token}`
+          );
+        }
+
+        return json({
+          success: true,
+          message: "Logged out"
+        });
+      }
+
+
+      // =========================================
+      // CURRENT USER
+      // =========================================
+
+      if (
+        url.pathname === "/api/me" &&
+        request.method === "GET"
+      ) {
+        const auth =
+          await authenticate(
+            request,
+            env
+          );
+
+        if (!auth.success) {
+          return json({
+            success: false,
+            error: auth.error
+          }, 401);
+        }
+
+        return json({
+          success: true,
+          user: publicUser(auth.user)
+        });
+      }
+
+
+      // =========================================
+      // REPORT LINK
+      // =========================================
+
+      if (
+        url.pathname === "/api/report" &&
+        request.method === "POST"
+      ) {
+        const data =
+          await request.json();
 
         if (!data.url) {
           return json({
             success: false,
             error: "Missing URL"
-          }, 400, corsHeaders);
+          }, 400);
         }
 
         let parsedURL;
 
         try {
-          parsedURL = new URL(data.url);
+          parsedURL =
+            new URL(data.url);
         } catch {
           return json({
             success: false,
             error: "Invalid URL"
-          }, 400, corsHeaders);
+          }, 400);
         }
 
         if (
@@ -54,21 +472,32 @@ export default {
           return json({
             success: false,
             error: "Invalid protocol"
-          }, 400, corsHeaders);
+          }, 400);
         }
 
-        const key = encodeURIComponent(parsedURL.href);
+        const key =
+          encodeURIComponent(
+            parsedURL.href
+          );
 
-        const existing = await env.REPORTS.get(key);
+        const existing =
+          await env.REPORTS.get(
+            key,
+            "json"
+          );
 
         if (!existing) {
           const report = {
             url: parsedURL.href,
+
             name:
               typeof data.name === "string"
                 ? data.name.slice(0, 500)
                 : parsedURL.hostname,
-            time: new Date().toISOString(),
+
+            time:
+              new Date().toISOString(),
+
             reports: 1
           };
 
@@ -76,29 +505,50 @@ export default {
             key,
             JSON.stringify(report)
           );
+
+        } else {
+
+          existing.reports =
+            Number(existing.reports || 1) + 1;
+
+          existing.lastReported =
+            new Date().toISOString();
+
+          await env.REPORTS.put(
+            key,
+            JSON.stringify(existing)
+          );
         }
 
         return json({
           success: true,
           message: "Link reported"
-        }, 200, corsHeaders);
-
-      } catch (error) {
-        console.error("REPORT ERROR:", error);
-
-        return json({
-          success: false,
-          error: "Could not save report"
-        }, 500, corsHeaders);
+        });
       }
-    }
 
-    // GET ALL REPORTS
-    if (url.pathname === "/api/reports" && request.method === "GET") {
-      try {
+
+      // =========================================
+      // ADMIN: GET ALL REPORTS
+      // =========================================
+
+      if (
+        url.pathname === "/api/reports" &&
+        request.method === "GET"
+      ) {
+        const auth =
+          await requireAdmin(
+            request,
+            env
+          );
+
+        if (!auth.success) {
+          return json({
+            success: false,
+            error: auth.error
+          }, auth.status);
+        }
+
         const reports = [];
-
-        // Use KV list without passing an undefined cursor.
         let cursor;
 
         while (true) {
@@ -107,16 +557,24 @@ export default {
           };
 
           if (cursor) {
-            options.cursor = cursor;
+            options.cursor =
+              cursor;
           }
 
-          const result = await env.REPORTS.list(options);
-
-          for (const item of result.keys) {
-            const report = await env.REPORTS.get(
-              item.name,
-              "json"
+          const result =
+            await env.REPORTS.list(
+              options
             );
+
+          for (
+            const item
+            of result.keys
+          ) {
+            const report =
+              await env.REPORTS.get(
+                item.name,
+                "json"
+              );
 
             if (report) {
               reports.push(report);
@@ -127,75 +585,884 @@ export default {
             break;
           }
 
-          cursor = result.cursor;
+          cursor =
+            result.cursor;
         }
 
         reports.sort(
           (a, b) =>
-            new Date(b.time) - new Date(a.time)
+            new Date(
+              b.lastReported || b.time
+            ) -
+            new Date(
+              a.lastReported || a.time
+            )
         );
 
         return json({
           success: true,
           reports,
           count: reports.length
-        }, 200, corsHeaders);
-
-      } catch (error) {
-        console.error("KV LIST ERROR:", error);
-
-        return json({
-          success: false,
-          error: "Could not load reports"
-        }, 500, corsHeaders);
+        });
       }
-    }
 
-    // RESTORE LINK
-    if (url.pathname === "/api/restore" && request.method === "POST") {
-      try {
-        const data = await request.json();
+
+      // =========================================
+      // ADMIN: RESTORE REPORT
+      // =========================================
+
+      if (
+        url.pathname === "/api/restore" &&
+        request.method === "POST"
+      ) {
+        const auth =
+          await requireAdmin(
+            request,
+            env
+          );
+
+        if (!auth.success) {
+          return json({
+            success: false,
+            error: auth.error
+          }, auth.status);
+        }
+
+        const data =
+          await request.json();
 
         if (!data.url) {
           return json({
             success: false,
             error: "Missing URL"
-          }, 400, corsHeaders);
+          }, 400);
         }
 
-        const parsedURL = new URL(data.url);
-        const key = encodeURIComponent(parsedURL.href);
+        let parsedURL;
 
-        await env.REPORTS.delete(key);
+        try {
+          parsedURL =
+            new URL(data.url);
+        } catch {
+          return json({
+            success: false,
+            error: "Invalid URL"
+          }, 400);
+        }
+
+        const key =
+          encodeURIComponent(
+            parsedURL.href
+          );
+
+        await env.REPORTS.delete(
+          key
+        );
 
         return json({
           success: true,
           message: "Report restored"
-        }, 200, corsHeaders);
+        });
+      }
 
-      } catch (error) {
-        console.error("RESTORE ERROR:", error);
+
+      // =========================================
+      // ADMIN: LIST USERS
+      // =========================================
+
+      if (
+        url.pathname === "/api/admin/users" &&
+        request.method === "GET"
+      ) {
+        const auth =
+          await requireAdmin(
+            request,
+            env
+          );
+
+        if (!auth.success) {
+          return json({
+            success: false,
+            error: auth.error
+          }, auth.status);
+        }
+
+        const users = [];
+        let cursor;
+
+        while (true) {
+          const result =
+            await env.USERS.list({
+              prefix: "id:",
+              limit: 1000,
+              ...(cursor
+                ? { cursor }
+                : {})
+            });
+
+          for (
+            const item
+            of result.keys
+          ) {
+            const user =
+              await env.USERS.get(
+                item.name,
+                "json"
+              );
+
+            if (user) {
+              users.push(
+                adminUser(user)
+              );
+            }
+          }
+
+          if (result.list_complete) {
+            break;
+          }
+
+          cursor =
+            result.cursor;
+        }
+
+        users.sort(
+          (a, b) =>
+            new Date(b.createdAt) -
+            new Date(a.createdAt)
+        );
 
         return json({
-          success: false,
-          error: "Could not restore report"
-        }, 400, corsHeaders);
+          success: true,
+          users,
+          count: users.length
+        });
       }
-    }
 
-    // Everything else → your website
-    return env.ASSETS.fetch(request);
+
+      // =========================================
+      // ADMIN: BLOCK USER
+      // =========================================
+
+      if (
+        url.pathname === "/api/admin/block" &&
+        request.method === "POST"
+      ) {
+        return changeUserStatus(
+          request,
+          env,
+          "blocked"
+        );
+      }
+
+
+      // =========================================
+      // ADMIN: BAN USER
+      // =========================================
+
+      if (
+        url.pathname === "/api/admin/ban" &&
+        request.method === "POST"
+      ) {
+        return changeUserStatus(
+          request,
+          env,
+          "banned"
+        );
+      }
+
+
+      // =========================================
+      // ADMIN: UNBLOCK USER
+      // =========================================
+
+      if (
+        url.pathname === "/api/admin/unblock" &&
+        request.method === "POST"
+      ) {
+        return changeUserStatus(
+          request,
+          env,
+          "active"
+        );
+      }
+
+
+      // =========================================
+      // ADMIN: PROMOTE USER
+      // =========================================
+
+      if (
+        url.pathname === "/api/admin/promote" &&
+        request.method === "POST"
+      ) {
+        const auth =
+          await requireAdmin(
+            request,
+            env
+          );
+
+        if (!auth.success) {
+          return json({
+            success: false,
+            error: auth.error
+          }, auth.status);
+        }
+
+        const data =
+          await request.json();
+
+        const userId =
+          typeof data.userId === "string"
+            ? data.userId
+            : "";
+
+        if (!userId) {
+          return json({
+            success: false,
+            error: "Missing userId"
+          }, 400);
+        }
+
+        const user =
+          await env.USERS.get(
+            `id:${userId}`,
+            "json"
+          );
+
+        if (!user) {
+          return json({
+            success: false,
+            error: "User not found"
+          }, 404);
+        }
+
+        user.role = "admin";
+
+        await saveUser(
+          env,
+          user
+        );
+
+        return json({
+          success: true,
+          message:
+            "User promoted to admin"
+        });
+      }
+
+
+      // =========================================
+      // EVERYTHING ELSE → WEBSITE
+      // =========================================
+
+      return env.ASSETS.fetch(request);
+
+    } catch (error) {
+
+      console.error(
+        "WORKER ERROR:",
+        error
+      );
+
+      return json({
+        success: false,
+        error: "Internal server error"
+      }, 500);
+    }
   }
 };
 
-function json(data, status = 200, extraHeaders = {}) {
+
+// =========================================
+// CHANGE USER STATUS
+// =========================================
+
+async function changeUserStatus(
+  request,
+  env,
+  status
+) {
+  const auth =
+    await requireAdmin(
+      request,
+      env
+    );
+
+  if (!auth.success) {
+    return json({
+      success: false,
+      error: auth.error
+    }, auth.status);
+  }
+
+  const data =
+    await request.json();
+
+  const userId =
+    typeof data.userId === "string"
+      ? data.userId
+      : "";
+
+  if (!userId) {
+    return json({
+      success: false,
+      error: "Missing userId"
+    }, 400);
+  }
+
+  if (
+    userId === auth.user.id &&
+    status !== "active"
+  ) {
+    return json({
+      success: false,
+      error:
+        "You cannot disable your own admin account"
+    }, 400);
+  }
+
+  const user =
+    await env.USERS.get(
+      `id:${userId}`,
+      "json"
+    );
+
+  if (!user) {
+    return json({
+      success: false,
+      error: "User not found"
+    }, 404);
+  }
+
+  user.status = status;
+
+  await saveUser(
+    env,
+    user
+  );
+
+  if (
+    status === "blocked" ||
+    status === "banned"
+  ) {
+    await revokeUserSessions(
+      env,
+      user.id
+    );
+  }
+
+  return json({
+    success: true,
+    message:
+      `User status changed to ${status}`
+  });
+}
+
+
+// =========================================
+// AUTHENTICATION
+// =========================================
+
+async function authenticate(
+  request,
+  env
+) {
+  const token =
+    getToken(request);
+
+  if (!token) {
+    return {
+      success: false,
+      error: "Not authenticated"
+    };
+  }
+
+  const session =
+    await env.SESSIONS.get(
+      `session:${token}`,
+      "json"
+    );
+
+  if (!session) {
+    return {
+      success: false,
+      error: "Invalid session"
+    };
+  }
+
+  if (
+    Date.now() >=
+    session.expiresAt
+  ) {
+    await env.SESSIONS.delete(
+      `session:${token}`
+    );
+
+    return {
+      success: false,
+      error: "Session expired"
+    };
+  }
+
+  const user =
+    await env.USERS.get(
+      `id:${session.userId}`,
+      "json"
+    );
+
+  if (!user) {
+    return {
+      success: false,
+      error: "Account not found"
+    };
+  }
+
+  if (
+    user.status === "blocked" ||
+    user.status === "banned"
+  ) {
+    return {
+      success: false,
+      error:
+        "Account access is disabled"
+    };
+  }
+
+  return {
+    success: true,
+    user,
+    session
+  };
+}
+
+
+async function requireAdmin(
+  request,
+  env
+) {
+  const auth =
+    await authenticate(
+      request,
+      env
+    );
+
+  if (!auth.success) {
+    return {
+      success: false,
+      error: auth.error,
+      status: 401
+    };
+  }
+
+  if (
+    auth.user.role !== "admin"
+  ) {
+    return {
+      success: false,
+      error: "Admin access required",
+      status: 403
+    };
+  }
+
+  return {
+    success: true,
+    user: auth.user,
+    session: auth.session
+  };
+}
+
+
+// =========================================
+// PASSWORD HASHING
+// =========================================
+
+async function hashPassword(
+  password
+) {
+  const salt =
+    randomToken();
+
+  const hash =
+    await derivePasswordHash(
+      password,
+      salt
+    );
+
+  return {
+    salt,
+    hash
+  };
+}
+
+
+async function verifyPassword(
+  password,
+  expectedHash,
+  salt
+) {
+  const actualHash =
+    await derivePasswordHash(
+      password,
+      salt
+    );
+
+  return timingSafeEqual(
+    actualHash,
+    expectedHash
+  );
+}
+
+
+async function derivePasswordHash(
+  password,
+  salt
+) {
+  const encoder =
+    new TextEncoder();
+
+  const material =
+    await crypto.subtle.importKey(
+      "raw",
+      encoder.encode(password),
+      "PBKDF2",
+      false,
+      ["deriveBits"]
+    );
+
+  const bits =
+    await crypto.subtle.deriveBits(
+      {
+        name: "PBKDF2",
+        salt: encoder.encode(salt),
+        iterations:
+          PASSWORD_ITERATIONS,
+        hash: "SHA-256"
+      },
+      material,
+      256
+    );
+
+  return bytesToBase64Url(
+    new Uint8Array(bits)
+  );
+}
+
+
+// =========================================
+// USER STORAGE
+// =========================================
+
+async function saveUser(
+  env,
+  user
+) {
+  await env.USERS.put(
+    `id:${user.id}`,
+    JSON.stringify(user)
+  );
+
+  await env.USERS.put(
+    `email:${user.email}`,
+    JSON.stringify(user)
+  );
+
+  await env.USERS.put(
+    `username:${user.username}`,
+    JSON.stringify(user)
+  );
+}
+
+
+// =========================================
+// ADMIN SEARCH
+// =========================================
+
+async function findAdmin(
+  env
+) {
+  let cursor;
+
+  while (true) {
+    const result =
+      await env.USERS.list({
+        prefix: "id:",
+        limit: 1000,
+        ...(cursor
+          ? { cursor }
+          : {})
+      });
+
+    for (
+      const item
+      of result.keys
+    ) {
+      const user =
+        await env.USERS.get(
+          item.name,
+          "json"
+        );
+
+      if (
+        user &&
+        user.role === "admin"
+      ) {
+        return user;
+      }
+    }
+
+    if (result.list_complete) {
+      return null;
+    }
+
+    cursor =
+      result.cursor;
+  }
+}
+
+
+// =========================================
+// REVOKE SESSIONS
+// =========================================
+
+async function revokeUserSessions(
+  env,
+  userId
+) {
+  let cursor;
+
+  while (true) {
+    const result =
+      await env.SESSIONS.list({
+        prefix: "session:",
+        limit: 1000,
+        ...(cursor
+          ? { cursor }
+          : {})
+      });
+
+    for (
+      const item
+      of result.keys
+    ) {
+      const session =
+        await env.SESSIONS.get(
+          item.name,
+          "json"
+        );
+
+      if (
+        session &&
+        session.userId === userId
+      ) {
+        await env.SESSIONS.delete(
+          item.name
+        );
+      }
+    }
+
+    if (result.list_complete) {
+      break;
+    }
+
+    cursor =
+      result.cursor;
+  }
+}
+
+
+// =========================================
+// TOKEN
+// =========================================
+
+function randomToken() {
+  const bytes =
+    new Uint8Array(32);
+
+  crypto.getRandomValues(
+    bytes
+  );
+
+  return bytesToBase64Url(
+    bytes
+  );
+}
+
+
+function bytesToBase64Url(
+  bytes
+) {
+  let binary = "";
+
+  for (
+    const byte of bytes
+  ) {
+    binary +=
+      String.fromCharCode(
+        byte
+      );
+  }
+
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+}
+
+
+// =========================================
+// TOKEN EXTRACTION
+// =========================================
+
+function getToken(
+  request
+) {
+  const header =
+    request.headers.get(
+      "Authorization"
+    );
+
+  if (
+    !header ||
+    !header.startsWith(
+      "Bearer "
+    )
+  ) {
+    return null;
+  }
+
+  return header
+    .slice(7)
+    .trim();
+}
+
+
+// =========================================
+// NAME NORMALIZATION
+// =========================================
+
+function normalizeUsername(
+  value
+) {
+  if (
+    typeof value !== "string"
+  ) {
+    return "";
+  }
+
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "");
+}
+
+
+function normalizeRealName(
+  value
+) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+
+// =========================================
+// EMAIL
+// =========================================
+
+function isValidEmail(
+  email
+) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    .test(email);
+}
+
+
+// =========================================
+// SAFE USER OBJECTS
+// =========================================
+
+function publicUser(
+  user
+) {
+  return {
+    id: user.id,
+    username: user.username,
+    displayName: user.displayName,
+    email: user.email,
+    createdAt: user.createdAt,
+    status: user.status,
+    role: user.role
+  };
+}
+
+
+function adminUser(
+  user
+) {
+  return {
+    id: user.id,
+    username: user.username,
+    displayName: user.displayName,
+    realName: user.realName,
+    email: user.email,
+    createdAt: user.createdAt,
+    status: user.status,
+    role: user.role,
+    realNameConflict:
+      Boolean(user.realNameConflict)
+  };
+}
+
+
+// =========================================
+// CONSTANT-TIME COMPARISON
+// =========================================
+
+function timingSafeEqual(
+  a,
+  b
+) {
+  if (
+    typeof a !== "string" ||
+    typeof b !== "string" ||
+    a.length !== b.length
+  ) {
+    return false;
+  }
+
+  let difference = 0;
+
+  for (
+    let i = 0;
+    i < a.length;
+    i++
+  ) {
+    difference |=
+      a.charCodeAt(i) ^
+      b.charCodeAt(i);
+  }
+
+  return difference === 0;
+}
+
+
+// =========================================
+// JSON RESPONSE
+// =========================================
+
+function json(
+  data,
+  status = 200
+) {
   return new Response(
     JSON.stringify(data),
     {
       status,
       headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-        ...extraHeaders
+        ...corsHeaders,
+        "Content-Type":
+          "application/json; charset=UTF-8"
       }
     }
   );
