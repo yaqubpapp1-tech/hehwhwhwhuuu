@@ -1,10 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>yaqubprxy</title>
+<title>Yaqub's Hub</title>
 
 <style>
 * {
@@ -17,7 +18,7 @@
     --bg: #050505;
     --panel: #111;
     --panel2: #171717;
-    --border: #2d2d2d;
+    --border: #303030;
     --muted: #888;
     --text: #fff;
     --danger: #ff3b3b;
@@ -57,10 +58,9 @@ body {
 
 .accessBox {
     width: min(430px, 100%);
-
     padding: 34px;
 
-    background: rgba(18,18,18,.96);
+    background: rgba(18,18,18,.97);
     border: 1px solid #333;
     border-radius: 22px;
 
@@ -103,47 +103,6 @@ body {
     border-color: white;
 }
 
-.primaryButton,
-.secondaryButton,
-.dangerButton,
-.adminButton {
-    border: none;
-    border-radius: 11px;
-    padding: 12px 14px;
-
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.primaryButton {
-    background: white;
-    color: black;
-}
-
-.secondaryButton {
-    background: #222;
-    border: 1px solid #333;
-    color: white;
-}
-
-.dangerButton {
-    background: var(--danger);
-    color: white;
-}
-
-.adminButton {
-    background: #222;
-    border: 1px solid #333;
-    color: white;
-}
-
-.primaryButton:hover,
-.secondaryButton:hover,
-.dangerButton:hover,
-.adminButton:hover {
-    transform: translateY(-1px);
-}
-
 #accessButton {
     width: 100%;
     margin-top: 10px;
@@ -154,6 +113,51 @@ body {
     margin-top: 13px;
     color: #ff6666;
     font-weight: 700;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.primaryButton,
+.secondaryButton,
+.dangerButton,
+.adminButton {
+    border-radius: 11px;
+    padding: 12px 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.primaryButton {
+    border: none;
+    background: white;
+    color: black;
+}
+
+.secondaryButton,
+.adminButton {
+    background: #222;
+    border: 1px solid #333;
+    color: white;
+}
+
+.dangerButton {
+    border: none;
+    background: var(--danger);
+    color: white;
+}
+
+.primaryButton:hover,
+.secondaryButton:hover,
+.dangerButton:hover,
+.adminButton:hover {
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    opacity: .55;
+    cursor: wait;
 }
 
 /* =========================================================
@@ -193,7 +197,6 @@ body {
 
 #searchBox {
     width: 100%;
-
     padding: 15px 18px;
 
     background: #111;
@@ -210,7 +213,7 @@ body {
 }
 
 /* =========================================================
-   LINKS
+   CATEGORIES + LINKS
 ========================================================= */
 
 .category {
@@ -227,7 +230,6 @@ body {
     padding-left: 12px;
 
     border-left: 4px solid white;
-
     font-size: 25px;
 }
 
@@ -240,6 +242,8 @@ body {
 .linkCard {
     position: relative;
     overflow: hidden;
+
+    display: block;
 
     padding: 18px;
 
@@ -276,10 +280,6 @@ body {
     word-break: break-all;
 }
 
-/* =========================================================
-   REPORT BADGE
-========================================================= */
-
 .reportedBadge {
     display: inline-block;
     margin-top: 12px;
@@ -295,7 +295,7 @@ body {
 }
 
 /* =========================================================
-   BEST
+   FEATURED
 ========================================================= */
 
 .best {
@@ -490,7 +490,6 @@ body {
 
 .accountForm input {
     width: 100%;
-
     padding: 13px;
 
     background: #0a0a0a;
@@ -561,7 +560,7 @@ body {
 }
 
 /* =========================================================
-   REPORT POPUP
+   REPORT
 ========================================================= */
 
 #reportModal .modalBox {
@@ -570,6 +569,7 @@ body {
 
 .reportIcon {
     margin-bottom: 10px;
+
     font-size: 42px;
     text-align: center;
 }
@@ -709,10 +709,6 @@ body {
     cursor: pointer;
 }
 
-.adminActions button:hover {
-    background: #282828;
-}
-
 /* =========================================================
    TOAST
 ========================================================= */
@@ -771,162 +767,13 @@ body {
         text-align: left;
     }
 }
-/* ================= ACCOUNT PANEL ================= */
-
-#accountPanel {
-    position: fixed;
-    inset: 0;
-
-    display: none;
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background: rgba(0, 0, 0, 0.8);
-
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    z-index: 9000;
-}
-
-#accountPanel.show {
-    display: flex;
-}
-
-.accountBox {
-    width: min(430px, 100%);
-
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 22px;
-
-    padding: 25px;
-
-    box-shadow: 0 25px 80px rgba(0,0,0,.7);
-}
-
-.accountHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 20px;
-}
-
-.accountHeader h2 {
-    font-size: 24px;
-}
-
-.accountClose {
-    width: 38px;
-    height: 38px;
-
-    border: 1px solid #333;
-    border-radius: 10px;
-
-    background: #191919;
-    color: white;
-
-    cursor: pointer;
-}
-
-.accountForm {
-    display: grid;
-    gap: 10px;
-}
-
-.accountForm input {
-    width: 100%;
-
-    padding: 13px;
-
-    border: 1px solid #333;
-    border-radius: 11px;
-
-    background: #0b0b0b;
-    color: white;
-
-    outline: none;
-}
-
-.accountForm input:focus {
-    border-color: #777;
-}
-
-.accountButton {
-    width: 100%;
-
-    padding: 13px;
-
-    border: none;
-    border-radius: 11px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.accountPrimary {
-    background: white;
-    color: black;
-}
-
-.accountSecondary {
-    background: #222;
-    color: white;
-    border: 1px solid #333;
-}
-
-.accountMessage {
-    min-height: 20px;
-
-    margin-bottom: 12px;
-
-    color: #aaa;
-
-    text-align: center;
-    font-size: 13px;
-}
-
-.accountCard {
-    background: #171717;
-    border: 1px solid #292929;
-    border-radius: 15px;
-
-    padding: 17px;
-}
-
-.accountRow {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-
-    padding: 11px 0;
-
-    border-bottom: 1px solid #292929;
-}
-
-.accountRow:last-child {
-    border-bottom: none;
-}
-
-.accountLabel {
-    color: #777;
-}
-
-.accountValue {
-    text-align: right;
-    word-break: break-word;
-}    
 </style>
 </head>
 
 <body>
 
 <!-- ========================================================
-     ACCESS
+     ACCESS SCREEN
 ========================================================= -->
 
 <div id="accessScreen">
@@ -973,28 +820,22 @@ body {
 <div id="app">
 
     <div class="header">
-
         <h1>🌐 Link Hub</h1>
-
         <p>All links in one place</p>
-
     </div>
 
 
     <div class="search">
-
         <input
             id="searchBox"
             type="text"
             placeholder="🔎 Search links..."
         >
-
     </div>
 
 
     <!-- =====================================================
-         EXAMPLE LINK COLLECTIONS
-         Keep your ordinary site resources here.
+         REPLACE THESE ORDINARY RESOURCE LINKS WITH YOUR OWN
     ====================================================== -->
 
     <section class="category">
@@ -1005,7 +846,7 @@ body {
 
             <a
                 class="linkCard"
-                href="https://example.com"
+                href="https://example.com/"
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -1015,7 +856,7 @@ body {
 
             <a
                 class="linkCard"
-                href="https://example.org"
+                href="https://example.org/"
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -1025,7 +866,7 @@ body {
 
             <a
                 class="linkCard"
-                href="https://example.net"
+                href="https://example.net/"
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -1034,7 +875,6 @@ body {
             </a>
 
         </div>
-
     </section>
 
 
@@ -1065,7 +905,6 @@ body {
             </a>
 
         </div>
-
     </section>
 
 
@@ -1087,7 +926,7 @@ body {
 
             <a
                 class="linkCard"
-                href="https://www.openstax.org/"
+                href="https://openstax.org/"
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -1096,13 +935,52 @@ body {
             </a>
 
         </div>
+    </section>
 
+
+    <section class="category">
+
+        <h2>📖 Resources</h2>
+
+        <div class="links">
+
+            <a
+                class="linkCard"
+                href="https://www.wolframalpha.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div class="linkNumber">01</div>
+                <div class="linkURL">wolframalpha.com</div>
+            </a>
+
+            <a
+                class="linkCard"
+                href="https://www.desmos.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div class="linkNumber">02</div>
+                <div class="linkURL">desmos.com</div>
+            </a>
+
+            <a
+                class="linkCard"
+                href="https://www.geogebra.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div class="linkNumber">03</div>
+                <div class="linkURL">geogebra.org</div>
+            </a>
+
+        </div>
     </section>
 
 
     <div class="best">
 
-        <h2>⭐ FEATURED</h2>
+        <h2>⭐ FEATURED RESOURCE</h2>
 
         <a
             href="https://www.wikipedia.org/"
@@ -1190,9 +1068,9 @@ body {
             <div id="accountMessage"></div>
 
 
-            <!-- LOGGED OUT -->
+            <!-- SIGNUP -->
 
-            <div id="accountLoggedOut">
+            <div id="signupView">
 
                 <div class="accountForm">
 
@@ -1213,13 +1091,6 @@ body {
                         id="signupRealName"
                         type="text"
                         placeholder="Real name"
-                    >
-
-                    <input
-                        id="signupEmail"
-                        type="email"
-                        placeholder="Email"
-                        autocomplete="email"
                     >
 
                     <input
@@ -1250,8 +1121,8 @@ body {
                     </div>
 
                     <div class="accountNote">
-                        Your real name is stored for account identification
-                        and is not displayed as your public username.
+                        Accounts use a username and password.
+                        No email is required.
                     </div>
 
                 </div>
@@ -1262,17 +1133,17 @@ body {
             <!-- LOGIN -->
 
             <div
-                id="accountLogin"
+                id="loginView"
                 style="display:none"
             >
 
                 <div class="accountForm">
 
                     <input
-                        id="loginEmail"
-                        type="email"
-                        placeholder="Email"
-                        autocomplete="email"
+                        id="loginUsername"
+                        type="text"
+                        placeholder="Username"
+                        autocomplete="username"
                     >
 
                     <input
@@ -1285,7 +1156,7 @@ body {
                     <div class="formButtons">
 
                         <button
-                            id="loginButton"
+                            id="loginAccountButton"
                             class="primaryButton"
                             type="button"
                         >
@@ -1297,7 +1168,7 @@ body {
                             class="secondaryButton"
                             type="button"
                         >
-                            Create a new account
+                            Create an account
                         </button>
 
                     </div>
@@ -1310,48 +1181,52 @@ body {
             <!-- LOGGED IN -->
 
             <div
-                id="accountLoggedIn"
+                id="accountView"
                 style="display:none"
             >
 
                 <div class="accountCard">
 
                     <div class="accountRow">
-                        <span class="accountLabel">Username</span>
+                        <span class="accountLabel">
+                            Username
+                        </span>
+
                         <span
-                            id="meUsername"
+                            id="accountUsernameValue"
                             class="accountValue"
                         ></span>
                     </div>
 
                     <div class="accountRow">
-                        <span class="accountLabel">Display name</span>
+                        <span class="accountLabel">
+                            Display name
+                        </span>
+
                         <span
-                            id="meDisplayName"
+                            id="accountDisplayNameValue"
                             class="accountValue"
                         ></span>
                     </div>
 
                     <div class="accountRow">
-                        <span class="accountLabel">Email</span>
+                        <span class="accountLabel">
+                            Role
+                        </span>
+
                         <span
-                            id="meEmail"
+                            id="accountRoleValue"
                             class="accountValue"
                         ></span>
                     </div>
 
                     <div class="accountRow">
-                        <span class="accountLabel">Role</span>
-                        <span
-                            id="meRole"
-                            class="accountValue"
-                        ></span>
-                    </div>
+                        <span class="accountLabel">
+                            Status
+                        </span>
 
-                    <div class="accountRow">
-                        <span class="accountLabel">Status</span>
                         <span
-                            id="meStatus"
+                            id="accountStatusValue"
                             class="accountValue"
                         ></span>
                     </div>
@@ -1446,7 +1321,7 @@ body {
 
 
 <!-- ========================================================
-     ADMIN MODAL
+     ADMIN PANEL
 ========================================================= -->
 
 <div
@@ -1477,7 +1352,7 @@ body {
 
                 <button
                     class="adminTab active"
-                    data-admin-tab="reports"
+                    data-tab="reports"
                     type="button"
                 >
                     🚨 Reports
@@ -1485,7 +1360,7 @@ body {
 
                 <button
                     class="adminTab"
-                    data-admin-tab="users"
+                    data-tab="users"
                     type="button"
                 >
                     👥 Users
@@ -1493,8 +1368,6 @@ body {
 
             </div>
 
-
-            <!-- REPORTS -->
 
             <section
                 id="reportsSection"
@@ -1524,8 +1397,6 @@ body {
 
             </section>
 
-
-            <!-- USERS -->
 
             <section
                 id="usersSection"
@@ -1565,7 +1436,7 @@ body {
     const ACCESS_PASSWORD =
         "yaqubraphinha";
 
-    const MAX_ACCESS_ATTEMPTS = 3;
+    const MAX_ATTEMPTS = 3;
 
     let sessionToken =
         localStorage.getItem("yaqub_session");
@@ -1576,73 +1447,6 @@ body {
 
 
     /* =====================================================
-       ELEMENTS
-    ===================================================== */
-
-    const accessScreen =
-        document.getElementById("accessScreen");
-
-    const app =
-        document.getElementById("app");
-
-    const accessPassword =
-        document.getElementById("accessPassword");
-
-    const accessButton =
-        document.getElementById("accessButton");
-
-    const accessError =
-        document.getElementById("accessError");
-
-
-    const searchBox =
-        document.getElementById("searchBox");
-
-    const linkCards =
-        Array.from(
-            document.querySelectorAll(".linkCard")
-        );
-
-    const categories =
-        Array.from(
-            document.querySelectorAll(".category")
-        );
-
-
-    const accountModal =
-        document.getElementById("accountModal");
-
-    const adminModal =
-        document.getElementById("adminModal");
-
-    const reportModal =
-        document.getElementById("reportModal");
-
-
-    const accountLoggedOut =
-        document.getElementById("accountLoggedOut");
-
-    const accountLogin =
-        document.getElementById("accountLogin");
-
-    const accountLoggedIn =
-        document.getElementById("accountLoggedIn");
-
-    const accountMessage =
-        document.getElementById("accountMessage");
-
-
-    const adminNav =
-        document.getElementById("adminNav");
-
-    const accountNav =
-        document.getElementById("accountNav");
-
-    const linksNav =
-        document.getElementById("linksNav");
-
-
-    /* =====================================================
        HELPERS
     ===================================================== */
 
@@ -1650,20 +1454,14 @@ body {
         const toast =
             document.getElementById("toast");
 
-        toast.textContent =
-            message;
+        toast.textContent = message;
+        toast.style.display = "block";
 
-        toast.style.display =
-            "block";
-
-        clearTimeout(
-            toast._timer
-        );
+        clearTimeout(toast._timer);
 
         toast._timer =
             setTimeout(() => {
-                toast.style.display =
-                    "none";
+                toast.style.display = "none";
             }, 3000);
     }
 
@@ -1678,13 +1476,9 @@ body {
     }
 
 
-    async function api(
-        path,
-        options = {}
-    ) {
+    async function api(path, options = {}) {
         const headers = {
-            "Content-Type":
-                "application/json",
+            "Content-Type": "application/json",
             ...(options.headers || {})
         };
 
@@ -1705,8 +1499,7 @@ body {
         let data = {};
 
         try {
-            data =
-                await response.json();
+            data = await response.json();
         } catch {
             data = {};
         }
@@ -1718,24 +1511,17 @@ body {
     }
 
 
-    function openModal(modal) {
-        modal.classList.add("show");
-    }
-
-
-    function closeModal(modal) {
-        modal.classList.remove("show");
-    }
-
-
-    function setActiveNav(button) {
+    function openModal(id) {
         document
-            .querySelectorAll(".navButton")
-            .forEach(item => {
-                item.classList.remove("active");
-            });
+            .getElementById(id)
+            .classList.add("show");
+    }
 
-        button.classList.add("active");
+
+    function closeModal(id) {
+        document
+            .getElementById(id)
+            .classList.remove("show");
     }
 
 
@@ -1747,162 +1533,214 @@ body {
     }
 
 
+    function setActiveNav(id) {
+        document
+            .querySelectorAll(".navButton")
+            .forEach(button => {
+                button.classList.remove("active");
+            });
+
+        document
+            .getElementById(id)
+            .classList.add("active");
+    }
+
+
     /* =====================================================
-       ACCESS PASSWORD
+       ACCESS
     ===================================================== */
 
-    let accessAttempts = 0;
+    let attempts = 0;
+
+    document
+        .getElementById("accessButton")
+        .addEventListener(
+            "click",
+            unlock
+        );
+
+
+    document
+        .getElementById("accessPassword")
+        .addEventListener(
+            "keydown",
+            event => {
+                if (event.key === "Enter") {
+                    unlock();
+                }
+            }
+        );
+
 
     function unlock() {
-        const value =
-            accessPassword.value
+        const input =
+            document.getElementById(
+                "accessPassword"
+            );
+
+        const error =
+            document.getElementById(
+                "accessError"
+            );
+
+        if (
+            input.value
                 .trim()
-                .toLowerCase();
+                .toLowerCase() ===
+            ACCESS_PASSWORD
+        ) {
 
-        if (value === ACCESS_PASSWORD) {
+            document.getElementById(
+                "accessScreen"
+            ).style.display = "none";
 
-            accessScreen.style.display =
-                "none";
-
-            app.style.display =
-                "block";
+            document.getElementById(
+                "app"
+            ).style.display = "block";
 
             restoreSession();
 
             return;
         }
 
-        accessAttempts++;
 
-        accessPassword.value = "";
+        attempts++;
 
-        if (
-            accessAttempts >=
-            MAX_ACCESS_ATTEMPTS
-        ) {
-            accessButton.disabled =
-                true;
+        input.value = "";
 
-            accessPassword.disabled =
-                true;
 
-            accessError.textContent =
+        if (attempts >= MAX_ATTEMPTS) {
+
+            input.disabled = true;
+
+            document.getElementById(
+                "accessButton"
+            ).disabled = true;
+
+            error.textContent =
                 "Access unavailable.";
 
-            accessError.style.display =
+            error.style.display =
                 "block";
 
-            showAccessUnavailable();
+            const modal =
+                document.createElement("div");
+
+            modal.className =
+                "modal show";
+
+            modal.innerHTML = `
+                <div class="modalBox smallModal">
+                    <div class="modalBody" style="text-align:center">
+                        <div style="font-size:42px;margin-bottom:10px">
+                            🔒
+                        </div>
+
+                        <h2 style="margin-bottom:8px">
+                            Access unavailable
+                        </h2>
+
+                        <p style="color:#888">
+                            Access is unavailable at this moment.
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
 
         } else {
-            accessError.style.display =
+            error.style.display =
                 "block";
         }
     }
-
-
-    function showAccessUnavailable() {
-        const modal =
-            document.createElement("div");
-
-        modal.className =
-            "modal show";
-
-        modal.innerHTML = `
-            <div class="modalBox smallModal">
-                <div class="modalBody" style="text-align:center">
-                    <div style="font-size:42px;margin-bottom:10px">
-                        🔒
-                    </div>
-
-                    <h2 style="margin-bottom:8px">
-                        Access unavailable
-                    </h2>
-
-                    <p style="color:#888">
-                        Access is unavailable at this moment.
-                    </p>
-                </div>
-            </div>
-        `;
-
-        document.body.appendChild(modal);
-    }
-
-
-    accessButton.addEventListener(
-        "click",
-        unlock
-    );
-
-    accessPassword.addEventListener(
-        "keydown",
-        event => {
-            if (event.key === "Enter") {
-                unlock();
-            }
-        }
-    );
 
 
     /* =====================================================
        SEARCH
     ===================================================== */
 
+    const searchBox =
+        document.getElementById(
+            "searchBox"
+        );
+
+    const cards =
+        Array.from(
+            document.querySelectorAll(
+                ".linkCard"
+            )
+        );
+
+    const categories =
+        Array.from(
+            document.querySelectorAll(
+                ".category"
+            )
+        );
+
+
     searchBox.addEventListener(
         "input",
         () => {
+
             const query =
                 searchBox.value
                     .trim()
                     .toLowerCase();
 
-            linkCards.forEach(card => {
+
+            cards.forEach(card => {
+
                 card.classList.toggle(
                     "hidden",
                     !card.innerText
                         .toLowerCase()
                         .includes(query)
                 );
+
             });
 
-            categories.forEach(category => {
-                const visible =
-                    category.querySelectorAll(
-                        ".linkCard:not(.hidden)"
-                    ).length;
 
-                category.classList.toggle(
-                    "hidden",
-                    visible === 0
-                );
-            });
+            categories.forEach(
+                category => {
+
+                    const visible =
+                        category.querySelectorAll(
+                            ".linkCard:not(.hidden)"
+                        ).length;
+
+                    category.classList.toggle(
+                        "hidden",
+                        visible === 0
+                    );
+
+                }
+            );
+
         }
     );
 
 
     /* =====================================================
-       LINK REPORTING
+       REPORTING
     ===================================================== */
 
-    linkCards.forEach(card => {
+    cards.forEach(card => {
 
         let timer = null;
+
 
         card.addEventListener(
             "contextmenu",
             event => {
-                event.preventDefault();
-                openReport(card.href);
-            }
-        );
 
-
-        card.addEventListener(
-            "dblclick",
-            event => {
                 event.preventDefault();
-                openReport(card.href);
+
+                openReport(
+                    card.href
+                );
+
             }
         );
 
@@ -1910,12 +1748,18 @@ body {
         card.addEventListener(
             "touchstart",
             () => {
+
                 clearTimeout(timer);
 
                 timer =
                     setTimeout(() => {
-                        openReport(card.href);
+
+                        openReport(
+                            card.href
+                        );
+
                     }, 1200);
+
             },
             { passive: true }
         );
@@ -1935,10 +1779,12 @@ body {
                 clearTimeout(timer);
             }
         );
+
     });
 
 
     function openReport(url) {
+
         selectedReportURL =
             url;
 
@@ -1948,8 +1794,9 @@ body {
             url;
 
         openModal(
-            reportModal
+            "reportModal"
         );
+
     }
 
 
@@ -1958,12 +1805,14 @@ body {
     ).addEventListener(
         "click",
         () => {
+
             selectedReportURL =
                 null;
 
             closeModal(
-                reportModal
+                "reportModal"
             );
+
         }
     );
 
@@ -1989,6 +1838,7 @@ body {
             button.textContent =
                 "Reporting...";
 
+
             try {
 
                 const result =
@@ -1996,10 +1846,12 @@ body {
                         "/api/report",
                         {
                             method: "POST",
+
                             body:
                                 JSON.stringify({
                                     url:
                                         selectedReportURL,
+
                                     name:
                                         new URL(
                                             selectedReportURL
@@ -2007,6 +1859,7 @@ body {
                                 })
                         }
                     );
+
 
                 if (
                     !result.response.ok ||
@@ -2018,19 +1871,20 @@ body {
                     );
                 }
 
-                showToast(
-                    "✅ Link reported."
-                );
 
                 markReported(
                     selectedReportURL
+                );
+
+                showToast(
+                    "✅ Link reported."
                 );
 
                 selectedReportURL =
                     null;
 
                 closeModal(
-                    reportModal
+                    "reportModal"
                 );
 
             } catch (error) {
@@ -2047,21 +1901,26 @@ body {
 
                 button.textContent =
                     "Report";
+
             }
+
         }
     );
 
 
     function markReported(url) {
+
         const card =
-            linkCards.find(
+            cards.find(
                 item =>
                     item.href === url
             );
 
+
         if (!card) {
             return;
         }
+
 
         if (
             card.querySelector(
@@ -2070,6 +1929,7 @@ body {
         ) {
             return;
         }
+
 
         const badge =
             document.createElement(
@@ -2085,68 +1945,82 @@ body {
         card.appendChild(
             badge
         );
+
     }
 
 
     /* =====================================================
-       ACCOUNT NAV
+       NAVIGATION
     ===================================================== */
 
-    accountNav.addEventListener(
+    document.getElementById(
+        "linksNav"
+    ).addEventListener(
         "click",
         () => {
+
             setActiveNav(
-                accountNav
-            );
-
-            openModal(
-                accountModal
-            );
-        }
-    );
-
-
-    linksNav.addEventListener(
-        "click",
-        () => {
-            setActiveNav(
-                linksNav
+                "linksNav"
             );
 
             window.scrollTo({
                 top: 0,
                 behavior: "smooth"
             });
+
         }
     );
 
 
-    adminNav.addEventListener(
+    document.getElementById(
+        "accountNav"
+    ).addEventListener(
+        "click",
+        () => {
+
+            setActiveNav(
+                "accountNav"
+            );
+
+            openModal(
+                "accountModal"
+            );
+
+        }
+    );
+
+
+    document.getElementById(
+        "adminNav"
+    ).addEventListener(
         "click",
         () => {
 
             if (!isAdmin()) {
+
                 showToast(
                     "Admin access required."
                 );
+
                 return;
             }
 
             setActiveNav(
-                adminNav
+                "adminNav"
             );
 
             openModal(
-                adminModal
+                "adminModal"
             );
 
             loadReports();
+
         }
     );
 
 
     /* =====================================================
-       MODAL CLOSERS
+       CLOSE BUTTONS
     ===================================================== */
 
     document
@@ -2157,20 +2031,17 @@ body {
                 "click",
                 () => {
 
-                    const modal =
-                        document.getElementById(
-                            button.dataset.close
-                        );
-
-                    if (modal) {
-                        closeModal(modal);
-                    }
+                    closeModal(
+                        button.dataset.close
+                    );
 
                     setActiveNav(
-                        linksNav
+                        "linksNav"
                     );
+
                 }
             );
+
         });
 
 
@@ -2185,10 +2056,15 @@ body {
                     if (
                         event.target === modal
                     ) {
-                        closeModal(modal);
-                        setActiveNav(
-                            linksNav
+
+                        modal.classList.remove(
+                            "show"
                         );
+
+                        setActiveNav(
+                            "linksNav"
+                        );
+
                     }
 
                 }
@@ -2198,87 +2074,108 @@ body {
 
 
     /* =====================================================
-       ACCOUNT MODE SWITCHING
+       ACCOUNT VIEWS
     ===================================================== */
 
     function showSignup() {
 
-        accountLoggedOut.style.display =
+        document.getElementById(
+            "signupView"
+        ).style.display =
             "block";
 
-        accountLogin.style.display =
+        document.getElementById(
+            "loginView"
+        ).style.display =
             "none";
 
-        accountLoggedIn.style.display =
+        document.getElementById(
+            "accountView"
+        ).style.display =
             "none";
 
-        accountMessage.textContent =
+        document.getElementById(
+            "accountMessage"
+        ).textContent =
             "";
+
     }
 
 
     function showLogin() {
 
-        accountLoggedOut.style.display =
+        document.getElementById(
+            "signupView"
+        ).style.display =
             "none";
 
-        accountLogin.style.display =
+        document.getElementById(
+            "loginView"
+        ).style.display =
             "block";
 
-        accountLoggedIn.style.display =
+        document.getElementById(
+            "accountView"
+        ).style.display =
             "none";
 
-        accountMessage.textContent =
+        document.getElementById(
+            "accountMessage"
+        ).textContent =
             "";
+
     }
 
 
     function showAccount(user) {
 
-        accountLoggedOut.style.display =
+        document.getElementById(
+            "signupView"
+        ).style.display =
             "none";
 
-        accountLogin.style.display =
+        document.getElementById(
+            "loginView"
+        ).style.display =
             "none";
 
-        accountLoggedIn.style.display =
+        document.getElementById(
+            "accountView"
+        ).style.display =
             "block";
 
 
         document.getElementById(
-            "meUsername"
+            "accountUsernameValue"
         ).textContent =
             user.username || "";
 
 
         document.getElementById(
-            "meDisplayName"
+            "accountDisplayNameValue"
         ).textContent =
             user.displayName || "";
 
 
         document.getElementById(
-            "meEmail"
-        ).textContent =
-            user.email || "";
-
-
-        document.getElementById(
-            "meRole"
+            "accountRoleValue"
         ).textContent =
             user.role || "user";
 
 
         document.getElementById(
-            "meStatus"
+            "accountStatusValue"
         ).textContent =
             user.status || "active";
 
 
-        adminNav.style.display =
+        document.getElementById(
+            "adminNav"
+        ).style.display =
             isAdmin()
                 ? "block"
                 : "none";
+
     }
 
 
@@ -2315,39 +2212,24 @@ body {
                             body:
                                 JSON.stringify({
                                     username:
-                                        document
-                                            .getElementById(
-                                                "signupUsername"
-                                            )
-                                            .value,
+                                        document.getElementById(
+                                            "signupUsername"
+                                        ).value,
 
                                     displayName:
-                                        document
-                                            .getElementById(
-                                                "signupDisplayName"
-                                            )
-                                            .value,
+                                        document.getElementById(
+                                            "signupDisplayName"
+                                        ).value,
 
                                     realName:
-                                        document
-                                            .getElementById(
-                                                "signupRealName"
-                                            )
-                                            .value,
-
-                                    email:
-                                        document
-                                            .getElementById(
-                                                "signupEmail"
-                                            )
-                                            .value,
+                                        document.getElementById(
+                                            "signupRealName"
+                                        ).value,
 
                                     password:
-                                        document
-                                            .getElementById(
-                                                "signupPassword"
-                                            )
-                                            .value
+                                        document.getElementById(
+                                            "signupPassword"
+                                        ).value
                                 })
                         }
                     );
@@ -2357,21 +2239,27 @@ body {
                     !result.response.ok ||
                     !result.data.success
                 ) {
+
                     throw new Error(
                         result.data.error ||
                         "Could not create account"
                     );
+
                 }
 
 
-                accountMessage.textContent =
-                    "✅ Account created. Login below.";
+                document.getElementById(
+                    "accountMessage"
+                ).textContent =
+                    "✅ Account created. You can now log in.";
 
                 showLogin();
 
             } catch (error) {
 
-                accountMessage.textContent =
+                document.getElementById(
+                    "accountMessage"
+                ).textContent =
                     "❌ " +
                     error.message;
 
@@ -2382,7 +2270,9 @@ body {
 
                 button.textContent =
                     "Create Account";
+
             }
+
         }
     );
 
@@ -2408,14 +2298,14 @@ body {
     ===================================================== */
 
     document.getElementById(
-        "loginButton"
+        "loginAccountButton"
     ).addEventListener(
         "click",
         async () => {
 
             const button =
                 document.getElementById(
-                    "loginButton"
+                    "loginAccountButton"
                 );
 
             button.disabled =
@@ -2435,19 +2325,15 @@ body {
 
                             body:
                                 JSON.stringify({
-                                    email:
-                                        document
-                                            .getElementById(
-                                                "loginEmail"
-                                            )
-                                            .value,
+                                    username:
+                                        document.getElementById(
+                                            "loginUsername"
+                                        ).value,
 
                                     password:
-                                        document
-                                            .getElementById(
-                                                "loginPassword"
-                                            )
-                                            .value
+                                        document.getElementById(
+                                            "loginPassword"
+                                        ).value
                                 })
                         }
                     );
@@ -2457,15 +2343,21 @@ body {
                     !result.response.ok ||
                     !result.data.success
                 ) {
+
                     throw new Error(
                         result.data.error ||
                         "Login failed"
                     );
+
                 }
 
 
                 sessionToken =
                     result.data.token;
+
+                currentUser =
+                    result.data.user;
+
 
                 localStorage.setItem(
                     "yaqub_session",
@@ -2473,21 +2365,20 @@ body {
                 );
 
 
-                currentUser =
-                    result.data.user;
-
-
                 showAccount(
                     currentUser
                 );
 
 
-                accountMessage.textContent =
-                    "✅ Logged in.";
+                showToast(
+                    "✅ Logged in."
+                );
 
             } catch (error) {
 
-                accountMessage.textContent =
+                document.getElementById(
+                    "accountMessage"
+                ).textContent =
                     "❌ " +
                     error.message;
 
@@ -2498,7 +2389,9 @@ body {
 
                 button.textContent =
                     "Login";
+
             }
+
         }
     );
 
@@ -2521,8 +2414,9 @@ body {
                     }
                 );
             } catch {
-                // Session is cleared locally below.
+                // Local session is cleared below.
             }
+
 
             sessionToken =
                 null;
@@ -2530,21 +2424,24 @@ body {
             currentUser =
                 null;
 
+
             localStorage.removeItem(
                 "yaqub_session"
             );
 
-            adminNav.style.display =
+
+            document.getElementById(
+                "adminNav"
+            ).style.display =
                 "none";
 
-            showSignup();
 
-            accountMessage.textContent =
-                "Logged out.";
+            showSignup();
 
             showToast(
                 "Logged out."
             );
+
         }
     );
 
@@ -2560,6 +2457,7 @@ body {
             return;
         }
 
+
         try {
 
             const result =
@@ -2572,9 +2470,7 @@ body {
                 !result.response.ok ||
                 !result.data.success
             ) {
-
                 throw new Error(
-                    result.data.error ||
                     "Session expired"
                 );
             }
@@ -2582,6 +2478,7 @@ body {
 
             currentUser =
                 result.data.user;
+
 
             showAccount(
                 currentUser
@@ -2599,11 +2496,10 @@ body {
                 "yaqub_session"
             );
 
-            adminNav.style.display =
-                "none";
-
             showSignup();
+
         }
+
     }
 
 
@@ -2648,7 +2544,7 @@ body {
 
 
                     const target =
-                        tab.dataset.adminTab;
+                        tab.dataset.tab;
 
 
                     document
@@ -2662,33 +2558,28 @@ body {
 
 
                     if (
-                        target ===
-                        "reports"
+                        target === "reports"
                     ) {
                         loadReports();
                     }
 
                     if (
-                        target ===
-                        "users"
+                        target === "users"
                     ) {
                         loadUsers();
                     }
 
                 }
             );
+
         });
 
 
     /* =====================================================
-       LOAD REPORTS
+       REPORT ADMIN
     ===================================================== */
 
     async function loadReports() {
-
-        if (!isAdmin()) {
-            return;
-        }
 
         const list =
             document.getElementById(
@@ -2756,6 +2647,7 @@ body {
                     "🟢 No reported links.";
 
                 return;
+
             }
 
 
@@ -2787,7 +2679,6 @@ body {
                         </div>
 
                         <div class="adminMeta">
-                            Reported:
                             ${escapeHTML(
                                 new Date(
                                     report.lastReported ||
@@ -2798,8 +2689,8 @@ body {
 
                         <div class="adminActions">
                             <button
+                                class="secondaryButton restoreReportButton"
                                 type="button"
-                                class="restoreButton"
                             >
                                 ♻️ Restore
                             </button>
@@ -2809,7 +2700,7 @@ body {
 
                     item
                         .querySelector(
-                            ".restoreButton"
+                            ".restoreReportButton"
                         )
                         .addEventListener(
                             "click",
@@ -2823,6 +2714,7 @@ body {
                     list.appendChild(
                         item
                     );
+
                 }
             );
 
@@ -2831,17 +2723,13 @@ body {
             list.textContent =
                 "❌ " +
                 error.message;
+
         }
+
     }
 
 
-    /* =====================================================
-       RESTORE REPORT
-    ===================================================== */
-
-    async function restoreReport(
-        url
-    ) {
+    async function restoreReport(url) {
 
         try {
 
@@ -2850,6 +2738,7 @@ body {
                     "/api/restore",
                     {
                         method: "POST",
+
                         body:
                             JSON.stringify({
                                 url
@@ -2882,19 +2771,17 @@ body {
                 "❌ " +
                 error.message
             );
+
         }
+
     }
 
 
     /* =====================================================
-       LOAD USERS
+       ADMIN USERS
     ===================================================== */
 
     async function loadUsers() {
-
-        if (!isAdmin()) {
-            return;
-        }
 
         const list =
             document.getElementById(
@@ -2940,6 +2827,7 @@ body {
                     "No accounts yet.";
 
                 return;
+
             }
 
 
@@ -2977,12 +2865,6 @@ body {
                         </div>
 
                         <div class="adminMeta">
-                            ${escapeHTML(
-                                user.email
-                            )}
-                        </div>
-
-                        <div class="adminMeta">
                             Role:
                             ${escapeHTML(
                                 user.role
@@ -2992,22 +2874,22 @@ body {
                         <div class="adminActions">
 
                             <button
-                                type="button"
                                 data-action="block"
+                                type="button"
                             >
                                 🚫 Block
                             </button>
 
                             <button
-                                type="button"
                                 data-action="unblock"
+                                type="button"
                             >
                                 ✅ Unblock
                             </button>
 
                             <button
-                                type="button"
                                 data-action="ban"
+                                type="button"
                             >
                                 🔨 Ban
                             </button>
@@ -3016,8 +2898,8 @@ body {
                                 user.role !== "admin"
                                 ? `
                                     <button
-                                        type="button"
                                         data-action="promote"
+                                        type="button"
                                     >
                                         ⭐ Make Admin
                                     </button>
@@ -3039,11 +2921,12 @@ body {
                                 button.addEventListener(
                                     "click",
                                     () =>
-                                        userAction(
+                                        adminUserAction(
                                             button.dataset.action,
                                             user.id
                                         )
                                 );
+
                             }
                         );
 
@@ -3051,6 +2934,7 @@ body {
                     list.appendChild(
                         item
                     );
+
                 }
             );
 
@@ -3059,15 +2943,13 @@ body {
             list.textContent =
                 "❌ " +
                 error.message;
+
         }
+
     }
 
 
-    /* =====================================================
-       ADMIN USER ACTION
-    ===================================================== */
-
-    async function userAction(
+    async function adminUserAction(
         action,
         userId
     ) {
@@ -3116,7 +2998,6 @@ body {
                 !result.response.ok ||
                 !result.data.success
             ) {
-
                 throw new Error(
                     result.data.error ||
                     "Action failed"
@@ -3138,12 +3019,14 @@ body {
                 "❌ " +
                 error.message
             );
+
         }
+
     }
 
 
     /* =====================================================
-       START
+       STARTUP
     ===================================================== */
 
     restoreSession();
@@ -3153,3 +3036,4 @@ body {
 
 </body>
 </html>
+```
