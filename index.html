@@ -771,6 +771,155 @@ body {
         text-align: left;
     }
 }
+/* ================= ACCOUNT PANEL ================= */
+
+#accountPanel {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.8);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    z-index: 9000;
+}
+
+#accountPanel.show {
+    display: flex;
+}
+
+.accountBox {
+    width: min(430px, 100%);
+
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 22px;
+
+    padding: 25px;
+
+    box-shadow: 0 25px 80px rgba(0,0,0,.7);
+}
+
+.accountHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.accountHeader h2 {
+    font-size: 24px;
+}
+
+.accountClose {
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    background: #191919;
+    color: white;
+
+    cursor: pointer;
+}
+
+.accountForm {
+    display: grid;
+    gap: 10px;
+}
+
+.accountForm input {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid #333;
+    border-radius: 11px;
+
+    background: #0b0b0b;
+    color: white;
+
+    outline: none;
+}
+
+.accountForm input:focus {
+    border-color: #777;
+}
+
+.accountButton {
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+    border-radius: 11px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.accountPrimary {
+    background: white;
+    color: black;
+}
+
+.accountSecondary {
+    background: #222;
+    color: white;
+    border: 1px solid #333;
+}
+
+.accountMessage {
+    min-height: 20px;
+
+    margin-bottom: 12px;
+
+    color: #aaa;
+
+    text-align: center;
+    font-size: 13px;
+}
+
+.accountCard {
+    background: #171717;
+    border: 1px solid #292929;
+    border-radius: 15px;
+
+    padding: 17px;
+}
+
+.accountRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #292929;
+}
+
+.accountRow:last-child {
+    border-bottom: none;
+}
+
+.accountLabel {
+    color: #777;
+}
+
+.accountValue {
+    text-align: right;
+    word-break: break-word;
+}    
 </style>
 </head>
 
