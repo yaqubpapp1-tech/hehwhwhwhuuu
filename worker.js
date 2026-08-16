@@ -1512,3 +1512,136 @@ function json(
     }
   );
 }
+export class ChatRoom {
+  constructor(state, env) {
+    this.state = state;
+    this.env = env;
+
+    this.sessions = new Map();
+  }
+
+  async fetch(request) {
+    const url = new URL(request.url);
+
+    if (request.headers.get("Upgrade") !== "websocket") {
+      return new Response("WebSocket endpoint", {
+        status: 426
+      });
+    }
+
+    const pair = new WebSocketPair();
+    const client = pair[0];
+    const server = pair[1];
+
+    server.accept();
+
+    const id = crypto.randomUUID();
+
+    this.sessions.set(id, server);
+
+    server.addEventListener("message", event => {
+      this.handleMessage(id, event.data);
+    });
+
+    server.addEventListener("close", () => {
+      this.sessions.delete(id);
+    });
+
+    server.addEventListener("error", () => {
+      this.sessions.delete(id);
+    });
+
+    return new Response(null, {
+      status: 101,
+      webSocket: client
+    });
+  }
+
+  async handleMessage(id, rawMessage) {
+    let message;
+
+    try {
+      message =
+        typeof rawMessage === "string"
+          ? JSON.parse(rawMessage)
+          : rawMessage;
+    } catch {
+      this.send(id, {
+        type: "error",
+        error: "Invalid message"
+      });
+
+      return;
+    }
+
+    if (message.type !== "chat") {
+      return;
+    }
+
+    const text =
+      typeof message.text === "string"
+        ? message.text.trim()
+        : "";
+
+    if (!text) {
+      return;
+    }
+
+    if (text.length > 1000) {
+      this.send(id, {
+        type: "error",
+        error: "Message too long"
+      });
+
+      return;
+    }
+
+    const username =
+      typeof message.username === "string"
+        ? message.username.trim().slice(0, 30)
+        : "User";
+
+    const chatMessage = {
+      type: "message",
+      id: crypto.randomUUID(),
+      username,
+      text,
+      time: new Date().toISOString()
+    };
+
+    await this.broadcast(chatMessage);
+  }
+
+  send(id, data) {
+    const socket =
+      this.sessions.get(id);
+
+    if (!socket) {
+      return;
+    }
+
+    try {
+      socket.send(
+        JSON.stringify(data)
+      );
+    } catch {
+      this.sessions.delete(id);
+    }
+  }
+
+  async broadcast(data) {
+    const payload =
+      JSON.stringify(data);
+
+    for (
+      const [id, socket]
+      of this.sessions
+    ) {
+      try {
+        socket.send(payload);
+      } catch {
+        this.sessions.delete(id);
+      }
+    }
+  }
+}
