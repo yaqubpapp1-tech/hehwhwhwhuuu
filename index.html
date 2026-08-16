@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Yaqub's Hub</title>
 
 <style>
@@ -17,14 +18,16 @@ body {
     background: #050505;
     color: white;
     min-height: 100vh;
+    padding-bottom: 105px;
 }
 
-/* LOGIN */
+/* ================= LOGIN ================= */
 
 #loginScreen {
     position: fixed;
     inset: 0;
-    background: radial-gradient(circle at top, #222 0%, #050505 55%);
+    background:
+        radial-gradient(circle at top, #222 0%, #050505 55%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -102,7 +105,7 @@ body {
     font-weight: bold;
 }
 
-/* MAIN */
+/* ================= MAIN ================= */
 
 #mainSite {
     display: none;
@@ -140,6 +143,8 @@ body {
     outline: none;
 }
 
+/* ================= CATEGORIES ================= */
+
 .category {
     max-width: 1100px;
     margin: 0 auto 35px;
@@ -158,13 +163,19 @@ body {
     gap: 12px;
 }
 
+/* ================= LINK CARD ================= */
+
 .linkCard {
+    display: block;
+    position: relative;
+    color: white;
     background: #111;
     border: 1px solid #292929;
     border-radius: 14px;
     padding: 18px;
     transition: .2s;
     word-break: break-all;
+    overflow: hidden;
 }
 
 .linkCard:hover {
@@ -173,55 +184,105 @@ body {
     transform: translateY(-3px);
 }
 
-.linkCard a {
+.linkCard > a {
     display: block;
     text-decoration: none;
     color: white;
 }
 
-.number {
+.linkCard .number {
     color: #666;
     font-size: 12px;
     margin-bottom: 7px;
 }
 
-.url {
+.linkCard .url {
     font-size: 15px;
     font-weight: bold;
 }
 
-.reportButton {
-    margin-top: 14px;
-    padding: 8px 12px;
-    border: 1px solid #444;
-    border-radius: 9px;
-    background: #181818;
-    color: #aaa;
-    cursor: pointer;
-    font-size: 12px;
+/* ================= REPORT ================= */
+
+.reportOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.94);
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: opacity .2s ease;
+    z-index: 100;
 }
 
-.reportButton:hover {
+.reportOverlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.reportContent {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+}
+
+.reportIcon {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.reportTitle {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.reportURL {
+    color: #888;
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 12px;
+}
+
+.reportButtons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.reportButtons button {
+    border: none;
+    border-radius: 9px;
+    padding: 9px 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancelReport {
     background: #292929;
     color: white;
 }
 
-.reportButton:disabled {
-    cursor: default;
-    opacity: .7;
+.confirmReport {
+    background: #ff3333;
+    color: white;
 }
 
-.reportedBadge {
-    display: none;
-    margin-top: 10px;
-    padding: 6px 9px;
-    background: #5a4700;
-    border: 1px solid #8a6b00;
-    border-radius: 7px;
-    color: #ffd84d;
-    font-size: 11px;
-    font-weight: bold;
+.reportButtons button:disabled {
+    opacity: .6;
+    cursor: wait;
 }
+
+/* ================= BEST ================= */
 
 .best {
     max-width: 1100px;
@@ -229,7 +290,8 @@ body {
     padding: 30px;
     border-radius: 22px;
     text-align: center;
-    background: linear-gradient(135deg, #151515, #080808);
+    background:
+        linear-gradient(135deg, #151515, #080808);
     border: 1px solid #555;
     box-shadow: 0 0 35px rgba(255,255,255,.08);
 }
@@ -249,31 +311,365 @@ body {
     font-weight: 900;
 }
 
-.hidden {
-    display: none !important;
+/* ================= BOTTOM NAV ================= */
+
+#bottomNav {
+    position: fixed;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+
+    width: min(520px, calc(100% - 24px));
+
+    display: flex;
+    gap: 8px;
+
+    padding: 9px;
+
+    background: rgba(15,15,15,.94);
+    border: 1px solid #333;
+    border-radius: 24px;
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 12px 40px rgba(0,0,0,.55);
+
+    z-index: 7000;
 }
 
-footer {
-    text-align: center;
-    color: #444;
-    padding: 30px;
+.navButton {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: #777;
+    padding: 8px 5px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: .2s;
 }
+
+.navButton:hover,
+.navButton.active {
+    background: #202020;
+    color: white;
+}
+
+.navIcon {
+    display: block;
+    font-size: 24px;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.navLabel {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* ================= PANELS ================= */
+
+.panel {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    background: rgba(0,0,0,.78);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    z-index: 8000;
+}
+
+.panel.show {
+    display: flex;
+}
+
+.panelBox {
+    width: min(900px, 100%);
+    max-height: 90vh;
+    overflow: auto;
+
+    background: #0d0d0d;
+
+    border: 1px solid #333;
+    border-radius: 22px;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.7);
+}
+
+.panelHeader {
+    position: sticky;
+    top: 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 18px 20px;
+
+    background: rgba(13,13,13,.96);
+    border-bottom: 1px solid #292929;
+
+    z-index: 2;
+}
+
+.panelHeader h2 {
+    font-size: 22px;
+}
+
+.closePanel {
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    background: #181818;
+    color: white;
+
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* ================= ACCOUNT ================= */
+
+.accountBody {
+    padding: 20px;
+}
+
+.accountForm {
+    display: grid;
+    gap: 10px;
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+.accountForm input {
+    width: 100%;
+    padding: 13px;
+
+    border: 1px solid #333;
+    border-radius: 11px;
+
+    background: #111;
+    color: white;
+    outline: none;
+}
+
+.accountForm button,
+.primaryButton {
+    border: none;
+    border-radius: 11px;
+
+    padding: 13px;
+
+    background: white;
+    color: black;
+
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.secondaryButton {
+    border: 1px solid #333;
+    border-radius: 11px;
+
+    padding: 13px;
+
+    background: #181818;
+    color: white;
+
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.accountHint {
+    color: #777;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.accountCard {
+    background: #151515;
+    border: 1px solid #2d2d2d;
+    border-radius: 15px;
+    padding: 18px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.accountRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 11px 0;
+    border-bottom: 1px solid #292929;
+}
+
+.accountRow:last-child {
+    border-bottom: none;
+}
+
+.accountLabel {
+    color: #777;
+}
+
+.accountValue {
+    text-align: right;
+    word-break: break-word;
+}
+
+/* ================= ADMIN ================= */
+
+.adminTabs {
+    display: flex;
+    gap: 8px;
+    padding: 15px 20px 0;
+}
+
+.adminTab {
+    border: 1px solid #333;
+    border-radius: 10px;
+    background: #171717;
+    color: #aaa;
+    padding: 9px 12px;
+    cursor: pointer;
+}
+
+.adminTab.active {
+    background: white;
+    color: black;
+}
+
+.adminBody {
+    padding: 20px;
+}
+
+.adminSection {
+    display: none;
+}
+
+.adminSection.active {
+    display: block;
+}
+
+.adminList {
+    display: grid;
+    gap: 10px;
+}
+
+.adminItem {
+    background: #151515;
+    border: 1px solid #292929;
+    border-radius: 13px;
+    padding: 15px;
+}
+
+.adminItemTop {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.adminItem strong {
+    word-break: break-word;
+}
+
+.adminMeta {
+    color: #777;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.adminActions {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.adminActions button {
+    border: 1px solid #333;
+    border-radius: 9px;
+    background: #1a1a1a;
+    color: white;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.adminActions button:hover {
+    background: #282828;
+}
+
+.dangerButton {
+    color: #ff6666 !important;
+}
+
+.adminStats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.statBox {
+    background: #151515;
+    border: 1px solid #292929;
+    border-radius: 13px;
+    padding: 15px;
+}
+
+.statBox small {
+    display: block;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.statBox strong {
+    font-size: 24px;
+}
+
+/* ================= TOAST ================= */
 
 #toast {
     position: fixed;
     right: 18px;
-    bottom: 18px;
+    bottom: 95px;
+
+    max-width: 340px;
+
     background: #171717;
     border: 1px solid #444;
     border-radius: 12px;
+
     padding: 13px 16px;
+
     color: white;
+
     display: none;
+
     z-index: 10000;
-    box-shadow: 0 10px 35px rgba(0,0,0,.5);
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.5);
 }
 
+/* ================= MOBILE ================= */
+
 @media(max-width:600px) {
+
     #mainSite {
         padding: 15px;
     }
@@ -285,13 +681,22 @@ footer {
     .links {
         grid-template-columns: 1fr;
     }
+
+    .panelBox {
+        max-height: 94vh;
+        border-radius: 18px;
+    }
+
+    .adminStats {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- ================= LOGIN ================= -->
 
 <div id="loginScreen">
 
@@ -327,7 +732,7 @@ footer {
 </div>
 
 
-<!-- MAIN SITE -->
+<!-- ================= MAIN SITE ================= -->
 
 <div id="mainSite">
 
@@ -351,7 +756,7 @@ footer {
     </div>
 
 
-    <!-- SPACE -->
+    <!-- ================= SPACE ================= -->
 
     <section class="category">
 
@@ -359,47 +764,76 @@ footer {
 
         <div class="links">
 
-            <div class="linkCard">
-                <a href="https://ok.worldmicroscope.com" target="_blank" rel="noopener noreferrer">
-                    <div class="number">01</div>
-                    <div class="url">ok.worldmicroscope.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://ok.worldmicroscope.com"
+               target="_blank">
 
-            <div class="linkCard">
-                <a href="https://good.volticsolar.co.za" target="_blank" rel="noopener noreferrer">
-                    <div class="number">02</div>
-                    <div class="url">good.volticsolar.co.za</div>
-                </a>
-            </div>
+                <div class="number">01</div>
 
-            <div class="linkCard">
-                <a href="https://home.gynauto.ro" target="_blank" rel="noopener noreferrer">
-                    <div class="number">03</div>
-                    <div class="url">home.gynauto.ro</div>
-                </a>
-            </div>
+                <div class="url">
+                    ok.worldmicroscope.com
+                </div>
 
-            <div class="linkCard">
-                <a href="https://school.claravia.cl" target="_blank" rel="noopener noreferrer">
-                    <div class="number">04</div>
-                    <div class="url">school.claravia.cl</div>
-                </a>
-            </div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://space.blackmunk.com" target="_blank" rel="noopener noreferrer">
-                    <div class="number">05</div>
-                    <div class="url">space.blackmunk.com</div>
-                </a>
-            </div>
+
+            <a class="linkCard"
+               href="https://good.volticsolar.co.za"
+               target="_blank">
+
+                <div class="number">02</div>
+
+                <div class="url">
+                    good.volticsolar.co.za
+                </div>
+
+            </a>
+
+
+            <a class="linkCard"
+               href="https://home.gynauto.ro"
+               target="_blank">
+
+                <div class="number">03</div>
+
+                <div class="url">
+                    home.gynauto.ro
+                </div>
+
+            </a>
+
+
+            <a class="linkCard"
+               href="https://school.claravia.cl"
+               target="_blank">
+
+                <div class="number">04</div>
+
+                <div class="url">
+                    school.claravia.cl
+                </div>
+
+            </a>
+
+
+            <a class="linkCard"
+               href="https://space.blackmunk.com"
+               target="_blank">
+
+                <div class="number">05</div>
+
+                <div class="url">
+                    space.blackmunk.com
+                </div>
+
+            </a>
 
         </div>
 
     </section>
 
 
-    <!-- UTOPIA -->
+    <!-- ================= UTOPIA ================= -->
 
     <section class="category">
 
@@ -407,47 +841,76 @@ footer {
 
         <div class="links">
 
-            <div class="linkCard">
-                <a href="https://can.worldmicroscope.com" target="_blank" rel="noopener noreferrer">
-                    <div class="number">01</div>
-                    <div class="url">can.worldmicroscope.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://can.worldmicroscope.com"
+               target="_blank">
 
-            <div class="linkCard">
-                <a href="https://zoom.volticsolar.co.za" target="_blank" rel="noopener noreferrer">
-                    <div class="number">02</div>
-                    <div class="url">zoom.volticsolar.co.za</div>
-                </a>
-            </div>
+                <div class="number">01</div>
 
-            <div class="linkCard">
-                <a href="https://not.claravia.cl" target="_blank" rel="noopener noreferrer">
-                    <div class="number">03</div>
-                    <div class="url">not.claravia.cl</div>
-                </a>
-            </div>
+                <div class="url">
+                    can.worldmicroscope.com
+                </div>
 
-            <div class="linkCard">
-                <a href="https://work.gynauto.ro" target="_blank" rel="noopener noreferrer">
-                    <div class="number">04</div>
-                    <div class="url">work.gynauto.ro</div>
-                </a>
-            </div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://utopia.blackmunk.com" target="_blank" rel="noopener noreferrer">
-                    <div class="number">05</div>
-                    <div class="url">utopia.blackmunk.com</div>
-                </a>
-            </div>
+
+            <a class="linkCard"
+               href="https://zoom.volticsolar.co.za"
+               target="_blank">
+
+                <div class="number">02</div>
+
+                <div class="url">
+                    zoom.volticsolar.co.za
+                </div>
+
+            </a>
+
+
+            <a class="linkCard"
+               href="https://not.claravia.cl"
+               target="_blank">
+
+                <div class="number">03</div>
+
+                <div class="url">
+                    not.claravia.cl
+                </div>
+
+            </a>
+
+
+            <a class="linkCard"
+               href="https://work.gynauto.ro"
+               target="_blank">
+
+                <div class="number">04</div>
+
+                <div class="url">
+                    work.gynauto.ro
+                </div>
+
+            </a>
+
+
+            <a class="linkCard"
+               href="https://utopia.blackmunk.com"
+               target="_blank">
+
+                <div class="number">05</div>
+
+                <div class="url">
+                    utopia.blackmunk.com
+                </div>
+
+            </a>
 
         </div>
 
     </section>
 
 
-    <!-- SOLARA -->
+    <!-- ================= SOLARA ================= -->
 
     <section class="category">
 
@@ -455,72 +918,72 @@ footer {
 
         <div class="links">
 
-            <div class="linkCard">
-                <a href="https://question.worldmicroscope.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">question.worldmicroscope.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://question.worldmicroscope.com"
+               target="_blank">
+                <div class="url">question.worldmicroscope.com</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://long.volticsolar.co.za" target="_blank" rel="noopener noreferrer">
-                    <div class="url">long.volticsolar.co.za</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://long.volticsolar.co.za"
+               target="_blank">
+                <div class="url">long.volticsolar.co.za</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://hmm.gynauto.ro" target="_blank" rel="noopener noreferrer">
-                    <div class="url">hmm.gynauto.ro</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://hmm.gynauto.ro"
+               target="_blank">
+                <div class="url">hmm.gynauto.ro</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://solora.blackmunk.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">solora.blackmunk.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://solora.blackmunk.com"
+               target="_blank">
+                <div class="url">solora.blackmunk.com</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://club.claravia.cl" target="_blank" rel="noopener noreferrer">
-                    <div class="url">club.claravia.cl</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://club.claravia.cl"
+               target="_blank">
+                <div class="url">club.claravia.cl</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://wouldget.priestella.xyz" target="_blank" rel="noopener noreferrer">
-                    <div class="url">wouldget.priestella.xyz</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://wouldget.priestella.xyz"
+               target="_blank">
+                <div class="url">wouldget.priestella.xyz</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://questionme.mrvillain.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">questionme.mrvillain.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://questionme.mrvillain.com"
+               target="_blank">
+                <div class="url">questionme.mrvillain.com</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://solara.glamourfreaks.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">solara.glamourfreaks.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://solara.glamourfreaks.com"
+               target="_blank">
+                <div class="url">solara.glamourfreaks.com</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://schoolbook.berugy.hu" target="_blank" rel="noopener noreferrer">
-                    <div class="url">schoolbook.berugy.hu</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://schoolbook.berugy.hu"
+               target="_blank">
+                <div class="url">schoolbook.berugy.hu</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://okiwell.adijaya.id" target="_blank" rel="noopener noreferrer">
-                    <div class="url">okiwell.adijaya.id</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://okiwell.adijaya.id"
+               target="_blank">
+                <div class="url">okiwell.adijaya.id</div>
+            </a>
 
         </div>
 
     </section>
 
 
-    <!-- LUNAR -->
+    <!-- ================= LUNAR ================= -->
 
     <section class="category">
 
@@ -528,42 +991,42 @@ footer {
 
         <div class="links">
 
-            <div class="linkCard">
-                <a href="https://okwell.worldmicroscope.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">okwell.worldmicroscope.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://okwell.worldmicroscope.com"
+               target="_blank">
+                <div class="url">okwell.worldmicroscope.com</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://cool.volticsolar.co.za" target="_blank" rel="noopener noreferrer">
-                    <div class="url">cool.volticsolar.co.za</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://cool.volticsolar.co.za"
+               target="_blank">
+                <div class="url">cool.volticsolar.co.za</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://cell.claravia.cl" target="_blank" rel="noopener noreferrer">
-                    <div class="url">cell.claravia.cl</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://cell.claravia.cl"
+               target="_blank">
+                <div class="url">cell.claravia.cl</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://info.gynauto.ro" target="_blank" rel="noopener noreferrer">
-                    <div class="url">info.gynauto.ro</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://info.gynauto.ro"
+               target="_blank">
+                <div class="url">info.gynauto.ro</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://lunar.blackmunk.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">lunar.blackmunk.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://lunar.blackmunk.com"
+               target="_blank">
+                <div class="url">lunar.blackmunk.com</div>
+            </a>
 
         </div>
 
     </section>
 
 
-    <!-- VOYA -->
+    <!-- ================= VOYA ================= -->
 
     <section class="category">
 
@@ -571,42 +1034,42 @@ footer {
 
         <div class="links">
 
-            <div class="linkCard">
-                <a href="https://well.worldmicroscope.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">well.worldmicroscope.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://well.worldmicroscope.com"
+               target="_blank">
+                <div class="url">well.worldmicroscope.com</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://co.volticsolar.co.za" target="_blank" rel="noopener noreferrer">
-                    <div class="url">co.volticsolar.co.za</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://co.volticsolar.co.za"
+               target="_blank">
+                <div class="url">co.volticsolar.co.za</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://should.claravia.cl" target="_blank" rel="noopener noreferrer">
-                    <div class="url">should.claravia.cl</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://should.claravia.cl"
+               target="_blank">
+                <div class="url">should.claravia.cl</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://in.gynauto.ro" target="_blank" rel="noopener noreferrer">
-                    <div class="url">in.gynauto.ro</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://in.gynauto.ro"
+               target="_blank">
+                <div class="url">in.gynauto.ro</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://science.blackmunk.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">science.blackmunk.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://science.blackmunk.com"
+               target="_blank">
+                <div class="url">science.blackmunk.com</div>
+            </a>
 
         </div>
 
     </section>
 
 
-    <!-- STRAWBERRY -->
+    <!-- ================= STRAWBERRY ================= -->
 
     <section class="category">
 
@@ -614,42 +1077,42 @@ footer {
 
         <div class="links">
 
-            <div class="linkCard">
-                <a href="https://wider.worldmicroscope.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">wider.worldmicroscope.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://wider.worldmicroscope.com"
+               target="_blank">
+                <div class="url">wider.worldmicroscope.com</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://coo.volticsolar.co.za" target="_blank" rel="noopener noreferrer">
-                    <div class="url">coo.volticsolar.co.za</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://coo.volticsolar.co.za"
+               target="_blank">
+                <div class="url">coo.volticsolar.co.za</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://right.claravia.cl" target="_blank" rel="noopener noreferrer">
-                    <div class="url">right.claravia.cl</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://right.claravia.cl"
+               target="_blank">
+                <div class="url">right.claravia.cl</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://hot.gynauto.ro" target="_blank" rel="noopener noreferrer">
-                    <div class="url">hot.gynauto.ro</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://hot.gynauto.ro"
+               target="_blank">
+                <div class="url">hot.gynauto.ro</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://stroberri.blackmunk.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">stroberri.blackmunk.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://stroberri.blackmunk.com"
+               target="_blank">
+                <div class="url">stroberri.blackmunk.com</div>
+            </a>
 
         </div>
 
     </section>
 
 
-    <!-- TUNG -->
+    <!-- ================= TUNG ================= -->
 
     <section class="category">
 
@@ -657,42 +1120,42 @@ footer {
 
         <div class="links">
 
-            <div class="linkCard">
-                <a href="https://scope.worldmicroscope.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">scope.worldmicroscope.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://scope.worldmicroscope.com"
+               target="_blank">
+                <div class="url">scope.worldmicroscope.com</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://volume.volticsolar.co.za" target="_blank" rel="noopener noreferrer">
-                    <div class="url">volume.volticsolar.co.za</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://volume.volticsolar.co.za"
+               target="_blank">
+                <div class="url">volume.volticsolar.co.za</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://tryit.claravia.cl" target="_blank" rel="noopener noreferrer">
-                    <div class="url">tryit.claravia.cl</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://tryit.claravia.cl"
+               target="_blank">
+                <div class="url">tryit.claravia.cl</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://him.gynauto.ro" target="_blank" rel="noopener noreferrer">
-                    <div class="url">him.gynauto.ro</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://him.gynauto.ro"
+               target="_blank">
+                <div class="url">him.gynauto.ro</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://tung.blackmunk.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">tung.blackmunk.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://tung.blackmunk.com"
+               target="_blank">
+                <div class="url">tung.blackmunk.com</div>
+            </a>
 
         </div>
 
     </section>
 
 
-    <!-- STUDY -->
+    <!-- ================= STUDY ================= -->
 
     <section class="category">
 
@@ -700,42 +1163,85 @@ footer {
 
         <div class="links">
 
-            <div class="linkCard">
-                <a href="https://wipe.worldmicroscope.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">wipe.worldmicroscope.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://wipe.worldmicroscope.com"
+               target="_blank">
+                <div class="url">wipe.worldmicroscope.com</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://hound.volticsolar.co.za" target="_blank" rel="noopener noreferrer">
-                    <div class="url">hound.volticsolar.co.za</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://hound.volticsolar.co.za"
+               target="_blank">
+                <div class="url">hound.volticsolar.co.za</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://class.claravia.cl" target="_blank" rel="noopener noreferrer">
-                    <div class="url">class.claravia.cl</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://class.claravia.cl"
+               target="_blank">
+                <div class="url">class.claravia.cl</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://study.blackmunk.com" target="_blank" rel="noopener noreferrer">
-                    <div class="url">study.blackmunk.com</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://study.blackmunk.com"
+               target="_blank">
+                <div class="url">study.blackmunk.com</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://ro.gynauto.ro" target="_blank" rel="noopener noreferrer">
-                    <div class="url">ro.gynauto.ro</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://ro.gynauto.ro"
+               target="_blank">
+                <div class="url">ro.gynauto.ro</div>
+            </a>
 
         </div>
 
     </section>
 
 
-    <!-- SECOND SET -->
+    <!-- ================= TRIPLE T ================= -->
+
+    <section class="category">
+
+        <h2>📺 Triple T HD</h2>
+
+        <div class="links">
+
+            <a class="linkCard"
+               href="https://crossing.worldmicroscope.com"
+               target="_blank">
+                <div class="url">crossing.worldmicroscope.com</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://question.volticsolar.co.za"
+               target="_blank">
+                <div class="url">question.volticsolar.co.za</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://who.claravia.cl"
+               target="_blank">
+                <div class="url">who.claravia.cl</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://gyro.gynauto.ro"
+               target="_blank">
+                <div class="url">gyro.gynauto.ro</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://black.blackmunk.com"
+               target="_blank">
+                <div class="url">black.blackmunk.com</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SECOND SET ================= -->
 
     <section class="category">
 
@@ -743,42 +1249,386 @@ footer {
 
         <div class="links">
 
-            <div class="linkCard">
-                <a href="https://but.streetdirectory.sg" target="_blank" rel="noopener noreferrer">
-                    <div class="url">but.streetdirectory.sg</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://but.streetdirectory.sg"
+               target="_blank">
+                <div class="url">but.streetdirectory.sg</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://can.nondestructivetesting.ca" target="_blank" rel="noopener noreferrer">
-                    <div class="url">can.nondestructivetesting.ca</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://can.nondestructivetesting.ca"
+               target="_blank">
+                <div class="url">can.nondestructivetesting.ca</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://very.meridiano.com.br" target="_blank" rel="noopener noreferrer">
-                    <div class="url">very.meridiano.com.br</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://very.meridiano.com.br"
+               target="_blank">
+                <div class="url">very.meridiano.com.br</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://him.biometrika.cl" target="_blank" rel="noopener noreferrer">
-                    <div class="url">him.biometrika.cl</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://him.biometrika.cl"
+               target="_blank">
+                <div class="url">him.biometrika.cl</div>
+            </a>
 
-            <div class="linkCard">
-                <a href="https://about.aidbayarea.org" target="_blank" rel="noopener noreferrer">
-                    <div class="url">about.aidbayarea.org</div>
-                </a>
-            </div>
+            <a class="linkCard"
+               href="https://about.aidbayarea.org"
+               target="_blank">
+                <div class="url">about.aidbayarea.org</div>
+            </a>
 
         </div>
 
     </section>
 
 
-    <!-- BEST -->
+    <!-- ================= SECOND TRIPLE ================= -->
+
+    <section class="category">
+
+        <h2>📺 Triple T HD</h2>
+
+        <div class="links">
+
+            <a class="linkCard"
+               href="https://can.streetdirectory.sg"
+               target="_blank">
+                <div class="url">can.streetdirectory.sg</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://triple.nondestructivetesting.ca"
+               target="_blank">
+                <div class="url">triple.nondestructivetesting.ca</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://wowing.meridiano.com.br"
+               target="_blank">
+                <div class="url">wowing.meridiano.com.br</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://thme.biometrika.cl"
+               target="_blank">
+                <div class="url">thme.biometrika.cl</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://it.aidbayarea.org"
+               target="_blank">
+                <div class="url">it.aidbayarea.org</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SECOND SPACE ================= -->
+
+    <section class="category">
+
+        <h2>🚀 Space</h2>
+
+        <div class="links">
+
+            <a class="linkCard"
+               href="https://quick.streetdirectory.sg"
+               target="_blank">
+                <div class="url">quick.streetdirectory.sg</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://real.nondestructivetesting.ca"
+               target="_blank">
+                <div class="url">real.nondestructivetesting.ca</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://so.biometrika.cl"
+               target="_blank">
+                <div class="url">so.biometrika.cl</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://ok.aidbayarea.org"
+               target="_blank">
+                <div class="url">ok.aidbayarea.org</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://br.meridiano.com.br"
+               target="_blank">
+                <div class="url">br.meridiano.com.br</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SECOND UTOPIA ================= -->
+
+    <section class="category">
+
+        <h2>🌌 Utopia</h2>
+
+        <div class="links">
+
+            <a class="linkCard"
+               href="https://school.streetdirectory.sg"
+               target="_blank">
+                <div class="url">school.streetdirectory.sg</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://hilarious.nondestructivetesting.ca"
+               target="_blank">
+                <div class="url">hilarious.nondestructivetesting.ca</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://that.meridiano.com.br"
+               target="_blank">
+                <div class="url">that.meridiano.com.br</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://bill.biometrika.cl"
+               target="_blank">
+                <div class="url">bill.biometrika.cl</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://what.aidbayarea.org"
+               target="_blank">
+                <div class="url">what.aidbayarea.org</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SECOND LUNAR ================= -->
+
+    <section class="category">
+
+        <h2>🌙 Lunar</h2>
+
+        <div class="links">
+
+            <a class="linkCard"
+               href="https://pin.streetdirectory.sg"
+               target="_blank">
+                <div class="url">pin.streetdirectory.sg</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://hills.nondestructivetesting.ca"
+               target="_blank">
+                <div class="url">hills.nondestructivetesting.ca</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://cs.meridiano.com.br"
+               target="_blank">
+                <div class="url">cs.meridiano.com.br</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://the.biometrika.cl"
+               target="_blank">
+                <div class="url">the.biometrika.cl</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://well.aidbayarea.org"
+               target="_blank">
+                <div class="url">well.aidbayarea.org</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SECOND STUDY ================= -->
+
+    <section class="category">
+
+        <h2>📚 Study Hub</h2>
+
+        <div class="links">
+
+            <a class="linkCard"
+               href="https://kill.streetdirectory.sg"
+               target="_blank">
+                <div class="url">kill.streetdirectory.sg</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://tt.nondestructivetesting.ca"
+               target="_blank">
+                <div class="url">tt.nondestructivetesting.ca</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://zsch.meridiano.com.br"
+               target="_blank">
+                <div class="url">zsch.meridiano.com.br</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://bus.biometrika.cl"
+               target="_blank">
+                <div class="url">bus.biometrika.cl</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://would.aidbayarea.org"
+               target="_blank">
+                <div class="url">would.aidbayarea.org</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SECOND TUNG ================= -->
+
+    <section class="category">
+
+        <h2>🗿 Tung Tung</h2>
+
+        <div class="links">
+
+            <a class="linkCard"
+               href="https://new.streetdirectory.sg"
+               target="_blank">
+                <div class="url">new.streetdirectory.sg</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://killl.nondestructivetesting.ca"
+               target="_blank">
+                <div class="url">killl.nondestructivetesting.ca</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://tt.meridiano.com.br"
+               target="_blank">
+                <div class="url">tt.meridiano.com.br</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://down.biometrika.cl"
+               target="_blank">
+                <div class="url">down.biometrika.cl</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://thay.aidbayarea.org"
+               target="_blank">
+                <div class="url">thay.aidbayarea.org</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SECOND VOYA ================= -->
+
+    <section class="category">
+
+        <h2>🛸 Voya</h2>
+
+        <div class="links">
+
+            <a class="linkCard"
+               href="https://me.streetdirectory.sg"
+               target="_blank">
+                <div class="url">me.streetdirectory.sg</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://weekly.nondestructivetesting.ca"
+               target="_blank">
+                <div class="url">weekly.nondestructivetesting.ca</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://voya.meridiano.com.br"
+               target="_blank">
+                <div class="url">voya.meridiano.com.br</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://building.biometrika.cl"
+               target="_blank">
+                <div class="url">building.biometrika.cl</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://theme.aidbayarea.org"
+               target="_blank">
+                <div class="url">theme.aidbayarea.org</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SECOND STRAWBERRY ================= -->
+
+    <section class="category">
+
+        <h2>🍓 Stroberii</h2>
+
+        <div class="links">
+
+            <a class="linkCard"
+               href="https://with.streetdirectory.sg"
+               target="_blank">
+                <div class="url">with.streetdirectory.sg</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://they.nondestructivetesting.ca"
+               target="_blank">
+                <div class="url">they.nondestructivetesting.ca</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://cool.meridiano.com.br"
+               target="_blank">
+                <div class="url">cool.meridiano.com.br</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://working.biometrika.cl"
+               target="_blank">
+                <div class="url">working.biometrika.cl</div>
+            </a>
+
+            <a class="linkCard"
+               href="https://okk.aidbayarea.org"
+               target="_blank">
+                <div class="url">okk.aidbayarea.org</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= BEST ================= -->
 
     <div class="best">
 
@@ -787,7 +1637,6 @@ footer {
         <a
             href="https://thinking.rymconstrucciones.cl/"
             target="_blank"
-            rel="noopener noreferrer"
         >
             🚀 OPEN THE BEST ONE
         </a>
@@ -802,64 +1651,470 @@ footer {
 </div>
 
 
+<!-- ================= BOTTOM NAV ================= -->
+
+<nav id="bottomNav">
+
+    <button
+        class="navButton active"
+        id="linksNav"
+        type="button"
+    >
+        <span class="navIcon">🔗</span>
+        <span class="navLabel">Links</span>
+    </button>
+
+    <button
+        class="navButton"
+        id="adminNav"
+        type="button"
+        style="display:none"
+    >
+        <span class="navIcon">🤖</span>
+        <span class="navLabel">Admin Panel</span>
+    </button>
+
+    <button
+        class="navButton"
+        id="accountNav"
+        type="button"
+    >
+        <span class="navIcon">👤</span>
+        <span class="navLabel">Account</span>
+    </button>
+
+</nav>
+
+
+<!-- ================= ACCOUNT PANEL ================= -->
+
+<div
+    class="panel"
+    id="accountPanel"
+>
+
+    <div class="panelBox">
+
+        <div class="panelHeader">
+
+            <h2>👤 Account</h2>
+
+            <button
+                class="closePanel"
+                data-close="accountPanel"
+                type="button"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="accountBody">
+
+            <div
+                id="accountLoggedOut"
+            >
+
+                <div class="accountForm">
+
+                    <input
+                        id="accountUsername"
+                        placeholder="Username"
+                        autocomplete="username"
+                    >
+
+                    <input
+                        id="accountDisplayName"
+                        placeholder="Display name"
+                    >
+
+                    <input
+                        id="accountRealName"
+                        placeholder="Real name"
+                    >
+
+                    <input
+                        id="accountEmail"
+                        type="email"
+                        placeholder="Email"
+                        autocomplete="email"
+                    >
+
+                    <input
+                        id="accountPassword"
+                        type="password"
+                        placeholder="Password"
+                        autocomplete="new-password"
+                    >
+
+                    <button
+                        class="primaryButton"
+                        id="registerButton"
+                        type="button"
+                    >
+                        Create Account
+                    </button>
+
+                    <button
+                        class="secondaryButton"
+                        id="loginAccountButton"
+                        type="button"
+                    >
+                        Login
+                    </button>
+
+                    <div class="accountHint">
+                        Your real name is used for account identification.
+                        Other users should not see it.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="accountLoggedIn"
+                style="display:none"
+            >
+
+                <div class="accountCard">
+
+                    <div class="accountRow">
+                        <span class="accountLabel">
+                            Username
+                        </span>
+
+                        <span
+                            class="accountValue"
+                            id="meUsername"
+                        >
+                        </span>
+                    </div>
+
+                    <div class="accountRow">
+                        <span class="accountLabel">
+                            Display name
+                        </span>
+
+                        <span
+                            class="accountValue"
+                            id="meDisplayName"
+                        >
+                        </span>
+                    </div>
+
+                    <div class="accountRow">
+                        <span class="accountLabel">
+                            Email
+                        </span>
+
+                        <span
+                            class="accountValue"
+                            id="meEmail"
+                        >
+                        </span>
+                    </div>
+
+                    <div class="accountRow">
+                        <span class="accountLabel">
+                            Role
+                        </span>
+
+                        <span
+                            class="accountValue"
+                            id="meRole"
+                        >
+                        </span>
+                    </div>
+
+                    <div class="accountRow">
+                        <span class="accountLabel">
+                            Status
+                        </span>
+
+                        <span
+                            class="accountValue"
+                            id="meStatus"
+                        >
+                        </span>
+                    </div>
+
+                    <br>
+
+                    <button
+                        class="secondaryButton"
+                        id="logoutButton"
+                        type="button"
+                    >
+                        Log Out
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= ADMIN PANEL ================= -->
+
+<div
+    class="panel"
+    id="adminPanel"
+>
+
+    <div class="panelBox">
+
+        <div class="panelHeader">
+
+            <h2>🤖 Admin Panel</h2>
+
+            <button
+                class="closePanel"
+                data-close="adminPanel"
+                type="button"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="adminTabs">
+
+            <button
+                class="adminTab active"
+                data-tab="reports"
+                type="button"
+            >
+                🚨 Reports
+            </button>
+
+            <button
+                class="adminTab"
+                data-tab="users"
+                type="button"
+            >
+                👥 Users
+            </button>
+
+        </div>
+
+
+        <div class="adminBody">
+
+            <!-- REPORTS -->
+
+            <section
+                class="adminSection active"
+                id="reportsSection"
+            >
+
+                <div class="adminStats">
+
+                    <div class="statBox">
+
+                        <small>
+                            Reported Links
+                        </small>
+
+                        <strong
+                            id="adminReportCount"
+                        >
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div class="statBox">
+
+                        <small>
+                            Total Reports
+                        </small>
+
+                        <strong
+                            id="adminTotalReports"
+                        >
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="adminList"
+                    id="reportsList"
+                >
+                    Loading...
+                </div>
+
+            </section>
+
+
+            <!-- USERS -->
+
+            <section
+                class="adminSection"
+                id="usersSection"
+            >
+
+                <div
+                    class="adminList"
+                    id="usersList"
+                >
+                    Loading...
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
 <div id="toast"></div>
 
 
 <script>
 
-/*
-==================================================
-CONFIG
-==================================================
-*/
+/* =========================================================
+   CONFIG
+========================================================= */
 
 const API_BASE =
     "https://hehwhwhwhuuu.yaqubpapp1.workers.dev";
 
-const correctPassword =
+const ACCESS_PASSWORD =
     "yaqubraphinha";
 
+let authToken =
+    localStorage.getItem(
+        "yaqub_session"
+    );
 
-/*
-==================================================
-LOGIN
-==================================================
-*/
+let currentUser = null;
 
-const loginScreen =
-    document.getElementById("loginScreen");
 
-const mainSite =
-    document.getElementById("mainSite");
+/* =========================================================
+   HELPERS
+========================================================= */
 
-const passwordInput =
-    document.getElementById("passwordInput");
+function showToast(message) {
 
-const loginButton =
-    document.getElementById("loginButton");
+    const toast =
+        document.getElementById("toast");
 
-const error =
-    document.getElementById("error");
+    toast.textContent =
+        message;
 
-const lockedMessage =
-    document.getElementById("lockedMessage");
+    toast.style.display =
+        "block";
 
-let failedAttempts = 0;
+    clearTimeout(
+        window.toastTimer
+    );
 
-function login() {
+    window.toastTimer =
+        setTimeout(() => {
 
-    if (failedAttempts >= 3) {
-        return;
+            toast.style.display =
+                "none";
+
+        }, 3000);
+}
+
+
+async function api(
+    path,
+    options = {}
+) {
+
+    const headers = {
+        "Content-Type":
+            "application/json",
+        ...(options.headers || {})
+    };
+
+    if (authToken) {
+
+        headers.Authorization =
+            `Bearer ${authToken}`;
+
     }
 
-    const enteredPassword =
-        passwordInput.value
-            .trim()
-            .toLowerCase();
+    const response =
+        await fetch(
+            API_BASE + path,
+            {
+                ...options,
+                headers
+            }
+        );
+
+    const data =
+        await response.json();
+
+    return {
+        response,
+        data
+    };
+}
+
+
+/* =========================================================
+   ACCESS PASSWORD
+========================================================= */
+
+const loginScreen =
+    document.getElementById(
+        "loginScreen"
+    );
+
+const mainSite =
+    document.getElementById(
+        "mainSite"
+    );
+
+const passwordInput =
+    document.getElementById(
+        "passwordInput"
+    );
+
+const loginButton =
+    document.getElementById(
+        "loginButton"
+    );
+
+const error =
+    document.getElementById(
+        "error"
+    );
+
+const lockedMessage =
+    document.getElementById(
+        "lockedMessage"
+    );
+
+let passwordAttempts = 0;
+
+
+function unlockSite() {
 
     if (
-        enteredPassword ===
-        correctPassword
+        passwordInput.value
+            .trim()
+            .toLowerCase() ===
+        ACCESS_PASSWORD
     ) {
 
         loginScreen.style.display =
@@ -868,27 +2123,30 @@ function login() {
         mainSite.style.display =
             "block";
 
-        loadReports();
+        restoreAccount();
 
     } else {
 
-        failedAttempts++;
+        passwordAttempts++;
 
-        passwordInput.value = "";
+        passwordInput.value =
+            "";
 
-        if (failedAttempts >= 3) {
+        if (
+            passwordAttempts >= 3
+        ) {
+
+            loginButton.disabled =
+                true;
+
+            passwordInput.disabled =
+                true;
 
             error.style.display =
                 "none";
 
             lockedMessage.style.display =
                 "block";
-
-            passwordInput.disabled =
-                true;
-
-            loginButton.disabled =
-                true;
 
         } else {
 
@@ -908,28 +2166,32 @@ function login() {
 
 }
 
+
 loginButton.addEventListener(
     "click",
-    login
+    unlockSite
 );
+
 
 passwordInput.addEventListener(
     "keydown",
     event => {
 
-        if (event.key === "Enter") {
-            login();
+        if (
+            event.key === "Enter"
+        ) {
+
+            unlockSite();
+
         }
 
     }
 );
 
 
-/*
-==================================================
-SEARCH
-==================================================
-*/
+/* =========================================================
+   SEARCH
+========================================================= */
 
 const searchBox =
     document.getElementById(
@@ -946,6 +2208,7 @@ const categories =
         ".category"
     );
 
+
 searchBox.addEventListener(
     "input",
     () => {
@@ -961,24 +2224,12 @@ searchBox.addEventListener(
                 card.innerText
                     .toLowerCase();
 
-            if (
-                text.includes(query)
-            ) {
-
-                card.classList.remove(
-                    "hidden"
-                );
-
-            } else {
-
-                card.classList.add(
-                    "hidden"
-                );
-
-            }
+            card.classList.toggle(
+                "hidden",
+                !text.includes(query)
+            );
 
         });
-
 
         categories.forEach(
             category => {
@@ -988,21 +2239,10 @@ searchBox.addEventListener(
                         ".linkCard:not(.hidden)"
                     );
 
-                if (
+                category.classList.toggle(
+                    "hidden",
                     visible.length === 0
-                ) {
-
-                    category.classList.add(
-                        "hidden"
-                    );
-
-                } else {
-
-                    category.classList.remove(
-                        "hidden"
-                    );
-
-                }
+                );
 
             }
         );
@@ -1011,48 +2251,9 @@ searchBox.addEventListener(
 );
 
 
-/*
-==================================================
-TOAST
-==================================================
-*/
-
-const toast =
-    document.getElementById(
-        "toast"
-    );
-
-function showToast(message) {
-
-    toast.textContent =
-        message;
-
-    toast.style.display =
-        "block";
-
-    clearTimeout(
-        window.toastTimer
-    );
-
-    window.toastTimer =
-        setTimeout(
-            () => {
-
-                toast.style.display =
-                    "none";
-
-            },
-            3000
-        );
-
-}
-
-
-/*
-==================================================
-ADD REPORT BUTTONS
-==================================================
-*/
+/* =========================================================
+   REPORTING
+========================================================= */
 
 cards.forEach(card => {
 
@@ -1063,151 +2264,544 @@ cards.forEach(card => {
         return;
     }
 
-
-    const button =
-        document.createElement(
-            "button"
-        );
-
-    button.className =
-        "reportButton";
-
-    button.textContent =
-        "⚠️ Report";
-
-
-    const badge =
+    const overlay =
         document.createElement(
             "div"
         );
 
-    badge.className =
-        "reportedBadge";
+    overlay.className =
+        "reportOverlay";
 
-    badge.textContent =
-        "⚠️ Reported as blocked";
+    overlay.innerHTML = `
+
+        <div class="reportContent">
+
+            <div class="reportIcon">
+                ⚠️
+            </div>
+
+            <div class="reportTitle">
+                Report this link?
+            </div>
+
+            <div class="reportURL">
+                ${link.href}
+            </div>
+
+            <div class="reportButtons">
+
+                <button
+                    class="cancelReport"
+                    type="button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    class="confirmReport"
+                    type="button"
+                >
+                    🚨 Report Link
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+    card.appendChild(
+        overlay
+    );
+
+    let timer = null;
+    let held = false;
 
 
-    card.appendChild(button);
-    card.appendChild(badge);
+    function startHold() {
+
+        held = false;
+
+        clearTimeout(timer);
+
+        timer =
+            setTimeout(() => {
+
+                held = true;
+
+                overlay.classList.add(
+                    "show"
+                );
+
+            }, 2000);
+
+    }
 
 
-    button.addEventListener(
+    function cancelHold() {
+
+        clearTimeout(timer);
+
+    }
+
+
+    card.addEventListener(
+        "mousedown",
+        startHold
+    );
+
+    card.addEventListener(
+        "mouseup",
+        cancelHold
+    );
+
+    card.addEventListener(
+        "mouseleave",
+        cancelHold
+    );
+
+    card.addEventListener(
+        "touchstart",
+        startHold,
+        { passive: true }
+    );
+
+    card.addEventListener(
+        "touchend",
+        cancelHold
+    );
+
+    card.addEventListener(
+        "touchcancel",
+        cancelHold
+    );
+
+
+    card.addEventListener(
         "click",
         event => {
 
-            event.preventDefault();
-            event.stopPropagation();
+            if (held) {
 
-            reportLink(
-                link.href,
-                button,
-                badge
+                event.preventDefault();
+
+                held = false;
+
+            }
+
+        }
+    );
+
+
+    overlay
+        .querySelector(
+            ".cancelReport"
+        )
+        .addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                overlay.classList.remove(
+                    "show"
+                );
+
+                held = false;
+
+            }
+        );
+
+
+    overlay
+        .querySelector(
+            ".confirmReport"
+        )
+        .addEventListener(
+            "click",
+            async event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                const button =
+                    event.currentTarget;
+
+                button.disabled =
+                    true;
+
+                button.textContent =
+                    "⏳ Reporting...";
+
+
+                try {
+
+                    const result =
+                        await api(
+                            "/api/report",
+                            {
+                                method: "POST",
+                                body:
+                                    JSON.stringify({
+                                        url:
+                                            link.href,
+                                        name:
+                                            new URL(
+                                                link.href
+                                            ).hostname
+                                    })
+                            }
+                        );
+
+
+                    if (
+                        !result.response.ok ||
+                        !result.data.success
+                    ) {
+
+                        throw new Error(
+                            result.data.error ||
+                            "Report failed"
+                        );
+
+                    }
+
+
+                    button.textContent =
+                        "✅ Reported!";
+
+                    showToast(
+                        "Link reported successfully."
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            overlay.classList.remove(
+                                "show"
+                            );
+
+                            button.disabled =
+                                false;
+
+                            button.textContent =
+                                "🚨 Report Link";
+
+                        },
+                        1000
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+                    button.disabled =
+                        false;
+
+                    button.textContent =
+                        "❌ Try Again";
+
+                    showToast(
+                        "Couldn't submit report."
+                    );
+
+                }
+
+            }
+        );
+
+});
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const linksNav =
+    document.getElementById(
+        "linksNav"
+    );
+
+const adminNav =
+    document.getElementById(
+        "adminNav"
+    );
+
+const accountNav =
+    document.getElementById(
+        "accountNav"
+    );
+
+const accountPanel =
+    document.getElementById(
+        "accountPanel"
+    );
+
+const adminPanel =
+    document.getElementById(
+        "adminPanel"
+    );
+
+
+linksNav.addEventListener(
+    "click",
+    () => {
+
+        closePanels();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+        setActiveNav(
+            linksNav
+        );
+
+    }
+);
+
+
+accountNav.addEventListener(
+    "click",
+    () => {
+
+        accountPanel.classList.add(
+            "show"
+        );
+
+        setActiveNav(
+            accountNav
+        );
+
+    }
+);
+
+
+adminNav.addEventListener(
+    "click",
+    () => {
+
+        if (
+            !currentUser ||
+            currentUser.role !==
+            "admin"
+        ) {
+
+            showToast(
+                "Admin access required."
+            );
+
+            return;
+
+        }
+
+        adminPanel.classList.add(
+            "show"
+        );
+
+        setActiveNav(
+            adminNav
+        );
+
+        loadAdminReports();
+
+    }
+);
+
+
+function setActiveNav(
+    button
+) {
+
+    document
+        .querySelectorAll(
+            ".navButton"
+        )
+        .forEach(
+            item =>
+                item.classList.remove(
+                    "active"
+                )
+        );
+
+    button.classList.add(
+        "active"
+    );
+
+}
+
+
+function closePanels() {
+
+    accountPanel.classList.remove(
+        "show"
+    );
+
+    adminPanel.classList.remove(
+        "show"
+    );
+
+    setActiveNav(
+        linksNav
+    );
+
+}
+
+
+document
+    .querySelectorAll(
+        "[data-close]"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    closePanels();
+
+                }
             );
 
         }
     );
 
-});
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
+const loggedOut =
+    document.getElementById(
+        "accountLoggedOut"
+    );
+
+const loggedIn =
+    document.getElementById(
+        "accountLoggedIn"
+    );
 
 
-/*
-==================================================
-REPORT
-==================================================
-*/
+const usernameInput =
+    document.getElementById(
+        "accountUsername"
+    );
 
-async function reportLink(
-    url,
-    button,
-    badge
-) {
+const displayNameInput =
+    document.getElementById(
+        "accountDisplayName"
+    );
 
-    if (button.disabled) {
-        return;
-    }
+const realNameInput =
+    document.getElementById(
+        "accountRealName"
+    );
+
+const emailInput =
+    document.getElementById(
+        "accountEmail"
+    );
+
+const passwordAccountInput =
+    document.getElementById(
+        "accountPassword"
+    );
 
 
-    button.disabled =
-        true;
+document
+    .getElementById(
+        "registerButton"
+    )
+    .addEventListener(
+        "click",
+        registerAccount
+    );
 
-    button.textContent =
-        "Reporting...";
 
+document
+    .getElementById(
+        "loginAccountButton"
+    )
+    .addEventListener(
+        "click",
+        loginAccount
+    );
+
+
+document
+    .getElementById(
+        "logoutButton"
+    )
+    .addEventListener(
+        "click",
+        logoutAccount
+    );
+
+
+async function registerAccount() {
 
     try {
 
-        const response =
-            await fetch(
-                API_BASE +
-                "/api/report",
+        const result =
+            await api(
+                "/api/register",
                 {
                     method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
+                    body:
+                        JSON.stringify({
+                            username:
+                                usernameInput.value,
 
-                    body: JSON.stringify({
-                        url: url,
-                        name:
-                            new URL(url)
-                                .hostname
-                    })
+                            displayName:
+                                displayNameInput.value,
+
+                            realName:
+                                realNameInput.value,
+
+                            email:
+                                emailInput.value,
+
+                            password:
+                                passwordAccountInput.value
+                        })
                 }
             );
 
 
-        const data =
-            await response.json();
-
-
         if (
-            !response.ok ||
-            !data.success
+            !result.response.ok ||
+            !result.data.success
         ) {
 
             throw new Error(
-                data.error ||
-                "Report failed"
+                result.data.error ||
+                "Registration failed"
             );
 
         }
 
 
-        badge.style.display =
-            "inline-block";
-
-        button.textContent =
-            "✓ Reported";
-
-        button.style.color =
-            "#ffd84d";
-
-        button.style.borderColor =
-            "#8a6b00";
-
         showToast(
-            "Link reported successfully."
+            "✅ Account created. You can now log in."
         );
 
+
+        passwordAccountInput.value =
+            "";
 
     } catch (error) {
 
-        console.error(
-            "REPORT ERROR:",
-            error
-        );
-
-        button.disabled =
-            false;
-
-        button.textContent =
-            "⚠️ Report";
-
         showToast(
-            "Couldn't submit report."
+            "❌ " + error.message
         );
 
     }
@@ -1215,155 +2809,850 @@ async function reportLink(
 }
 
 
-/*
-==================================================
-LOAD REPORTS
-==================================================
-*/
-
-async function loadReports() {
+async function loginAccount() {
 
     try {
 
-        const response =
-            await fetch(
-                API_BASE +
-                "/api/reports",
+        const result =
+            await api(
+                "/api/login",
                 {
-                    cache: "no-store"
+                    method: "POST",
+
+                    body:
+                        JSON.stringify({
+                            email:
+                                emailInput.value,
+
+                            password:
+                                passwordAccountInput.value
+                        })
                 }
             );
 
 
-        const data =
-            await response.json();
-
-
         if (
-            !response.ok ||
-            !data.success
+            !result.response.ok ||
+            !result.data.success
         ) {
 
             throw new Error(
-                data.error ||
-                "Could not load reports"
+                result.data.error ||
+                "Login failed"
+            );
+
+        }
+
+
+        authToken =
+            result.data.token;
+
+        localStorage.setItem(
+            "yaqub_session",
+            authToken
+        );
+
+
+        await restoreAccount();
+
+        showToast(
+            "✅ Logged in"
+        );
+
+
+    } catch (error) {
+
+        showToast(
+            "❌ " + error.message
+        );
+
+    }
+
+}
+
+
+async function restoreAccount() {
+
+    if (!authToken) {
+
+        showLoggedOut();
+
+        return;
+
+    }
+
+
+    try {
+
+        const result =
+            await api(
+                "/api/me"
+            );
+
+
+        if (
+            !result.response.ok ||
+            !result.data.success
+        ) {
+
+            localStorage.removeItem(
+                "yaqub_session"
+            );
+
+            authToken =
+                null;
+
+            showLoggedOut();
+
+            return;
+
+        }
+
+
+        currentUser =
+            result.data.user;
+
+        showLoggedIn(
+            currentUser
+        );
+
+
+        if (
+            currentUser.role ===
+            "admin"
+        ) {
+
+            adminNav.style.display =
+                "block";
+
+        } else {
+
+            adminNav.style.display =
+                "none";
+
+        }
+
+    } catch {
+
+        showLoggedOut();
+
+    }
+
+}
+
+
+function showLoggedOut() {
+
+    currentUser =
+        null;
+
+    loggedOut.style.display =
+        "block";
+
+    loggedIn.style.display =
+        "none";
+
+    adminNav.style.display =
+        "none";
+
+}
+
+
+function showLoggedIn(
+    user
+) {
+
+    loggedOut.style.display =
+        "none";
+
+    loggedIn.style.display =
+        "block";
+
+
+    document.getElementById(
+        "meUsername"
+    ).textContent =
+        user.username || "";
+
+
+    document.getElementById(
+        "meDisplayName"
+    ).textContent =
+        user.displayName || "";
+
+
+    document.getElementById(
+        "meEmail"
+    ).textContent =
+        user.email || "";
+
+
+    document.getElementById(
+        "meRole"
+    ).textContent =
+        user.role || "user";
+
+
+    document.getElementById(
+        "meStatus"
+    ).textContent =
+        user.status || "active";
+
+}
+
+
+async function logoutAccount() {
+
+    try {
+
+        await api(
+            "/api/logout",
+            {
+                method: "POST"
+            }
+        );
+
+    } finally {
+
+        localStorage.removeItem(
+            "yaqub_session"
+        );
+
+        authToken =
+            null;
+
+        showLoggedOut();
+
+        closePanels();
+
+        showToast(
+            "Logged out"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ADMIN TABS
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".adminTab"
+    )
+    .forEach(
+        tab => {
+
+            tab.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            ".adminTab"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
+
+                    document
+                        .querySelectorAll(
+                            ".adminSection"
+                        )
+                        .forEach(
+                            section =>
+                                section.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    tab.classList.add(
+                        "active"
+                    );
+
+
+                    const target =
+                        tab.dataset.tab;
+
+
+                    document
+                        .getElementById(
+                            target +
+                            "Section"
+                        )
+                        .classList.add(
+                            "active"
+                        );
+
+
+                    if (
+                        target ===
+                        "users"
+                    ) {
+
+                        loadAdminUsers();
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   ADMIN REPORTS
+========================================================= */
+
+async function loadAdminReports() {
+
+    const list =
+        document.getElementById(
+            "reportsList"
+        );
+
+    list.innerHTML =
+        "Loading reports...";
+
+
+    try {
+
+        const result =
+            await api(
+                "/api/reports"
+            );
+
+
+        if (
+            !result.response.ok ||
+            !result.data.success
+        ) {
+
+            throw new Error(
+                result.data.error ||
+                "Couldn't load reports"
             );
 
         }
 
 
         const reports =
-            data.reports || [];
+            result.data.reports ||
+            [];
 
 
-        const reportedURLs =
-            new Set();
+        document.getElementById(
+            "adminReportCount"
+        ).textContent =
+            reports.length;
+
+
+        const total =
+            reports.reduce(
+                (
+                    sum,
+                    report
+                ) =>
+                    sum +
+                    Number(
+                        report.reports ||
+                        0
+                    ),
+                0
+            );
+
+
+        document.getElementById(
+            "adminTotalReports"
+        ).textContent =
+            total;
+
+
+        if (
+            reports.length === 0
+        ) {
+
+            list.innerHTML =
+                "🟢 No reported links.";
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            "";
 
 
         reports.forEach(
             report => {
 
-                if (report.url) {
+                const item =
+                    document.createElement(
+                        "div"
+                    );
 
-                    try {
+                item.className =
+                    "adminItem";
 
-                        reportedURLs.add(
-                            new URL(
+
+                item.innerHTML = `
+
+                    <div class="adminItemTop">
+
+                        <strong>
+                            ${escapeHTML(
                                 report.url
-                            ).href
-                        );
+                            )}
+                        </strong>
 
-                    } catch {
+                        <span>
+                            ${Number(
+                                report.reports ||
+                                0
+                            )} reports
+                        </span>
 
-                        reportedURLs.add(
-                            report.url
-                        );
+                    </div>
 
-                    }
+                    <div class="adminMeta">
+                        Reported:
+                        ${escapeHTML(
+                            formatDate(
+                                report.lastReported ||
+                                report.time
+                            )
+                        )}
+                    </div>
 
-                }
+                    <div class="adminActions">
+
+                        <button
+                            type="button"
+                            class="restoreReportButton"
+                        >
+                            ♻️ Restore
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                item
+                    .querySelector(
+                        ".restoreReportButton"
+                    )
+                    .addEventListener(
+                        "click",
+                        () =>
+                            restoreReport(
+                                report.url
+                            )
+                    );
+
+
+                list.appendChild(
+                    item
+                );
 
             }
         );
-
-
-        cards.forEach(card => {
-
-            const link =
-                card.querySelector("a");
-
-            const button =
-                card.querySelector(
-                    ".reportButton"
-                );
-
-            const badge =
-                card.querySelector(
-                    ".reportedBadge"
-                );
-
-            if (!link) {
-                return;
-            }
-
-
-            let normalizedURL;
-
-            try {
-
-                normalizedURL =
-                    new URL(
-                        link.href
-                    ).href;
-
-            } catch {
-
-                normalizedURL =
-                    link.href;
-
-            }
-
-
-            if (
-                reportedURLs.has(
-                    normalizedURL
-                )
-            ) {
-
-                badge.style.display =
-                    "inline-block";
-
-                button.textContent =
-                    "✓ Reported";
-
-                button.disabled =
-                    true;
-
-                button.style.color =
-                    "#ffd84d";
-
-                button.style.borderColor =
-                    "#8a6b00";
-
-            }
-
-        });
 
 
     } catch (error) {
 
-        console.error(
-            "LOAD REPORTS ERROR:",
-            error
-        );
-
-        showToast(
-            "Couldn't load report status."
-        );
+        list.innerHTML =
+            "❌ " +
+            escapeHTML(
+                error.message
+            );
 
     }
 
 }
+
+
+async function restoreReport(
+    url
+) {
+
+    const result =
+        await api(
+            "/api/restore",
+            {
+                method: "POST",
+
+                body:
+                    JSON.stringify({
+                        url
+                    })
+            }
+        );
+
+
+    if (
+        !result.response.ok ||
+        !result.data.success
+    ) {
+
+        showToast(
+            "❌ " +
+            (
+                result.data.error ||
+                "Restore failed"
+            )
+        );
+
+        return;
+
+    }
+
+
+    showToast(
+        "✅ Report restored"
+    );
+
+
+    loadAdminReports();
+
+}
+
+
+/* =========================================================
+   ADMIN USERS
+========================================================= */
+
+async function loadAdminUsers() {
+
+    const list =
+        document.getElementById(
+            "usersList"
+        );
+
+    list.innerHTML =
+        "Loading users...";
+
+
+    try {
+
+        const result =
+            await api(
+                "/api/admin/users"
+            );
+
+
+        if (
+            !result.response.ok ||
+            !result.data.success
+        ) {
+
+            throw new Error(
+                result.data.error ||
+                "Couldn't load users"
+            );
+
+        }
+
+
+        const users =
+            result.data.users ||
+            [];
+
+
+        if (
+            users.length === 0
+        ) {
+
+            list.innerHTML =
+                "No accounts yet.";
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            "";
+
+
+        users.forEach(
+            user => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+                item.className =
+                    "adminItem";
+
+
+                item.innerHTML = `
+
+                    <div class="adminItemTop">
+
+                        <strong>
+                            @${escapeHTML(
+                                user.username
+                            )}
+                        </strong>
+
+                        <span>
+                            ${escapeHTML(
+                                user.status
+                            )}
+                        </span>
+
+                    </div>
+
+                    <div class="adminMeta">
+                        ${escapeHTML(
+                            user.displayName
+                        )}
+                        ·
+                        ${escapeHTML(
+                            user.email
+                        )}
+                    </div>
+
+                    <div class="adminMeta">
+                        Real name:
+                        ${escapeHTML(
+                            user.realName
+                        )}
+                    </div>
+
+                    <div class="adminMeta">
+                        Role:
+                        ${escapeHTML(
+                            user.role
+                        )}
+                    </div>
+
+                    <div class="adminActions">
+
+                        <button
+                            type="button"
+                            data-action="block"
+                        >
+                            🚫 Block
+                        </button>
+
+                        <button
+                            type="button"
+                            data-action="unblock"
+                        >
+                            ✅ Unblock
+                        </button>
+
+                        <button
+                            type="button"
+                            class="dangerButton"
+                            data-action="ban"
+                        >
+                            🔨 Ban
+                        </button>
+
+                        ${
+                            user.role !== "admin"
+                            ? `
+                                <button
+                                    type="button"
+                                    data-action="promote"
+                                >
+                                    ⭐ Make Admin
+                                </button>
+                            `
+                            : ""
+                        }
+
+                    </div>
+
+                `;
+
+
+                item
+                    .querySelectorAll(
+                        "[data-action]"
+                    )
+                    .forEach(
+                        button => {
+
+                            button.addEventListener(
+                                "click",
+                                () =>
+                                    adminUserAction(
+                                        button.dataset.action,
+                                        user.id
+                                    )
+                            );
+
+                        }
+                    );
+
+
+                list.appendChild(
+                    item
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        list.innerHTML =
+            "❌ " +
+            escapeHTML(
+                error.message
+            );
+
+    }
+
+}
+
+
+async function adminUserAction(
+    action,
+    userId
+) {
+
+    const pathMap = {
+
+        block:
+            "/api/admin/block",
+
+        unblock:
+            "/api/admin/unblock",
+
+        ban:
+            "/api/admin/ban",
+
+        promote:
+            "/api/admin/promote"
+
+    };
+
+
+    const path =
+        pathMap[action];
+
+
+    if (!path) {
+        return;
+    }
+
+
+    const result =
+        await api(
+            path,
+            {
+                method: "POST",
+
+                body:
+                    JSON.stringify({
+                        userId
+                    })
+            }
+        );
+
+
+    if (
+        !result.response.ok ||
+        !result.data.success
+    ) {
+
+        showToast(
+            "❌ " +
+            (
+                result.data.error ||
+                "Action failed"
+            )
+        );
+
+        return;
+
+    }
+
+
+    showToast(
+        "✅ " +
+        result.data.message
+    );
+
+
+    loadAdminUsers();
+
+}
+
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
+
+}
+
+
+function formatDate(
+    timestamp
+) {
+
+    try {
+
+        return new Date(
+            timestamp
+        ).toLocaleString();
+
+    } catch {
+
+        return timestamp;
+
+    }
+
+}
+
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+restoreAccount();
 
 </script>
 
