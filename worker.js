@@ -19,10 +19,6 @@ export default {
     }
 
     try {
-      // =====================================================
-      // HEALTH
-      // =====================================================
-
       if (
         url.pathname === "/api/health" &&
         request.method === "GET"
@@ -34,11 +30,6 @@ export default {
         });
       }
 
-
-      // =====================================================
-      // REGISTER
-      // =====================================================
-
       if (
         url.pathname === "/api/register" &&
         request.method === "POST"
@@ -46,22 +37,12 @@ export default {
         return await registerUser(request, env);
       }
 
-
-      // =====================================================
-      // LOGIN
-      // =====================================================
-
       if (
         url.pathname === "/api/login" &&
         request.method === "POST"
       ) {
         return await loginUser(request, env);
       }
-
-
-      // =====================================================
-      // LOGOUT
-      // =====================================================
 
       if (
         url.pathname === "/api/logout" &&
@@ -78,11 +59,6 @@ export default {
           message: "Logged out"
         });
       }
-
-
-      // =====================================================
-      // CURRENT USER
-      // =====================================================
 
       if (
         url.pathname === "/api/me" &&
@@ -103,11 +79,6 @@ export default {
         });
       }
 
-
-      // =====================================================
-      // ONE-TIME ADMIN SETUP
-      // =====================================================
-
       if (
         url.pathname === "/api/admin/setup" &&
         request.method === "POST"
@@ -115,22 +86,12 @@ export default {
         return await setupFirstAdmin(request, env);
       }
 
-
-      // =====================================================
-      // REPORT A LINK
-      // =====================================================
-
       if (
         url.pathname === "/api/report" &&
         request.method === "POST"
       ) {
         return await reportLink(request, env);
       }
-
-
-      // =====================================================
-      // ADMIN: GET REPORTS
-      // =====================================================
 
       if (
         url.pathname === "/api/reports" &&
@@ -148,11 +109,6 @@ export default {
         return await getReports(env);
       }
 
-
-      // =====================================================
-      // ADMIN: RESTORE REPORT
-      // =====================================================
-
       if (
         url.pathname === "/api/restore" &&
         request.method === "POST"
@@ -168,11 +124,6 @@ export default {
 
         return await restoreReport(request, env);
       }
-
-
-      // =====================================================
-      // ADMIN: LIST USERS
-      // =====================================================
 
       if (
         url.pathname === "/api/admin/users" &&
@@ -190,11 +141,6 @@ export default {
         return await listUsers(env);
       }
 
-
-      // =====================================================
-      // ADMIN: BLOCK USER
-      // =====================================================
-
       if (
         url.pathname === "/api/admin/block" &&
         request.method === "POST"
@@ -205,11 +151,6 @@ export default {
           "blocked"
         );
       }
-
-
-      // =====================================================
-      // ADMIN: BAN USER
-      // =====================================================
 
       if (
         url.pathname === "/api/admin/ban" &&
@@ -222,11 +163,6 @@ export default {
         );
       }
 
-
-      // =====================================================
-      // ADMIN: UNBLOCK USER
-      // =====================================================
-
       if (
         url.pathname === "/api/admin/unblock" &&
         request.method === "POST"
@@ -238,22 +174,12 @@ export default {
         );
       }
 
-
-      // =====================================================
-      // ADMIN: PROMOTE USER
-      // =====================================================
-
       if (
         url.pathname === "/api/admin/promote" &&
         request.method === "POST"
       ) {
         return await promoteUser(request, env);
       }
-
-
-      // =====================================================
-      // WEBSITE
-      // =====================================================
 
       return env.ASSETS.fetch(request);
 
@@ -280,9 +206,8 @@ async function registerUser(request, env) {
   try {
     const data = await request.json();
 
-    const username = normalizeUsername(
-      data.username
-    );
+    const username =
+      normalizeUsername(data.username);
 
     const displayName =
       typeof data.displayName === "string"
@@ -294,11 +219,6 @@ async function registerUser(request, env) {
         ? data.realName.trim().slice(0, 120)
         : "";
 
-    const email =
-      typeof data.email === "string"
-        ? data.email.trim().toLowerCase().slice(0, 200)
-        : "";
-
     const password =
       typeof data.password === "string"
         ? data.password
@@ -308,12 +228,11 @@ async function registerUser(request, env) {
       !username ||
       !displayName ||
       !realName ||
-      !email ||
       !password
     ) {
       return json({
         success: false,
-        error: "Missing required information"
+        error: "Username, display name, real name, and password are required"
       }, 400);
     }
 
@@ -346,27 +265,6 @@ async function registerUser(request, env) {
       }, 400);
     }
 
-    if (!isValidEmail(email)) {
-      return json({
-        success: false,
-        error: "Invalid email"
-      }, 400);
-    }
-
-    const existingEmail =
-      await env.USERS.get(
-        `email:${email}`,
-        "json"
-      );
-
-    if (existingEmail) {
-      return json({
-        success: false,
-        error:
-          "An account with that email already exists"
-      }, 409);
-    }
-
     const existingUsername =
       await env.USERS.get(
         `username:${username}`,
@@ -376,8 +274,7 @@ async function registerUser(request, env) {
     if (existingUsername) {
       return json({
         success: false,
-        error:
-          "That username is already taken"
+        error: "That username is already taken"
       }, 409);
     }
 
@@ -399,7 +296,6 @@ async function registerUser(request, env) {
       username,
       displayName,
       realName,
-      email,
 
       passwordHash:
         passwordData.hash,
@@ -456,26 +352,24 @@ async function loginUser(request, env) {
   try {
     const data = await request.json();
 
-    const email =
-      typeof data.email === "string"
-        ? data.email.trim().toLowerCase()
-        : "";
+    const username =
+      normalizeUsername(data.username);
 
     const password =
       typeof data.password === "string"
         ? data.password
         : "";
 
-    if (!email || !password) {
+    if (!username || !password) {
       return json({
         success: false,
-        error: "Missing email or password"
+        error: "Username and password are required"
       }, 400);
     }
 
     const user =
       await env.USERS.get(
-        `email:${email}`,
+        `username:${username}`,
         "json"
       );
 
@@ -573,16 +467,16 @@ async function setupFirstAdmin(
         ? data.setupKey
         : "";
 
-    const email =
-      typeof data.email === "string"
-        ? data.email.trim().toLowerCase()
-        : "";
+    const username =
+      normalizeUsername(
+        data.username
+      );
 
-    if (!setupKey || !email) {
+    if (!setupKey || !username) {
       return json({
         success: false,
         error:
-          "Missing setup information"
+          "Username and setup key are required"
       }, 400);
     }
 
@@ -608,7 +502,7 @@ async function setupFirstAdmin(
 
     const user =
       await env.USERS.get(
-        `email:${email}`,
+        `username:${username}`,
         "json"
       );
 
@@ -648,7 +542,7 @@ async function setupFirstAdmin(
 
 
 // =========================================================
-// REPORT LINK
+// REPORT
 // =========================================================
 
 async function reportLink(
@@ -702,15 +596,12 @@ async function reportLink(
     if (!existing) {
       const report = {
         url: parsedURL.href,
-
         name:
           typeof data.name === "string"
             ? data.name.slice(0, 500)
             : parsedURL.hostname,
-
         time:
           new Date().toISOString(),
-
         reports: 1
       };
 
@@ -752,13 +643,12 @@ async function reportLink(
 
 
 // =========================================================
-// GET REPORTS
+// REPORT LIST
 // =========================================================
 
 async function getReports(env) {
   try {
     const reports = [];
-
     let cursor;
 
     while (true) {
@@ -829,7 +719,7 @@ async function getReports(env) {
 
 
 // =========================================================
-// RESTORE REPORT
+// RESTORE
 // =========================================================
 
 async function restoreReport(
@@ -885,7 +775,6 @@ async function restoreReport(
 async function listUsers(env) {
   try {
     const users = [];
-
     let cursor;
 
     while (true) {
@@ -950,7 +839,7 @@ async function listUsers(env) {
 
 
 // =========================================================
-// CHANGE USER STATUS
+// USER STATUS
 // =========================================================
 
 async function changeUserStatus(
@@ -1037,7 +926,7 @@ async function changeUserStatus(
 
   } catch (error) {
     console.error(
-      "STATUS CHANGE ERROR:",
+      "STATUS ERROR:",
       error?.stack || error
     );
 
@@ -1128,7 +1017,7 @@ async function promoteUser(
 
 
 // =========================================================
-// AUTHENTICATION
+// AUTH
 // =========================================================
 
 async function authenticate(
@@ -1195,8 +1084,7 @@ async function authenticate(
   ) {
     return {
       success: false,
-      error:
-        "Account access is disabled",
+      error: "Account access is disabled",
       status: 403
     };
   }
@@ -1209,10 +1097,6 @@ async function authenticate(
   };
 }
 
-
-// =========================================================
-// REQUIRE ADMIN
-// =========================================================
 
 async function requireAdmin(
   request,
@@ -1332,11 +1216,6 @@ async function saveUser(
   );
 
   await env.USERS.put(
-    `email:${user.email}`,
-    JSON.stringify(user)
-  );
-
-  await env.USERS.put(
     `username:${user.username}`,
     JSON.stringify(user)
   );
@@ -1344,7 +1223,7 @@ async function saveUser(
 
 
 // =========================================================
-// FIND FIRST ADMIN
+// FIND ADMIN
 // =========================================================
 
 async function findAdmin(
@@ -1391,7 +1270,7 @@ async function findAdmin(
 
 
 // =========================================================
-// REVOKE USER SESSIONS
+// REVOKE SESSIONS
 // =========================================================
 
 async function revokeUserSessions(
@@ -1441,7 +1320,7 @@ async function revokeUserSessions(
 
 
 // =========================================================
-// TOKEN
+// HELPERS
 // =========================================================
 
 function randomToken() {
@@ -1466,9 +1345,8 @@ function bytesToBase64Url(
   for (
     const byte of bytes
   ) {
-    binary += String.fromCharCode(
-      byte
-    );
+    binary +=
+      String.fromCharCode(byte);
   }
 
   return btoa(binary)
@@ -1477,10 +1355,6 @@ function bytesToBase64Url(
     .replace(/=+$/g, "");
 }
 
-
-// =========================================================
-// AUTH TOKEN
-// =========================================================
 
 function getToken(
   request
@@ -1505,10 +1379,6 @@ function getToken(
 }
 
 
-// =========================================================
-// USERNAME
-// =========================================================
-
 function normalizeUsername(
   value
 ) {
@@ -1524,10 +1394,6 @@ function normalizeUsername(
 }
 
 
-// =========================================================
-// REAL NAME
-// =========================================================
-
 function normalizeRealName(
   value
 ) {
@@ -1538,23 +1404,6 @@ function normalizeRealName(
 }
 
 
-// =========================================================
-// EMAIL
-// =========================================================
-
-function isValidEmail(
-  email
-) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-    email
-  );
-}
-
-
-// =========================================================
-// PUBLIC USER
-// =========================================================
-
 function publicUser(
   user
 ) {
@@ -1562,17 +1411,12 @@ function publicUser(
     id: user.id,
     username: user.username,
     displayName: user.displayName,
-    email: user.email,
     createdAt: user.createdAt,
     status: user.status,
     role: user.role
   };
 }
 
-
-// =========================================================
-// ADMIN USER
-// =========================================================
 
 function adminUser(
   user
@@ -1582,7 +1426,6 @@ function adminUser(
     username: user.username,
     displayName: user.displayName,
     realName: user.realName,
-    email: user.email,
     createdAt: user.createdAt,
     status: user.status,
     role: user.role,
@@ -1591,10 +1434,6 @@ function adminUser(
   };
 }
 
-
-// =========================================================
-// CONSTANT-TIME COMPARE
-// =========================================================
 
 function timingSafeEqual(
   a,
@@ -1623,10 +1462,6 @@ function timingSafeEqual(
   return difference === 0;
 }
 
-
-// =========================================================
-// JSON RESPONSE
-// =========================================================
 
 function json(
   data,
