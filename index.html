@@ -1382,7 +1382,23 @@ async function api(path, options = {}) {
         data
     };
 }
+function showToast(message) {
+    const toast = document.getElementById("toast");
 
+    if (!toast) {
+        console.warn(message);
+        return;
+    }
+
+    toast.textContent = message;
+    toast.style.display = "block";
+
+    clearTimeout(toast._timer);
+
+    toast._timer = setTimeout(() => {
+        toast.style.display = "none";
+    }, 3000);
+}
     /* =====================================================
        LINK DATA
        First occurrence wins; duplicates are removed by
