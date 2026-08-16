@@ -5,7 +5,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Yaqub's Hub</title>
+/* ================= BOTTOM NAV ================= */
 
+#bottomNav {
+    position: fixed;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+
+    width: min(520px, calc(100% - 24px));
+
+    display: flex;
+    gap: 8px;
+
+    padding: 9px;
+
+    background: rgba(15, 15, 15, 0.94);
+    border: 1px solid #333;
+    border-radius: 24px;
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+
+    z-index: 7000;
+}
+
+.navButton {
+    flex: 1;
+
+    border: none;
+    background: transparent;
+    color: #777;
+
+    padding: 8px 5px;
+
+    border-radius: 16px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.navButton:hover,
+.navButton.active {
+    background: #202020;
+    color: white;
+}
+
+.navIcon {
+    display: block;
+    font-size: 24px;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.navLabel {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    #bottomNav {
+        bottom: 10px;
+        width: calc(100% - 20px);
+    }
+
+    .navIcon {
+        font-size: 22px;
+    }
+}
 <style>
 * {
     box-sizing: border-box;
@@ -3655,6 +3726,25 @@ function formatDate(
 restoreAccount();
 
 </script>
+<!-- ================= BOTTOM NAV ================= -->
 
+<nav id="bottomNav">
+
+    <button class="navButton active" id="linksNav" type="button">
+        <span class="navIcon">🔗</span>
+        <span class="navLabel">Links</span>
+    </button>
+
+    <button class="navButton" id="adminNav" type="button">
+        <span class="navIcon">🤖</span>
+        <span class="navLabel">Admin Panel</span>
+    </button>
+
+    <button class="navButton" id="accountNav" type="button">
+        <span class="navIcon">👤</span>
+        <span class="navLabel">Account</span>
+    </button>
+
+</nav>
 </body>
 </html>
