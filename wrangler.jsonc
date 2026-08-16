@@ -1,5 +1,5 @@
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
+  "$schema": "node_modules/wrangler/config-schema.json",
 
   "name": "yaqubs-link-hub",
 
@@ -25,14 +25,23 @@
       "id": "b93ee107b4b9404cbb1342306d2fa009"
     }
   ],
-"durable_objects": {
-  "bindings": [
-    {
-      "name": "CHAT_ROOM",
-      "class_name": "ChatRoom"
+
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CHAT_ROOM",
+        "class_name": "ChatRoom"
+      }
+    ]
+  },
+
+  "exports": {
+    "ChatRoom": {
+      "type": "durable-object",
+      "storage": "sqlite"
     }
-  ]
-},
+  },
+
   "assets": {
     "directory": "./",
     "binding": "ASSETS"
