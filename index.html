@@ -6,248 +6,656 @@
 <title>Yaqub's Hub</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #050505;
+    color: white;
+    min-height: 100vh;
+}
+
+/* ================= PASSWORD SCREEN ================= */
+
+#loginScreen {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top, #222 0%, #050505 55%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.loginBox {
+    width: 100%;
+    max-width: 430px;
+    background: rgba(20,20,20,.95);
+    border: 1px solid #333;
+    border-radius: 22px;
+    padding: 35px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255,255,255,.08);
+}
+
+.lock {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+.loginBox h1 {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.loginBox p {
+    color: #999;
+    margin-bottom: 25px;
+}
+
+#passwordInput {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #444;
+    background: #0c0c0c;
+    color: white;
+    outline: none;
+    font-size: 16px;
+    text-align: center;
+}
+
+#passwordInput:focus {
+    border-color: white;
+}
+
+#loginButton {
+    width: 100%;
+    margin-top: 12px;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: white;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#error {
+    color: #ff4444;
+    margin-top: 15px;
+    display: none;
+    font-weight: bold;
+}
+
+/* ================= MAIN SITE ================= */
+
+#mainSite {
+    display: none;
+    padding: 25px;
+}
+
+.header {
+    text-align: center;
+    padding: 35px 10px;
+}
+
+.header h1 {
+    font-size: clamp(32px, 7vw, 60px);
+    font-weight: 900;
+}
+
+.header p {
+    color: #888;
+    margin-top: 8px;
+}
+
+.search {
+    max-width: 600px;
+    margin: 0 auto 35px;
+}
+
+#searchBox {
+    width: 100%;
+    padding: 15px 18px;
+    border-radius: 14px;
+    border: 1px solid #333;
+    background: #111;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+#searchBox:focus {
+    border-color: #777;
+}
+
+/* ================= ADMIN BUTTON ================= */
+
+#adminButton {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 5000;
+
+    border: 1px solid #333;
+    background: rgba(15,15,15,.92);
+    color: white;
+
+    padding: 11px 15px;
+    border-radius: 12px;
+
+    font-weight: bold;
+    cursor: pointer;
+
+    backdrop-filter: blur(10px);
+    transition: .2s;
+}
+
+#adminButton:hover {
+    background: #222;
+    border-color: #777;
+    transform: translateY(-2px);
+}
+
+/* ================= CATEGORIES ================= */
+
+.category {
+    max-width: 1100px;
+    margin: 0 auto 35px;
+}
+
+.category h2 {
+    font-size: 25px;
+    margin-bottom: 15px;
+    border-left: 4px solid white;
+    padding-left: 12px;
+}
+
+.links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px;
+}
+
+/* ================= LINK CARDS ================= */
+
+.linkCard {
+    position: relative;
+
+    display: block;
+    text-decoration: none;
+    color: white;
+
+    background: #111;
+    border: 1px solid #292929;
+    border-radius: 14px;
+
+    padding: 18px;
+
+    transition: .2s;
+
+    word-break: break-all;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    overflow: hidden;
+}
+
+.linkCard:hover {
+    background: #1d1d1d;
+    border-color: #666;
+    transform: translateY(-3px);
+}
+
+.linkCard .number {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 7px;
+}
+
+.linkCard .url {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* ================= HOLD REPORT EFFECT ================= */
+
+.linkCard.holding {
+    transform: scale(.98);
+    border-color: #777;
+}
+
+/*
+    IMPORTANT:
+    Only the background gets the blur effect.
+    The text stays sharp.
+*/
+
+.linkCard.holding::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: rgba(255,255,255,.08);
+
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+
+    pointer-events: none;
+}
+
+.linkCard.holding .report-progress {
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    height: 4px;
+    width: 0%;
+
+    background: white;
+
+    z-index: 5;
+
+    animation: reportProgress 2s linear forwards;
+}
+
+@keyframes reportProgress {
+    from {
+        width: 0%;
     }
 
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #050505;
-        color: white;
-        min-height: 100vh;
+    to {
+        width: 100%;
     }
+}
 
-    /* ================= PASSWORD SCREEN ================= */
+/* ================= REPORT MODE ================= */
 
-    #loginScreen {
-        position: fixed;
-        inset: 0;
-        background:
-            radial-gradient(circle at top, #222 0%, #050505 55%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        padding: 20px;
+.linkCard.reportMode {
+    background: #180909;
+    border-color: #ff4444;
+}
+
+.linkCard.reportMode:hover {
+    background: #240b0b;
+}
+
+.linkCard.reportMode .url {
+    color: #ff5555;
+}
+
+/* ================= REPORT MESSAGE ================= */
+
+.reportMessage {
+    position: fixed;
+
+    left: 50%;
+    bottom: 25px;
+
+    transform: translateX(-50%) translateY(100px);
+
+    background: #111;
+    border: 1px solid #333;
+
+    padding: 15px 20px;
+
+    border-radius: 14px;
+
+    box-shadow: 0 10px 40px rgba(0,0,0,.5);
+
+    z-index: 10000;
+
+    transition: .3s;
+
+    font-weight: bold;
+
+    pointer-events: none;
+}
+
+.reportMessage.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ================= BEST ONE ================= */
+
+.best {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 22px;
+    text-align: center;
+
+    background: linear-gradient(135deg, #151515, #080808);
+
+    border: 1px solid #555;
+
+    box-shadow: 0 0 35px rgba(255,255,255,.08);
+}
+
+.best h2 {
+    font-size: 30px;
+    margin-bottom: 18px;
+}
+
+.best a {
+    display: inline-block;
+    text-decoration: none;
+
+    color: black;
+    background: white;
+
+    padding: 17px 30px;
+    border-radius: 14px;
+
+    font-weight: 900;
+
+    transition: .2s;
+}
+
+.best a:hover {
+    transform: scale(1.05);
+    background: #ddd;
+}
+
+.hidden {
+    display: none !important;
+}
+
+footer {
+    text-align: center;
+    color: #444;
+    padding: 30px;
+}
+
+/* ================= ADMIN CENTER ================= */
+
+#adminOverlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0,0,0,.75);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    z-index: 8000;
+
+    display: none;
+
+    padding: 20px;
+}
+
+#adminOverlay.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.adminPanel {
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+
+    background: #0d0d0d;
+
+    border: 1px solid #333;
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: 0 30px 100px rgba(0,0,0,.7);
+
+    display: flex;
+    flex-direction: column;
+}
+
+.adminHeader {
+    padding: 20px;
+
+    border-bottom: 1px solid #292929;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+}
+
+.adminHeader h2 {
+    font-size: 24px;
+}
+
+.closeAdmin {
+    background: #191919;
+    border: 1px solid #333;
+
+    color: white;
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-size: 20px;
+}
+
+.adminStats {
+    padding: 15px 20px;
+
+    display: flex;
+    gap: 12px;
+
+    border-bottom: 1px solid #222;
+
+    flex-wrap: wrap;
+}
+
+.stat {
+    background: #151515;
+
+    border: 1px solid #292929;
+
+    border-radius: 12px;
+
+    padding: 12px 16px;
+
+    flex: 1;
+    min-width: 150px;
+}
+
+.stat small {
+    color: #777;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.stat strong {
+    font-size: 22px;
+}
+
+.adminControls {
+    padding: 15px 20px;
+
+    display: flex;
+    gap: 10px;
+}
+
+.refreshButton {
+    background: white;
+    color: black;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 11px 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.reportsList {
+    overflow-y: auto;
+
+    padding: 20px;
+}
+
+.reportItem {
+    background: #151515;
+
+    border: 1px solid #292929;
+
+    border-radius: 14px;
+
+    padding: 17px;
+
+    margin-bottom: 12px;
+}
+
+.reportTop {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    align-items: flex-start;
+}
+
+.reportURL {
+    font-weight: bold;
+
+    color: white;
+
+    word-break: break-all;
+
+    font-size: 15px;
+}
+
+.reportCount {
+    background: #351010;
+
+    color: #ff5555;
+
+    border: 1px solid #5a2020;
+
+    border-radius: 8px;
+
+    padding: 5px 9px;
+
+    white-space: nowrap;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.reportTime {
+    color: #666;
+
+    font-size: 12px;
+
+    margin-top: 8px;
+}
+
+.restoreButton {
+    margin-top: 12px;
+
+    background: #191919;
+
+    color: #ddd;
+
+    border: 1px solid #333;
+
+    padding: 9px 12px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+.restoreButton:hover {
+    background: #252525;
+    border-color: #666;
+}
+
+.noReports {
+    text-align: center;
+
+    color: #666;
+
+    padding: 50px 20px;
+}
+
+.loading {
+    text-align: center;
+
+    color: #777;
+
+    padding: 40px;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px) {
+
+    #mainSite {
+        padding: 15px;
     }
 
     .loginBox {
-        width: 100%;
-        max-width: 430px;
-        background: rgba(20,20,20,.95);
-        border: 1px solid #333;
-        border-radius: 22px;
-        padding: 35px;
-        text-align: center;
-        box-shadow: 0 0 50px rgba(255,255,255,.08);
-    }
-
-    .lock {
-        font-size: 55px;
-        margin-bottom: 15px;
-    }
-
-    .loginBox h1 {
-        font-size: 30px;
-        margin-bottom: 8px;
-    }
-
-    .loginBox p {
-        color: #999;
-        margin-bottom: 25px;
-    }
-
-    #passwordInput {
-        width: 100%;
-        padding: 15px;
-        border-radius: 12px;
-        border: 1px solid #444;
-        background: #0c0c0c;
-        color: white;
-        outline: none;
-        font-size: 16px;
-        text-align: center;
-    }
-
-    #passwordInput:focus {
-        border-color: white;
-    }
-
-    #loginButton {
-        width: 100%;
-        margin-top: 12px;
-        padding: 15px;
-        border: none;
-        border-radius: 12px;
-        background: white;
-        color: black;
-        font-weight: bold;
-        font-size: 16px;
-        cursor: pointer;
-        transition: .2s;
-    }
-
-    #loginButton:hover {
-        transform: scale(1.02);
-        background: #ddd;
-    }
-
-    #error {
-        color: #ff4444;
-        margin-top: 15px;
-        display: none;
-        font-weight: bold;
-    }
-
-    /* ================= MAIN SITE ================= */
-
-    #mainSite {
-        display: none;
         padding: 25px;
     }
 
-    .header {
-        text-align: center;
-        padding: 35px 10px;
-    }
-
-    .header h1 {
-        font-size: clamp(32px, 7vw, 60px);
-        font-weight: 900;
-    }
-
-    .header p {
-        color: #888;
-        margin-top: 8px;
-    }
-
-    .search {
-        max-width: 600px;
-        margin: 0 auto 35px;
-    }
-
-    #searchBox {
-        width: 100%;
-        padding: 15px 18px;
-        border-radius: 14px;
-        border: 1px solid #333;
-        background: #111;
-        color: white;
-        font-size: 16px;
-        outline: none;
-    }
-
-    #searchBox:focus {
-        border-color: #777;
-    }
-
-    .category {
-        max-width: 1100px;
-        margin: 0 auto 35px;
-    }
-
-    .category h2 {
-        font-size: 25px;
-        margin-bottom: 15px;
-        border-left: 4px solid white;
-        padding-left: 12px;
-    }
-
     .links {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-        gap: 12px;
+        grid-template-columns: 1fr;
     }
 
-    .linkCard {
-        display: block;
-        text-decoration: none;
-        color: white;
-        background: #111;
-        border: 1px solid #292929;
-        border-radius: 14px;
-        padding: 18px;
-        transition: .2s;
-        word-break: break-all;
-    }
+    #adminButton {
+        top: 12px;
+        right: 12px;
 
-    .linkCard:hover {
-        background: #1d1d1d;
-        border-color: #666;
-        transform: translateY(-3px);
-    }
-
-    .linkCard .number {
-        color: #666;
         font-size: 12px;
-        margin-bottom: 7px;
+
+        padding: 9px 11px;
     }
 
-    .linkCard .url {
-        font-size: 15px;
-        font-weight: bold;
+    .header {
+        padding-top: 55px;
     }
 
-    /* BEST ONE */
-
-    .best {
-        max-width: 1100px;
-        margin: 50px auto;
-        padding: 30px;
-        border-radius: 22px;
-        text-align: center;
-        background:
-            linear-gradient(135deg, #151515, #080808);
-        border: 1px solid #555;
-        box-shadow: 0 0 35px rgba(255,255,255,.08);
+    .adminPanel {
+        max-height: 94vh;
+        border-radius: 17px;
     }
 
-    .best h2 {
-        font-size: 30px;
-        margin-bottom: 18px;
+    .adminHeader h2 {
+        font-size: 20px;
     }
 
-    .best a {
-        display: inline-block;
-        text-decoration: none;
-        color: black;
-        background: white;
-        padding: 17px 30px;
-        border-radius: 14px;
-        font-weight: 900;
-        transition: .2s;
+    .reportTop {
+        flex-direction: column;
     }
 
-    .best a:hover {
-        transform: scale(1.05);
-        background: #ddd;
+    .reportCount {
+        align-self: flex-start;
     }
-
-    .hidden {
-        display: none !important;
-    }
-
-    footer {
-        text-align: center;
-        color: #444;
-        padding: 30px;
-    }
-
-    @media(max-width:600px) {
-        #mainSite {
-            padding: 15px;
-        }
-
-        .loginBox {
-            padding: 25px;
-        }
-
-        .links {
-            grid-template-columns: 1fr;
-        }
-    }
+}
 </style>
 </head>
 
@@ -288,6 +696,12 @@
 <!-- ================= MAIN SITE ================= -->
 
 <div id="mainSite">
+
+    <!-- ADMIN CENTER -->
+
+    <button id="adminButton">
+        🛠️ Admin Center
+    </button>
 
     <div class="header">
         <h1>🌐 Link Hub</h1>
@@ -894,84 +1308,1149 @@
 </div>
 
 
+<!-- ================= REPORT MESSAGE ================= -->
+
+<div id="reportMessage" class="reportMessage"></div>
+
+
+<!-- ================= ADMIN CENTER ================= -->
+
+<div id="adminOverlay">
+
+    <div class="adminPanel">
+
+        <div class="adminHeader">
+
+            <h2>🛠️ Global Link Reports</h2>
+
+            <button
+                class="closeAdmin"
+                id="closeAdmin"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="adminStats">
+
+            <div class="stat">
+                <small>Reported Links</small>
+                <strong id="reportCount">0</strong>
+            </div>
+
+            <div class="stat">
+                <small>Total Reports</small>
+                <strong id="totalReports">0</strong>
+            </div>
+
+        </div>
+
+        <div class="adminControls">
+
+            <button
+                class="refreshButton"
+                id="refreshReports"
+            >
+                🔄 Refresh
+            </button>
+
+        </div>
+
+        <div
+            class="reportsList"
+            id="reportsList"
+        >
+
+            <div class="loading">
+                Loading reports...
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
 
-    const correctPassword = "yaqubraphinha";
+/* =========================================================
+   CONFIG
+========================================================= */
 
-    const loginScreen = document.getElementById("loginScreen");
-    const mainSite = document.getElementById("mainSite");
-    const passwordInput = document.getElementById("passwordInput");
-    const loginButton = document.getElementById("loginButton");
-    const error = document.getElementById("error");
+const API_BASE =
+    "https://a304ad73-hehwhwhwhuuu.yaqubpapp1.workers.dev";
 
-    function login() {
 
-        const enteredPassword =
-            passwordInput.value.trim().toLowerCase();
+/* =========================================================
+   LOGIN
+========================================================= */
 
-        if (enteredPassword === correctPassword) {
+const correctPassword = "yaqubraphinha";
 
-            loginScreen.style.display = "none";
-            mainSite.style.display = "block";
+const loginScreen =
+    document.getElementById("loginScreen");
 
-        } else {
+const mainSite =
+    document.getElementById("mainSite");
 
-            error.style.display = "block";
-            passwordInput.value = "";
+const passwordInput =
+    document.getElementById("passwordInput");
 
-            setTimeout(() => {
-                error.style.display = "none";
-            }, 2500);
-        }
+const loginButton =
+    document.getElementById("loginButton");
+
+const error =
+    document.getElementById("error");
+
+
+function login() {
+
+    const enteredPassword =
+        passwordInput.value
+            .trim()
+            .toLowerCase();
+
+    if (enteredPassword === correctPassword) {
+
+        loginScreen.style.display = "none";
+        mainSite.style.display = "block";
+
+    } else {
+
+        error.style.display = "block";
+
+        passwordInput.value = "";
+
+        setTimeout(() => {
+
+            error.style.display = "none";
+
+        }, 2500);
     }
+}
 
-    loginButton.addEventListener("click", login);
 
-    passwordInput.addEventListener("keydown", function(event) {
+loginButton.addEventListener(
+    "click",
+    login
+);
+
+
+passwordInput.addEventListener(
+    "keydown",
+    function(event) {
 
         if (event.key === "Enter") {
             login();
         }
 
-    });
+    }
+);
 
 
-    /* SEARCH */
+/* =========================================================
+   SEARCH
+========================================================= */
 
-    const searchBox = document.getElementById("searchBox");
-    const cards = document.querySelectorAll(".linkCard");
-    const categories = document.querySelectorAll(".category");
+const searchBox =
+    document.getElementById("searchBox");
 
-    searchBox.addEventListener("input", function() {
+const cards =
+    document.querySelectorAll(".linkCard");
 
-        const query = searchBox.value.toLowerCase().trim();
+const categories =
+    document.querySelectorAll(".category");
+
+
+searchBox.addEventListener(
+    "input",
+    function() {
+
+        const query =
+            searchBox.value
+                .toLowerCase()
+                .trim();
 
         cards.forEach(card => {
 
-            const text = card.innerText.toLowerCase();
+            const text =
+                card.innerText
+                    .toLowerCase();
 
             if (text.includes(query)) {
-                card.classList.remove("hidden");
+
+                card.classList.remove(
+                    "hidden"
+                );
+
             } else {
-                card.classList.add("hidden");
+
+                card.classList.add(
+                    "hidden"
+                );
+
             }
 
         });
+
 
         categories.forEach(category => {
 
             const visibleCards =
-                category.querySelectorAll(".linkCard:not(.hidden)");
+                category.querySelectorAll(
+                    ".linkCard:not(.hidden)"
+                );
 
-            if (visibleCards.length === 0) {
-                category.classList.add("hidden");
+            if (
+                visibleCards.length === 0
+            ) {
+
+                category.classList.add(
+                    "hidden"
+                );
+
             } else {
-                category.classList.remove("hidden");
+
+                category.classList.remove(
+                    "hidden"
+                );
+
             }
 
         });
 
-    });
+    }
+);
+
+
+/* =========================================================
+   REPORT SYSTEM
+========================================================= */
+
+const HOLD_TIME = 2000;
+
+let holdTimer = null;
+
+let holdingCard = null;
+
+let holdTriggered = false;
+
+
+function startHold(card, event) {
+
+    /*
+        Don't interfere with normal clicks
+        unless the user holds the card.
+    */
+
+    holdTriggered = false;
+
+    holdingCard = card;
+
+    card.classList.add(
+        "holding"
+    );
+
+
+    const progress =
+        document.createElement(
+            "div"
+        );
+
+    progress.className =
+        "report-progress";
+
+    card.appendChild(progress);
+
+
+    holdTimer = setTimeout(
+        () => {
+
+            holdTriggered = true;
+
+            card.classList.remove(
+                "holding"
+            );
+
+            progress.remove();
+
+            activateReportMode(
+                card
+            );
+
+        },
+        HOLD_TIME
+    );
+}
+
+
+function cancelHold() {
+
+    if (holdTimer) {
+
+        clearTimeout(
+            holdTimer
+        );
+
+        holdTimer = null;
+
+    }
+
+    if (
+        holdingCard &&
+        !holdTriggered
+    ) {
+
+        holdingCard.classList.remove(
+            "holding"
+        );
+
+        const progress =
+            holdingCard.querySelector(
+                ".report-progress"
+            );
+
+        if (progress) {
+            progress.remove();
+        }
+    }
+
+    holdingCard = null;
+}
+
+
+function activateReportMode(card) {
+
+    card.classList.add(
+        "reportMode"
+    );
+
+    const urlElement =
+        card.querySelector(
+            ".url"
+        );
+
+    if (!urlElement) {
+        return;
+    }
+
+    /*
+        Save the original text.
+    */
+
+    card.dataset.originalText =
+        urlElement.textContent;
+
+    urlElement.textContent =
+        "⚠️ REPORT THIS LINK";
+
+    /*
+        Stop this card from navigating
+        while it is in report mode.
+    */
+
+    card.dataset.reportMode =
+        "true";
+
+    showMessage(
+        "⚠️ Tap the card again to report this link"
+    );
+}
+
+
+async function submitReport(card) {
+
+    const linkURL =
+        card.getAttribute(
+            "href"
+        );
+
+    if (!linkURL) {
+        return;
+    }
+
+    const urlElement =
+        card.querySelector(
+            ".url"
+        );
+
+
+    if (urlElement) {
+
+        urlElement.textContent =
+            "⏳ REPORTING...";
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_BASE +
+                "/api/report",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        url: linkURL,
+
+                        name:
+                            new URL(
+                                linkURL
+                            ).hostname
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error ||
+                "Report failed"
+            );
+
+        }
+
+
+        showMessage(
+            "✅ Link reported successfully"
+        );
+
+
+        card.classList.remove(
+            "reportMode"
+        );
+
+        delete card.dataset.reportMode;
+
+
+        if (urlElement) {
+
+            urlElement.textContent =
+                card.dataset.originalText ||
+                new URL(linkURL).hostname;
+
+        }
+
+
+    } catch (err) {
+
+        console.error(
+            "REPORT ERROR:",
+            err
+        );
+
+
+        showMessage(
+            "❌ Couldn't submit report"
+        );
+
+
+        card.classList.remove(
+            "reportMode"
+        );
+
+        delete card.dataset.reportMode;
+
+
+        if (urlElement) {
+
+            urlElement.textContent =
+                card.dataset.originalText ||
+                new URL(linkURL).hostname;
+
+        }
+
+    }
+}
+
+
+/*
+    Desktop / mouse
+*/
+
+cards.forEach(card => {
+
+    card.addEventListener(
+        "mousedown",
+        function(event) {
+
+            if (
+                card.dataset.reportMode ===
+                "true"
+            ) {
+
+                event.preventDefault();
+
+                submitReport(card);
+
+                return;
+            }
+
+            startHold(
+                card,
+                event
+            );
+
+        }
+    );
+
+
+    card.addEventListener(
+        "mouseup",
+        function(event) {
+
+            if (
+                holdTriggered
+            ) {
+
+                event.preventDefault();
+
+                return;
+            }
+
+            cancelHold();
+
+        }
+    );
+
+
+    card.addEventListener(
+        "mouseleave",
+        function() {
+
+            if (!holdTriggered) {
+                cancelHold();
+            }
+
+        }
+    );
+
+
+    /*
+        Mobile / touch
+    */
+
+    card.addEventListener(
+        "touchstart",
+        function(event) {
+
+            if (
+                card.dataset.reportMode ===
+                "true"
+            ) {
+
+                event.preventDefault();
+
+                submitReport(card);
+
+                return;
+            }
+
+            startHold(
+                card,
+                event
+            );
+
+        },
+        {
+            passive: false
+        }
+    );
+
+
+    card.addEventListener(
+        "touchend",
+        function(event) {
+
+            if (
+                holdTriggered
+            ) {
+
+                event.preventDefault();
+
+                return;
+            }
+
+            cancelHold();
+
+        },
+        {
+            passive: false
+        }
+    );
+
+
+    card.addEventListener(
+        "touchcancel",
+        function() {
+
+            cancelHold();
+
+        }
+    );
+
+
+    /*
+        Normal click behavior.
+    */
+
+    card.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                card.dataset.reportMode ===
+                "true"
+            ) {
+
+                event.preventDefault();
+
+                submitReport(card);
+
+                return;
+            }
+
+            if (holdTriggered) {
+
+                event.preventDefault();
+
+                holdTriggered = false;
+
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   REPORT MESSAGE
+========================================================= */
+
+const reportMessage =
+    document.getElementById(
+        "reportMessage"
+    );
+
+
+let messageTimer = null;
+
+
+function showMessage(message) {
+
+    reportMessage.textContent =
+        message;
+
+    reportMessage.classList.add(
+        "show"
+    );
+
+
+    if (messageTimer) {
+
+        clearTimeout(
+            messageTimer
+        );
+
+    }
+
+
+    messageTimer =
+        setTimeout(
+            () => {
+
+                reportMessage.classList.remove(
+                    "show"
+                );
+
+            },
+            3000
+        );
+}
+
+
+/* =========================================================
+   ADMIN CENTER
+========================================================= */
+
+const adminButton =
+    document.getElementById(
+        "adminButton"
+    );
+
+const adminOverlay =
+    document.getElementById(
+        "adminOverlay"
+    );
+
+const closeAdmin =
+    document.getElementById(
+        "closeAdmin"
+    );
+
+const refreshReports =
+    document.getElementById(
+        "refreshReports"
+    );
+
+const reportsList =
+    document.getElementById(
+        "reportsList"
+    );
+
+const reportCount =
+    document.getElementById(
+        "reportCount"
+    );
+
+const totalReports =
+    document.getElementById(
+        "totalReports"
+    );
+
+
+adminButton.addEventListener(
+    "click",
+    function() {
+
+        adminOverlay.classList.add(
+            "show"
+        );
+
+        loadReports();
+
+    }
+);
+
+
+closeAdmin.addEventListener(
+    "click",
+    function() {
+
+        adminOverlay.classList.remove(
+            "show"
+        );
+
+    }
+);
+
+
+/*
+    Clicking outside the panel closes it.
+*/
+
+adminOverlay.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target ===
+            adminOverlay
+        ) {
+
+            adminOverlay.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+refreshReports.addEventListener(
+    "click",
+    loadReports
+);
+
+
+/* =========================================================
+   LOAD REPORTS
+========================================================= */
+
+async function loadReports() {
+
+    reportsList.innerHTML =
+        `
+        <div class="loading">
+            🔄 Loading reports...
+        </div>
+        `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_BASE +
+                "/api/reports"
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error ||
+                "Failed to load reports"
+            );
+
+        }
+
+
+        renderReports(
+            data.reports || []
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "ADMIN ERROR:",
+            error
+        );
+
+
+        reportsList.innerHTML =
+            `
+            <div class="noReports">
+                ❌ Couldn't load reports.
+                <br><br>
+                Check that the Worker is online.
+            </div>
+            `;
+
+    }
+}
+
+
+/* =========================================================
+   RENDER REPORTS
+========================================================= */
+
+function renderReports(
+    reports
+) {
+
+    reportCount.textContent =
+        reports.length;
+
+
+    const total =
+        reports.reduce(
+            (
+                sum,
+                report
+            ) =>
+                sum +
+                Number(
+                    report.reports ||
+                    0
+                ),
+            0
+        );
+
+
+    totalReports.textContent =
+        total;
+
+
+    if (
+        reports.length === 0
+    ) {
+
+        reportsList.innerHTML =
+            `
+            <div class="noReports">
+                🟢 No reported links.
+            </div>
+            `;
+
+        return;
+    }
+
+
+    reportsList.innerHTML =
+        "";
+
+
+    reports.forEach(
+        report => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.className =
+                "reportItem";
+
+
+            const top =
+                document.createElement(
+                    "div"
+                );
+
+            top.className =
+                "reportTop";
+
+
+            const url =
+                document.createElement(
+                    "div"
+                );
+
+            url.className =
+                "reportURL";
+
+            url.textContent =
+                report.url ||
+                "Unknown URL";
+
+
+            const count =
+                document.createElement(
+                    "div"
+                );
+
+            count.className =
+                "reportCount";
+
+            count.textContent =
+                `${Number(
+                    report.reports || 0
+                )} REPORT${Number(
+                    report.reports || 0
+                ) === 1 ? "" : "S"}`;
+
+
+            top.appendChild(
+                url
+            );
+
+            top.appendChild(
+                count
+            );
+
+
+            const time =
+                document.createElement(
+                    "div"
+                );
+
+            time.className =
+                "reportTime";
+
+
+            const timestamp =
+                report.lastReported ||
+                report.time;
+
+
+            if (timestamp) {
+
+                time.textContent =
+                    "Last reported: " +
+                    formatDate(
+                        timestamp
+                    );
+
+            }
+
+
+            const restore =
+                document.createElement(
+                    "button"
+                );
+
+            restore.className =
+                "restoreButton";
+
+            restore.textContent =
+                "♻️ Restore Link";
+
+
+            restore.addEventListener(
+                "click",
+                function() {
+
+                    restoreReport(
+                        report.url
+                    );
+
+                }
+            );
+
+
+            item.appendChild(
+                top
+            );
+
+            item.appendChild(
+                time
+            );
+
+            item.appendChild(
+                restore
+            );
+
+
+            reportsList.appendChild(
+                item
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   RESTORE REPORT
+========================================================= */
+
+async function restoreReport(
+    url
+) {
+
+    const confirmed =
+        confirm(
+            "Restore this link and remove its report?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_BASE +
+                "/api/restore",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        url: url
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error ||
+                "Restore failed"
+            );
+
+        }
+
+
+        showMessage(
+            "♻️ Link restored"
+        );
+
+
+        await loadReports();
+
+
+    } catch (error) {
+
+        console.error(
+            "RESTORE ERROR:",
+            error
+        );
+
+
+        showMessage(
+            "❌ Couldn't restore link"
+        );
+
+    }
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatDate(
+    timestamp
+) {
+
+    try {
+
+        return new Date(
+            timestamp
+        ).toLocaleString();
+
+    } catch {
+
+        return timestamp;
+
+    }
+}
+
+
+/* =========================================================
+   ESCAPE ADMIN WITH ESC
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            adminOverlay.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
 
 </script>
 
