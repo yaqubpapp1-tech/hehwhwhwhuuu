@@ -3725,7 +3725,58 @@ function formatDate(
 ========================================================= */
 
 restoreAccount();
+/* ================= BOTTOM NAV ================= */
 
+const linksNav =
+    document.getElementById("linksNav");
+
+const adminNav =
+    document.getElementById("adminNav");
+
+const accountNav =
+    document.getElementById("accountNav");
+
+
+function setActiveNav(button) {
+
+    document
+        .querySelectorAll(".navButton")
+        .forEach(item => {
+            item.classList.remove("active");
+        });
+
+    button.classList.add("active");
+}
+
+
+linksNav.addEventListener("click", () => {
+
+    setActiveNav(linksNav);
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+});
+
+
+accountNav.addEventListener("click", () => {
+
+    setActiveNav(accountNav);
+
+    alert("Account section coming next 👤");
+
+});
+
+
+adminNav.addEventListener("click", () => {
+
+    setActiveNav(adminNav);
+
+    alert("Admin Panel coming next 🤖");
+
+});
 </script>
 <!-- ================= BOTTOM NAV ================= -->
 
