@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Yaqub's Hub</title>
 
 <style>
@@ -21,7 +20,7 @@ body {
     padding-bottom: 105px;
 }
 
-/* ================= LOGIN ================= */
+/* ================= PASSWORD SCREEN ================= */
 
 #loginScreen {
     position: fixed;
@@ -73,6 +72,10 @@ body {
     text-align: center;
 }
 
+#passwordInput:focus {
+    border-color: white;
+}
+
 #loginButton {
     width: 100%;
     margin-top: 12px;
@@ -84,11 +87,18 @@ body {
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
+    transition: .2s;
+}
+
+#loginButton:hover {
+    transform: scale(1.02);
+    background: #ddd;
 }
 
 #loginButton:disabled {
     opacity: .5;
     cursor: not-allowed;
+    transform: none;
 }
 
 #error {
@@ -105,7 +115,7 @@ body {
     font-weight: bold;
 }
 
-/* ================= MAIN ================= */
+/* ================= MAIN SITE ================= */
 
 #mainSite {
     display: none;
@@ -143,7 +153,9 @@ body {
     outline: none;
 }
 
-/* ================= CATEGORIES ================= */
+#searchBox:focus {
+    border-color: #777;
+}
 
 .category {
     max-width: 1100px;
@@ -163,11 +175,12 @@ body {
     gap: 12px;
 }
 
-/* ================= LINK CARD ================= */
+/* ================= LINK CARDS ================= */
 
 .linkCard {
     display: block;
     position: relative;
+    text-decoration: none;
     color: white;
     background: #111;
     border: 1px solid #292929;
@@ -176,18 +189,14 @@ body {
     transition: .2s;
     word-break: break-all;
     overflow: hidden;
+    cursor: pointer;
+    touch-action: manipulation;
 }
 
 .linkCard:hover {
     background: #1d1d1d;
     border-color: #666;
     transform: translateY(-3px);
-}
-
-.linkCard > a {
-    display: block;
-    text-decoration: none;
-    color: white;
 }
 
 .linkCard .number {
@@ -201,12 +210,12 @@ body {
     font-weight: bold;
 }
 
-/* ================= REPORT ================= */
+/* ================= REPORT OVERLAY ================= */
 
 .reportOverlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,.94);
+    background: rgba(0, 0, 0, 0.94);
     border-radius: 14px;
 
     display: flex;
@@ -265,6 +274,7 @@ body {
     padding: 9px 12px;
     font-weight: bold;
     cursor: pointer;
+    transition: .15s;
 }
 
 .cancelReport {
@@ -277,12 +287,35 @@ body {
     color: white;
 }
 
+.reportButtons button:hover {
+    transform: scale(1.04);
+}
+
 .reportButtons button:disabled {
     opacity: .6;
     cursor: wait;
 }
 
-/* ================= BEST ================= */
+/* ================= REPORTED BADGE ================= */
+
+.reportedBadge {
+    position: relative;
+    display: inline-block;
+    margin-top: 12px;
+    padding: 5px 8px;
+
+    background: #5a4700;
+    border: 1px solid #8a6b00;
+    border-radius: 7px;
+
+    color: #ffd84d;
+    font-size: 11px;
+    font-weight: bold;
+
+    z-index: 110;
+}
+
+/* ================= BEST ONE ================= */
 
 .best {
     max-width: 1100px;
@@ -309,6 +342,22 @@ body {
     padding: 17px 30px;
     border-radius: 14px;
     font-weight: 900;
+    transition: .2s;
+}
+
+.best a:hover {
+    transform: scale(1.05);
+    background: #ddd;
+}
+
+.hidden {
+    display: none !important;
+}
+
+footer {
+    text-align: center;
+    color: #444;
+    padding: 30px;
 }
 
 /* ================= BOTTOM NAV ================= */
@@ -333,20 +382,24 @@ body {
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
 
-    box-shadow:
-        0 12px 40px rgba(0,0,0,.55);
+    box-shadow: 0 12px 40px rgba(0,0,0,.55);
 
     z-index: 7000;
 }
 
 .navButton {
     flex: 1;
+
     border: none;
     background: transparent;
     color: #777;
+
     padding: 8px 5px;
+
     border-radius: 16px;
+
     cursor: pointer;
+
     transition: .2s;
 }
 
@@ -369,279 +422,7 @@ body {
     font-weight: bold;
 }
 
-/* ================= PANELS ================= */
-
-.panel {
-    position: fixed;
-    inset: 0;
-
-    display: none;
-    align-items: center;
-    justify-content: center;
-
-    padding: 18px;
-
-    background: rgba(0,0,0,.78);
-
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    z-index: 8000;
-}
-
-.panel.show {
-    display: flex;
-}
-
-.panelBox {
-    width: min(900px, 100%);
-    max-height: 90vh;
-    overflow: auto;
-
-    background: #0d0d0d;
-
-    border: 1px solid #333;
-    border-radius: 22px;
-
-    box-shadow:
-        0 25px 80px rgba(0,0,0,.7);
-}
-
-.panelHeader {
-    position: sticky;
-    top: 0;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    gap: 12px;
-
-    padding: 18px 20px;
-
-    background: rgba(13,13,13,.96);
-    border-bottom: 1px solid #292929;
-
-    z-index: 2;
-}
-
-.panelHeader h2 {
-    font-size: 22px;
-}
-
-.closePanel {
-    width: 40px;
-    height: 40px;
-
-    border: 1px solid #333;
-    border-radius: 10px;
-
-    background: #181818;
-    color: white;
-
-    cursor: pointer;
-    font-size: 18px;
-}
-
-/* ================= ACCOUNT ================= */
-
-.accountBody {
-    padding: 20px;
-}
-
-.accountForm {
-    display: grid;
-    gap: 10px;
-    max-width: 460px;
-    margin: 0 auto;
-}
-
-.accountForm input {
-    width: 100%;
-    padding: 13px;
-
-    border: 1px solid #333;
-    border-radius: 11px;
-
-    background: #111;
-    color: white;
-    outline: none;
-}
-
-.accountForm button,
-.primaryButton {
-    border: none;
-    border-radius: 11px;
-
-    padding: 13px;
-
-    background: white;
-    color: black;
-
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.secondaryButton {
-    border: 1px solid #333;
-    border-radius: 11px;
-
-    padding: 13px;
-
-    background: #181818;
-    color: white;
-
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.accountHint {
-    color: #777;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-.accountCard {
-    background: #151515;
-    border: 1px solid #2d2d2d;
-    border-radius: 15px;
-    padding: 18px;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.accountRow {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 11px 0;
-    border-bottom: 1px solid #292929;
-}
-
-.accountRow:last-child {
-    border-bottom: none;
-}
-
-.accountLabel {
-    color: #777;
-}
-
-.accountValue {
-    text-align: right;
-    word-break: break-word;
-}
-
-/* ================= ADMIN ================= */
-
-.adminTabs {
-    display: flex;
-    gap: 8px;
-    padding: 15px 20px 0;
-}
-
-.adminTab {
-    border: 1px solid #333;
-    border-radius: 10px;
-    background: #171717;
-    color: #aaa;
-    padding: 9px 12px;
-    cursor: pointer;
-}
-
-.adminTab.active {
-    background: white;
-    color: black;
-}
-
-.adminBody {
-    padding: 20px;
-}
-
-.adminSection {
-    display: none;
-}
-
-.adminSection.active {
-    display: block;
-}
-
-.adminList {
-    display: grid;
-    gap: 10px;
-}
-
-.adminItem {
-    background: #151515;
-    border: 1px solid #292929;
-    border-radius: 13px;
-    padding: 15px;
-}
-
-.adminItemTop {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-}
-
-.adminItem strong {
-    word-break: break-word;
-}
-
-.adminMeta {
-    color: #777;
-    font-size: 12px;
-    margin-top: 6px;
-}
-
-.adminActions {
-    display: flex;
-    gap: 7px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-}
-
-.adminActions button {
-    border: 1px solid #333;
-    border-radius: 9px;
-    background: #1a1a1a;
-    color: white;
-    padding: 8px 10px;
-    cursor: pointer;
-}
-
-.adminActions button:hover {
-    background: #282828;
-}
-
-.dangerButton {
-    color: #ff6666 !important;
-}
-
-.adminStats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.statBox {
-    background: #151515;
-    border: 1px solid #292929;
-    border-radius: 13px;
-    padding: 15px;
-}
-
-.statBox small {
-    display: block;
-    color: #777;
-    margin-bottom: 5px;
-}
-
-.statBox strong {
-    font-size: 24px;
-}
-
-/* ================= TOAST ================= */
+/* ================= APP MESSAGE ================= */
 
 #toast {
     position: fixed;
@@ -664,6 +445,8 @@ body {
 
     box-shadow:
         0 10px 35px rgba(0,0,0,.5);
+
+    font-weight: bold;
 }
 
 /* ================= MOBILE ================= */
@@ -682,78 +465,6 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .panelBox {
-        max-height: 94vh;
-        border-radius: 18px;
-    }
-
-    .adminStats {
-        grid-template-columns: 1fr;
-    }
-}
-/* ================= BOTTOM NAV ================= */
-
-#bottomNav {
-    position: fixed;
-    left: 50%;
-    bottom: 14px;
-    transform: translateX(-50%);
-
-    width: min(520px, calc(100% - 24px));
-
-    display: flex;
-    gap: 8px;
-
-    padding: 9px;
-
-    background: rgba(15, 15, 15, 0.94);
-    border: 1px solid #333;
-    border-radius: 24px;
-
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
-
-    z-index: 7000;
-}
-
-.navButton {
-    flex: 1;
-
-    border: none;
-    background: transparent;
-    color: #777;
-
-    padding: 8px 5px;
-
-    border-radius: 16px;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-.navButton:hover,
-.navButton.active {
-    background: #202020;
-    color: white;
-}
-
-.navIcon {
-    display: block;
-    font-size: 24px;
-    line-height: 1;
-    margin-bottom: 5px;
-}
-
-.navLabel {
-    display: block;
-    font-size: 11px;
-    font-weight: bold;
-}
-
-@media (max-width: 600px) {
     #bottomNav {
         bottom: 10px;
         width: calc(100% - 20px);
@@ -762,7 +473,7 @@ body {
     .navIcon {
         font-size: 22px;
     }
-}    
+}
 </style>
 </head>
 
@@ -841,62 +552,43 @@ body {
                target="_blank">
 
                 <div class="number">01</div>
-
-                <div class="url">
-                    ok.worldmicroscope.com
-                </div>
+                <div class="url">ok.worldmicroscope.com</div>
 
             </a>
-
 
             <a class="linkCard"
                href="https://good.volticsolar.co.za"
                target="_blank">
 
                 <div class="number">02</div>
-
-                <div class="url">
-                    good.volticsolar.co.za
-                </div>
+                <div class="url">good.volticsolar.co.za</div>
 
             </a>
-
 
             <a class="linkCard"
                href="https://home.gynauto.ro"
                target="_blank">
 
                 <div class="number">03</div>
-
-                <div class="url">
-                    home.gynauto.ro
-                </div>
+                <div class="url">home.gynauto.ro</div>
 
             </a>
-
 
             <a class="linkCard"
                href="https://school.claravia.cl"
                target="_blank">
 
                 <div class="number">04</div>
-
-                <div class="url">
-                    school.claravia.cl
-                </div>
+                <div class="url">school.claravia.cl</div>
 
             </a>
-
 
             <a class="linkCard"
                href="https://space.blackmunk.com"
                target="_blank">
 
                 <div class="number">05</div>
-
-                <div class="url">
-                    space.blackmunk.com
-                </div>
+                <div class="url">space.blackmunk.com</div>
 
             </a>
 
@@ -918,62 +610,43 @@ body {
                target="_blank">
 
                 <div class="number">01</div>
-
-                <div class="url">
-                    can.worldmicroscope.com
-                </div>
+                <div class="url">can.worldmicroscope.com</div>
 
             </a>
-
 
             <a class="linkCard"
                href="https://zoom.volticsolar.co.za"
                target="_blank">
 
                 <div class="number">02</div>
-
-                <div class="url">
-                    zoom.volticsolar.co.za
-                </div>
+                <div class="url">zoom.volticsolar.co.za</div>
 
             </a>
-
 
             <a class="linkCard"
                href="https://not.claravia.cl"
                target="_blank">
 
                 <div class="number">03</div>
-
-                <div class="url">
-                    not.claravia.cl
-                </div>
+                <div class="url">not.claravia.cl</div>
 
             </a>
-
 
             <a class="linkCard"
                href="https://work.gynauto.ro"
                target="_blank">
 
                 <div class="number">04</div>
-
-                <div class="url">
-                    work.gynauto.ro
-                </div>
+                <div class="url">work.gynauto.ro</div>
 
             </a>
-
 
             <a class="linkCard"
                href="https://utopia.blackmunk.com"
                target="_blank">
 
                 <div class="number">05</div>
-
-                <div class="url">
-                    utopia.blackmunk.com
-                </div>
+                <div class="url">utopia.blackmunk.com</div>
 
             </a>
 
@@ -990,63 +663,43 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://question.worldmicroscope.com"
-               target="_blank">
+            <a class="linkCard" href="https://question.worldmicroscope.com" target="_blank">
                 <div class="url">question.worldmicroscope.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://long.volticsolar.co.za"
-               target="_blank">
+            <a class="linkCard" href="https://long.volticsolar.co.za" target="_blank">
                 <div class="url">long.volticsolar.co.za</div>
             </a>
 
-            <a class="linkCard"
-               href="https://hmm.gynauto.ro"
-               target="_blank">
+            <a class="linkCard" href="https://hmm.gynauto.ro" target="_blank">
                 <div class="url">hmm.gynauto.ro</div>
             </a>
 
-            <a class="linkCard"
-               href="https://solora.blackmunk.com"
-               target="_blank">
+            <a class="linkCard" href="https://solora.blackmunk.com" target="_blank">
                 <div class="url">solora.blackmunk.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://club.claravia.cl"
-               target="_blank">
+            <a class="linkCard" href="https://club.claravia.cl" target="_blank">
                 <div class="url">club.claravia.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://wouldget.priestella.xyz"
-               target="_blank">
+            <a class="linkCard" href="https://wouldget.priestella.xyz" target="_blank">
                 <div class="url">wouldget.priestella.xyz</div>
             </a>
 
-            <a class="linkCard"
-               href="https://questionme.mrvillain.com"
-               target="_blank">
+            <a class="linkCard" href="https://questionme.mrvillain.com" target="_blank">
                 <div class="url">questionme.mrvillain.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://solara.glamourfreaks.com"
-               target="_blank">
+            <a class="linkCard" href="https://solara.glamourfreaks.com" target="_blank">
                 <div class="url">solara.glamourfreaks.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://schoolbook.berugy.hu"
-               target="_blank">
+            <a class="linkCard" href="https://schoolbook.berugy.hu" target="_blank">
                 <div class="url">schoolbook.berugy.hu</div>
             </a>
 
-            <a class="linkCard"
-               href="https://okiwell.adijaya.id"
-               target="_blank">
+            <a class="linkCard" href="https://okiwell.adijaya.id" target="_blank">
                 <div class="url">okiwell.adijaya.id</div>
             </a>
 
@@ -1063,33 +716,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://okwell.worldmicroscope.com"
-               target="_blank">
+            <a class="linkCard" href="https://okwell.worldmicroscope.com" target="_blank">
                 <div class="url">okwell.worldmicroscope.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://cool.volticsolar.co.za"
-               target="_blank">
+            <a class="linkCard" href="https://cool.volticsolar.co.za" target="_blank">
                 <div class="url">cool.volticsolar.co.za</div>
             </a>
 
-            <a class="linkCard"
-               href="https://cell.claravia.cl"
-               target="_blank">
+            <a class="linkCard" href="https://cell.claravia.cl" target="_blank">
                 <div class="url">cell.claravia.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://info.gynauto.ro"
-               target="_blank">
+            <a class="linkCard" href="https://info.gynauto.ro" target="_blank">
                 <div class="url">info.gynauto.ro</div>
             </a>
 
-            <a class="linkCard"
-               href="https://lunar.blackmunk.com"
-               target="_blank">
+            <a class="linkCard" href="https://lunar.blackmunk.com" target="_blank">
                 <div class="url">lunar.blackmunk.com</div>
             </a>
 
@@ -1106,33 +749,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://well.worldmicroscope.com"
-               target="_blank">
+            <a class="linkCard" href="https://well.worldmicroscope.com" target="_blank">
                 <div class="url">well.worldmicroscope.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://co.volticsolar.co.za"
-               target="_blank">
+            <a class="linkCard" href="https://co.volticsolar.co.za" target="_blank">
                 <div class="url">co.volticsolar.co.za</div>
             </a>
 
-            <a class="linkCard"
-               href="https://should.claravia.cl"
-               target="_blank">
+            <a class="linkCard" href="https://should.claravia.cl" target="_blank">
                 <div class="url">should.claravia.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://in.gynauto.ro"
-               target="_blank">
+            <a class="linkCard" href="https://in.gynauto.ro" target="_blank">
                 <div class="url">in.gynauto.ro</div>
             </a>
 
-            <a class="linkCard"
-               href="https://science.blackmunk.com"
-               target="_blank">
+            <a class="linkCard" href="https://science.blackmunk.com" target="_blank">
                 <div class="url">science.blackmunk.com</div>
             </a>
 
@@ -1149,33 +782,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://wider.worldmicroscope.com"
-               target="_blank">
+            <a class="linkCard" href="https://wider.worldmicroscope.com" target="_blank">
                 <div class="url">wider.worldmicroscope.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://coo.volticsolar.co.za"
-               target="_blank">
+            <a class="linkCard" href="https://coo.volticsolar.co.za" target="_blank">
                 <div class="url">coo.volticsolar.co.za</div>
             </a>
 
-            <a class="linkCard"
-               href="https://right.claravia.cl"
-               target="_blank">
+            <a class="linkCard" href="https://right.claravia.cl" target="_blank">
                 <div class="url">right.claravia.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://hot.gynauto.ro"
-               target="_blank">
+            <a class="linkCard" href="https://hot.gynauto.ro" target="_blank">
                 <div class="url">hot.gynauto.ro</div>
             </a>
 
-            <a class="linkCard"
-               href="https://stroberri.blackmunk.com"
-               target="_blank">
+            <a class="linkCard" href="https://stroberri.blackmunk.com" target="_blank">
                 <div class="url">stroberri.blackmunk.com</div>
             </a>
 
@@ -1192,33 +815,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://scope.worldmicroscope.com"
-               target="_blank">
+            <a class="linkCard" href="https://scope.worldmicroscope.com" target="_blank">
                 <div class="url">scope.worldmicroscope.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://volume.volticsolar.co.za"
-               target="_blank">
+            <a class="linkCard" href="https://volume.volticsolar.co.za" target="_blank">
                 <div class="url">volume.volticsolar.co.za</div>
             </a>
 
-            <a class="linkCard"
-               href="https://tryit.claravia.cl"
-               target="_blank">
+            <a class="linkCard" href="https://tryit.claravia.cl" target="_blank">
                 <div class="url">tryit.claravia.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://him.gynauto.ro"
-               target="_blank">
+            <a class="linkCard" href="https://him.gynauto.ro" target="_blank">
                 <div class="url">him.gynauto.ro</div>
             </a>
 
-            <a class="linkCard"
-               href="https://tung.blackmunk.com"
-               target="_blank">
+            <a class="linkCard" href="https://tung.blackmunk.com" target="_blank">
                 <div class="url">tung.blackmunk.com</div>
             </a>
 
@@ -1227,7 +840,7 @@ body {
     </section>
 
 
-    <!-- ================= STUDY ================= -->
+    <!-- ================= STUDY HUB ================= -->
 
     <section class="category">
 
@@ -1235,33 +848,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://wipe.worldmicroscope.com"
-               target="_blank">
+            <a class="linkCard" href="https://wipe.worldmicroscope.com" target="_blank">
                 <div class="url">wipe.worldmicroscope.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://hound.volticsolar.co.za"
-               target="_blank">
+            <a class="linkCard" href="https://hound.volticsolar.co.za" target="_blank">
                 <div class="url">hound.volticsolar.co.za</div>
             </a>
 
-            <a class="linkCard"
-               href="https://class.claravia.cl"
-               target="_blank">
+            <a class="linkCard" href="https://class.claravia.cl" target="_blank">
                 <div class="url">class.claravia.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://study.blackmunk.com"
-               target="_blank">
+            <a class="linkCard" href="https://study.blackmunk.com" target="_blank">
                 <div class="url">study.blackmunk.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://ro.gynauto.ro"
-               target="_blank">
+            <a class="linkCard" href="https://ro.gynauto.ro" target="_blank">
                 <div class="url">ro.gynauto.ro</div>
             </a>
 
@@ -1270,7 +873,7 @@ body {
     </section>
 
 
-    <!-- ================= TRIPLE T ================= -->
+    <!-- ================= TRIPLE T HD ================= -->
 
     <section class="category">
 
@@ -1278,33 +881,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://crossing.worldmicroscope.com"
-               target="_blank">
+            <a class="linkCard" href="https://crossing.worldmicroscope.com" target="_blank">
                 <div class="url">crossing.worldmicroscope.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://question.volticsolar.co.za"
-               target="_blank">
+            <a class="linkCard" href="https://question.volticsolar.co.za" target="_blank">
                 <div class="url">question.volticsolar.co.za</div>
             </a>
 
-            <a class="linkCard"
-               href="https://who.claravia.cl"
-               target="_blank">
+            <a class="linkCard" href="https://who.claravia.cl" target="_blank">
                 <div class="url">who.claravia.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://gyro.gynauto.ro"
-               target="_blank">
+            <a class="linkCard" href="https://gyro.gynauto.ro" target="_blank">
                 <div class="url">gyro.gynauto.ro</div>
             </a>
 
-            <a class="linkCard"
-               href="https://black.blackmunk.com"
-               target="_blank">
+            <a class="linkCard" href="https://black.blackmunk.com" target="_blank">
                 <div class="url">black.blackmunk.com</div>
             </a>
 
@@ -1313,7 +906,7 @@ body {
     </section>
 
 
-    <!-- ================= SECOND SET ================= -->
+    <!-- ================= SECOND SET SOLARA ================= -->
 
     <section class="category">
 
@@ -1321,33 +914,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://but.streetdirectory.sg"
-               target="_blank">
+            <a class="linkCard" href="https://but.streetdirectory.sg" target="_blank">
                 <div class="url">but.streetdirectory.sg</div>
             </a>
 
-            <a class="linkCard"
-               href="https://can.nondestructivetesting.ca"
-               target="_blank">
+            <a class="linkCard" href="https://can.nondestructivetesting.ca" target="_blank">
                 <div class="url">can.nondestructivetesting.ca</div>
             </a>
 
-            <a class="linkCard"
-               href="https://very.meridiano.com.br"
-               target="_blank">
+            <a class="linkCard" href="https://very.meridiano.com.br" target="_blank">
                 <div class="url">very.meridiano.com.br</div>
             </a>
 
-            <a class="linkCard"
-               href="https://him.biometrika.cl"
-               target="_blank">
+            <a class="linkCard" href="https://him.biometrika.cl" target="_blank">
                 <div class="url">him.biometrika.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://about.aidbayarea.org"
-               target="_blank">
+            <a class="linkCard" href="https://about.aidbayarea.org" target="_blank">
                 <div class="url">about.aidbayarea.org</div>
             </a>
 
@@ -1356,7 +939,7 @@ body {
     </section>
 
 
-    <!-- ================= SECOND TRIPLE ================= -->
+    <!-- ================= SECOND TRIPLE T HD ================= -->
 
     <section class="category">
 
@@ -1364,33 +947,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://can.streetdirectory.sg"
-               target="_blank">
+            <a class="linkCard" href="https://can.streetdirectory.sg" target="_blank">
                 <div class="url">can.streetdirectory.sg</div>
             </a>
 
-            <a class="linkCard"
-               href="https://triple.nondestructivetesting.ca"
-               target="_blank">
+            <a class="linkCard" href="https://triple.nondestructivetesting.ca" target="_blank">
                 <div class="url">triple.nondestructivetesting.ca</div>
             </a>
 
-            <a class="linkCard"
-               href="https://wowing.meridiano.com.br"
-               target="_blank">
+            <a class="linkCard" href="https://wowing.meridiano.com.br" target="_blank">
                 <div class="url">wowing.meridiano.com.br</div>
             </a>
 
-            <a class="linkCard"
-               href="https://thme.biometrika.cl"
-               target="_blank">
+            <a class="linkCard" href="https://thme.biometrika.cl" target="_blank">
                 <div class="url">thme.biometrika.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://it.aidbayarea.org"
-               target="_blank">
+            <a class="linkCard" href="https://it.aidbayarea.org" target="_blank">
                 <div class="url">it.aidbayarea.org</div>
             </a>
 
@@ -1407,33 +980,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://quick.streetdirectory.sg"
-               target="_blank">
+            <a class="linkCard" href="https://quick.streetdirectory.sg" target="_blank">
                 <div class="url">quick.streetdirectory.sg</div>
             </a>
 
-            <a class="linkCard"
-               href="https://real.nondestructivetesting.ca"
-               target="_blank">
+            <a class="linkCard" href="https://real.nondestructivetesting.ca" target="_blank">
                 <div class="url">real.nondestructivetesting.ca</div>
             </a>
 
-            <a class="linkCard"
-               href="https://so.biometrika.cl"
-               target="_blank">
+            <a class="linkCard" href="https://so.biometrika.cl" target="_blank">
                 <div class="url">so.biometrika.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://ok.aidbayarea.org"
-               target="_blank">
+            <a class="linkCard" href="https://ok.aidbayarea.org" target="_blank">
                 <div class="url">ok.aidbayarea.org</div>
             </a>
 
-            <a class="linkCard"
-               href="https://br.meridiano.com.br"
-               target="_blank">
+            <a class="linkCard" href="https://br.meridiano.com.br" target="_blank">
                 <div class="url">br.meridiano.com.br</div>
             </a>
 
@@ -1450,33 +1013,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://school.streetdirectory.sg"
-               target="_blank">
+            <a class="linkCard" href="https://school.streetdirectory.sg" target="_blank">
                 <div class="url">school.streetdirectory.sg</div>
             </a>
 
-            <a class="linkCard"
-               href="https://hilarious.nondestructivetesting.ca"
-               target="_blank">
+            <a class="linkCard" href="https://hilarious.nondestructivetesting.ca" target="_blank">
                 <div class="url">hilarious.nondestructivetesting.ca</div>
             </a>
 
-            <a class="linkCard"
-               href="https://that.meridiano.com.br"
-               target="_blank">
+            <a class="linkCard" href="https://that.meridiano.com.br" target="_blank">
                 <div class="url">that.meridiano.com.br</div>
             </a>
 
-            <a class="linkCard"
-               href="https://bill.biometrika.cl"
-               target="_blank">
+            <a class="linkCard" href="https://bill.biometrika.cl" target="_blank">
                 <div class="url">bill.biometrika.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://what.aidbayarea.org"
-               target="_blank">
+            <a class="linkCard" href="https://what.aidbayarea.org" target="_blank">
                 <div class="url">what.aidbayarea.org</div>
             </a>
 
@@ -1493,33 +1046,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://pin.streetdirectory.sg"
-               target="_blank">
+            <a class="linkCard" href="https://pin.streetdirectory.sg" target="_blank">
                 <div class="url">pin.streetdirectory.sg</div>
             </a>
 
-            <a class="linkCard"
-               href="https://hills.nondestructivetesting.ca"
-               target="_blank">
+            <a class="linkCard" href="https://hills.nondestructivetesting.ca" target="_blank">
                 <div class="url">hills.nondestructivetesting.ca</div>
             </a>
 
-            <a class="linkCard"
-               href="https://cs.meridiano.com.br"
-               target="_blank">
+            <a class="linkCard" href="https://cs.meridiano.com.br" target="_blank">
                 <div class="url">cs.meridiano.com.br</div>
             </a>
 
-            <a class="linkCard"
-               href="https://the.biometrika.cl"
-               target="_blank">
+            <a class="linkCard" href="https://the.biometrika.cl" target="_blank">
                 <div class="url">the.biometrika.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://well.aidbayarea.org"
-               target="_blank">
+            <a class="linkCard" href="https://well.aidbayarea.org" target="_blank">
                 <div class="url">well.aidbayarea.org</div>
             </a>
 
@@ -1528,7 +1071,7 @@ body {
     </section>
 
 
-    <!-- ================= SECOND STUDY ================= -->
+    <!-- ================= SECOND STUDY HUB ================= -->
 
     <section class="category">
 
@@ -1536,33 +1079,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://kill.streetdirectory.sg"
-               target="_blank">
+            <a class="linkCard" href="https://kill.streetdirectory.sg" target="_blank">
                 <div class="url">kill.streetdirectory.sg</div>
             </a>
 
-            <a class="linkCard"
-               href="https://tt.nondestructivetesting.ca"
-               target="_blank">
+            <a class="linkCard" href="https://tt.nondestructivetesting.ca" target="_blank">
                 <div class="url">tt.nondestructivetesting.ca</div>
             </a>
 
-            <a class="linkCard"
-               href="https://zsch.meridiano.com.br"
-               target="_blank">
+            <a class="linkCard" href="https://zsch.meridiano.com.br" target="_blank">
                 <div class="url">zsch.meridiano.com.br</div>
             </a>
 
-            <a class="linkCard"
-               href="https://bus.biometrika.cl"
-               target="_blank">
+            <a class="linkCard" href="https://bus.biometrika.cl" target="_blank">
                 <div class="url">bus.biometrika.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://would.aidbayarea.org"
-               target="_blank">
+            <a class="linkCard" href="https://would.aidbayarea.org" target="_blank">
                 <div class="url">would.aidbayarea.org</div>
             </a>
 
@@ -1579,33 +1112,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://new.streetdirectory.sg"
-               target="_blank">
+            <a class="linkCard" href="https://new.streetdirectory.sg" target="_blank">
                 <div class="url">new.streetdirectory.sg</div>
             </a>
 
-            <a class="linkCard"
-               href="https://killl.nondestructivetesting.ca"
-               target="_blank">
+            <a class="linkCard" href="https://killl.nondestructivetesting.ca" target="_blank">
                 <div class="url">killl.nondestructivetesting.ca</div>
             </a>
 
-            <a class="linkCard"
-               href="https://tt.meridiano.com.br"
-               target="_blank">
+            <a class="linkCard" href="https://tt.meridiano.com.br" target="_blank">
                 <div class="url">tt.meridiano.com.br</div>
             </a>
 
-            <a class="linkCard"
-               href="https://down.biometrika.cl"
-               target="_blank">
+            <a class="linkCard" href="https://down.biometrika.cl" target="_blank">
                 <div class="url">down.biometrika.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://thay.aidbayarea.org"
-               target="_blank">
+            <a class="linkCard" href="https://thay.aidbayarea.org" target="_blank">
                 <div class="url">thay.aidbayarea.org</div>
             </a>
 
@@ -1622,33 +1145,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://me.streetdirectory.sg"
-               target="_blank">
+            <a class="linkCard" href="https://me.streetdirectory.sg" target="_blank">
                 <div class="url">me.streetdirectory.sg</div>
             </a>
 
-            <a class="linkCard"
-               href="https://weekly.nondestructivetesting.ca"
-               target="_blank">
+            <a class="linkCard" href="https://weekly.nondestructivetesting.ca" target="_blank">
                 <div class="url">weekly.nondestructivetesting.ca</div>
             </a>
 
-            <a class="linkCard"
-               href="https://voya.meridiano.com.br"
-               target="_blank">
+            <a class="linkCard" href="https://voya.meridiano.com.br" target="_blank">
                 <div class="url">voya.meridiano.com.br</div>
             </a>
 
-            <a class="linkCard"
-               href="https://building.biometrika.cl"
-               target="_blank">
+            <a class="linkCard" href="https://building.biometrika.cl" target="_blank">
                 <div class="url">building.biometrika.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://theme.aidbayarea.org"
-               target="_blank">
+            <a class="linkCard" href="https://theme.aidbayarea.org" target="_blank">
                 <div class="url">theme.aidbayarea.org</div>
             </a>
 
@@ -1657,7 +1170,7 @@ body {
     </section>
 
 
-    <!-- ================= SECOND STRAWBERRY ================= -->
+    <!-- ================= SECOND STROBERII ================= -->
 
     <section class="category">
 
@@ -1665,33 +1178,23 @@ body {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://with.streetdirectory.sg"
-               target="_blank">
+            <a class="linkCard" href="https://with.streetdirectory.sg" target="_blank">
                 <div class="url">with.streetdirectory.sg</div>
             </a>
 
-            <a class="linkCard"
-               href="https://they.nondestructivetesting.ca"
-               target="_blank">
+            <a class="linkCard" href="https://they.nondestructivetesting.ca" target="_blank">
                 <div class="url">they.nondestructivetesting.ca</div>
             </a>
 
-            <a class="linkCard"
-               href="https://cool.meridiano.com.br"
-               target="_blank">
+            <a class="linkCard" href="https://cool.meridiano.com.br" target="_blank">
                 <div class="url">cool.meridiano.com.br</div>
             </a>
 
-            <a class="linkCard"
-               href="https://working.biometrika.cl"
-               target="_blank">
+            <a class="linkCard" href="https://working.biometrika.cl" target="_blank">
                 <div class="url">working.biometrika.cl</div>
             </a>
 
-            <a class="linkCard"
-               href="https://okk.aidbayarea.org"
-               target="_blank">
+            <a class="linkCard" href="https://okk.aidbayarea.org" target="_blank">
                 <div class="url">okk.aidbayarea.org</div>
             </a>
 
@@ -1700,7 +1203,7 @@ body {
     </section>
 
 
-    <!-- ================= BEST ================= -->
+    <!-- ================= BEST ONE ================= -->
 
     <div class="best">
 
@@ -1740,7 +1243,6 @@ body {
         class="navButton"
         id="adminNav"
         type="button"
-        style="display:none"
     >
         <span class="navIcon">🤖</span>
         <span class="navLabel">Admin Panel</span>
@@ -1758,302 +1260,6 @@ body {
 </nav>
 
 
-<!-- ================= ACCOUNT PANEL ================= -->
-
-<div
-    class="panel"
-    id="accountPanel"
->
-
-    <div class="panelBox">
-
-        <div class="panelHeader">
-
-            <h2>👤 Account</h2>
-
-            <button
-                class="closePanel"
-                data-close="accountPanel"
-                type="button"
-            >
-                ✕
-            </button>
-
-        </div>
-
-        <div class="accountBody">
-
-            <div
-                id="accountLoggedOut"
-            >
-
-                <div class="accountForm">
-
-                    <input
-                        id="accountUsername"
-                        placeholder="Username"
-                        autocomplete="username"
-                    >
-
-                    <input
-                        id="accountDisplayName"
-                        placeholder="Display name"
-                    >
-
-                    <input
-                        id="accountRealName"
-                        placeholder="Real name"
-                    >
-
-                    <input
-                        id="accountEmail"
-                        type="email"
-                        placeholder="Email"
-                        autocomplete="email"
-                    >
-
-                    <input
-                        id="accountPassword"
-                        type="password"
-                        placeholder="Password"
-                        autocomplete="new-password"
-                    >
-
-                    <button
-                        class="primaryButton"
-                        id="registerButton"
-                        type="button"
-                    >
-                        Create Account
-                    </button>
-
-                    <button
-                        class="secondaryButton"
-                        id="loginAccountButton"
-                        type="button"
-                    >
-                        Login
-                    </button>
-
-                    <div class="accountHint">
-                        Your real name is used for account identification.
-                        Other users should not see it.
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div
-                id="accountLoggedIn"
-                style="display:none"
-            >
-
-                <div class="accountCard">
-
-                    <div class="accountRow">
-                        <span class="accountLabel">
-                            Username
-                        </span>
-
-                        <span
-                            class="accountValue"
-                            id="meUsername"
-                        >
-                        </span>
-                    </div>
-
-                    <div class="accountRow">
-                        <span class="accountLabel">
-                            Display name
-                        </span>
-
-                        <span
-                            class="accountValue"
-                            id="meDisplayName"
-                        >
-                        </span>
-                    </div>
-
-                    <div class="accountRow">
-                        <span class="accountLabel">
-                            Email
-                        </span>
-
-                        <span
-                            class="accountValue"
-                            id="meEmail"
-                        >
-                        </span>
-                    </div>
-
-                    <div class="accountRow">
-                        <span class="accountLabel">
-                            Role
-                        </span>
-
-                        <span
-                            class="accountValue"
-                            id="meRole"
-                        >
-                        </span>
-                    </div>
-
-                    <div class="accountRow">
-                        <span class="accountLabel">
-                            Status
-                        </span>
-
-                        <span
-                            class="accountValue"
-                            id="meStatus"
-                        >
-                        </span>
-                    </div>
-
-                    <br>
-
-                    <button
-                        class="secondaryButton"
-                        id="logoutButton"
-                        type="button"
-                    >
-                        Log Out
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- ================= ADMIN PANEL ================= -->
-
-<div
-    class="panel"
-    id="adminPanel"
->
-
-    <div class="panelBox">
-
-        <div class="panelHeader">
-
-            <h2>🤖 Admin Panel</h2>
-
-            <button
-                class="closePanel"
-                data-close="adminPanel"
-                type="button"
-            >
-                ✕
-            </button>
-
-        </div>
-
-
-        <div class="adminTabs">
-
-            <button
-                class="adminTab active"
-                data-tab="reports"
-                type="button"
-            >
-                🚨 Reports
-            </button>
-
-            <button
-                class="adminTab"
-                data-tab="users"
-                type="button"
-            >
-                👥 Users
-            </button>
-
-        </div>
-
-
-        <div class="adminBody">
-
-            <!-- REPORTS -->
-
-            <section
-                class="adminSection active"
-                id="reportsSection"
-            >
-
-                <div class="adminStats">
-
-                    <div class="statBox">
-
-                        <small>
-                            Reported Links
-                        </small>
-
-                        <strong
-                            id="adminReportCount"
-                        >
-                            0
-                        </strong>
-
-                    </div>
-
-                    <div class="statBox">
-
-                        <small>
-                            Total Reports
-                        </small>
-
-                        <strong
-                            id="adminTotalReports"
-                        >
-                            0
-                        </strong>
-
-                    </div>
-
-                </div>
-
-                <div
-                    class="adminList"
-                    id="reportsList"
-                >
-                    Loading...
-                </div>
-
-            </section>
-
-
-            <!-- USERS -->
-
-            <section
-                class="adminSection"
-                id="usersSection"
-            >
-
-                <div
-                    class="adminList"
-                    id="usersList"
-                >
-                    Loading...
-                </div>
-
-            </section>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- ================= TOAST ================= -->
-
 <div id="toast"></div>
 
 
@@ -2063,88 +1269,21 @@ body {
    CONFIG
 ========================================================= */
 
-const API_BASE =
+const WORKER_URL =
     "https://hehwhwhwhuuu.yaqubpapp1.workers.dev";
 
 const ACCESS_PASSWORD =
     "yaqubraphinha";
 
-let authToken =
-    localStorage.getItem(
-        "yaqub_session"
-    );
+const MAX_PASSWORD_ATTEMPTS =
+    3;
 
-let currentUser = null;
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function showToast(message) {
-
-    const toast =
-        document.getElementById("toast");
-
-    toast.textContent =
-        message;
-
-    toast.style.display =
-        "block";
-
-    clearTimeout(
-        window.toastTimer
-    );
-
-    window.toastTimer =
-        setTimeout(() => {
-
-            toast.style.display =
-                "none";
-
-        }, 3000);
-}
-
-
-async function api(
-    path,
-    options = {}
-) {
-
-    const headers = {
-        "Content-Type":
-            "application/json",
-        ...(options.headers || {})
-    };
-
-    if (authToken) {
-
-        headers.Authorization =
-            `Bearer ${authToken}`;
-
-    }
-
-    const response =
-        await fetch(
-            API_BASE + path,
-            {
-                ...options,
-                headers
-            }
-        );
-
-    const data =
-        await response.json();
-
-    return {
-        response,
-        data
-    };
-}
+const HOLD_TIME =
+    2000;
 
 
 /* =========================================================
-   ACCESS PASSWORD
+   LOGIN
 ========================================================= */
 
 const loginScreen =
@@ -2177,15 +1316,27 @@ const lockedMessage =
         "lockedMessage"
     );
 
-let passwordAttempts = 0;
+let passwordAttempts =
+    0;
+
+let accessLocked =
+    false;
 
 
-function unlockSite() {
+function login() {
 
-    if (
+    if (accessLocked) {
+        return;
+    }
+
+    const enteredPassword =
         passwordInput.value
             .trim()
-            .toLowerCase() ===
+            .toLowerCase();
+
+
+    if (
+        enteredPassword ===
         ACCESS_PASSWORD
     ) {
 
@@ -2195,53 +1346,58 @@ function unlockSite() {
         mainSite.style.display =
             "block";
 
-        restoreAccount();
+        return;
+    }
+
+
+    passwordAttempts++;
+
+    passwordInput.value =
+        "";
+
+
+    if (
+        passwordAttempts >=
+        MAX_PASSWORD_ATTEMPTS
+    ) {
+
+        accessLocked =
+            true;
+
+        error.style.display =
+            "none";
+
+        lockedMessage.style.display =
+            "block";
+
+        passwordInput.disabled =
+            true;
+
+        loginButton.disabled =
+            true;
 
     } else {
 
-        passwordAttempts++;
+        error.style.display =
+            "block";
 
-        passwordInput.value =
-            "";
-
-        if (
-            passwordAttempts >= 3
-        ) {
-
-            loginButton.disabled =
-                true;
-
-            passwordInput.disabled =
-                true;
-
-            error.style.display =
-                "none";
-
-            lockedMessage.style.display =
-                "block";
-
-        } else {
-
-            error.style.display =
-                "block";
-
-            setTimeout(() => {
+        setTimeout(
+            () => {
 
                 error.style.display =
                     "none";
 
-            }, 2500);
-
-        }
+            },
+            2500
+        );
 
     }
-
 }
 
 
 loginButton.addEventListener(
     "click",
-    unlockSite
+    login
 );
 
 
@@ -2253,7 +1409,7 @@ passwordInput.addEventListener(
             event.key === "Enter"
         ) {
 
-            unlockSite();
+            login();
 
         }
 
@@ -2271,13 +1427,17 @@ const searchBox =
     );
 
 const cards =
-    document.querySelectorAll(
-        ".linkCard"
+    Array.from(
+        document.querySelectorAll(
+            ".linkCard"
+        )
     );
 
 const categories =
-    document.querySelectorAll(
-        ".category"
+    Array.from(
+        document.querySelectorAll(
+            ".category"
+        )
     );
 
 
@@ -2290,30 +1450,38 @@ searchBox.addEventListener(
                 .toLowerCase()
                 .trim();
 
-        cards.forEach(card => {
 
-            const text =
-                card.innerText
-                    .toLowerCase();
+        cards.forEach(
+            card => {
 
-            card.classList.toggle(
-                "hidden",
-                !text.includes(query)
-            );
+                const text =
+                    card.innerText
+                        .toLowerCase();
 
-        });
+
+                card.classList.toggle(
+                    "hidden",
+                    !text.includes(
+                        query
+                    )
+                );
+
+            }
+        );
+
 
         categories.forEach(
             category => {
 
-                const visible =
+                const visibleCards =
                     category.querySelectorAll(
                         ".linkCard:not(.hidden)"
                     );
 
+
                 category.classList.toggle(
                     "hidden",
-                    visible.length === 0
+                    visibleCards.length === 0
                 );
 
             }
@@ -2324,152 +1492,278 @@ searchBox.addEventListener(
 
 
 /* =========================================================
-   REPORTING
+   TOAST
 ========================================================= */
 
-cards.forEach(card => {
+const toast =
+    document.getElementById(
+        "toast"
+    );
 
-    const link =
-        card.querySelector("a");
+let toastTimer =
+    null;
 
-    if (!link) {
-        return;
-    }
 
-    const overlay =
-        document.createElement(
-            "div"
+function showToast(
+    message
+) {
+
+    toast.textContent =
+        message;
+
+    toast.style.display =
+        "block";
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.style.display =
+                    "none";
+
+            },
+            3000
         );
 
-    overlay.className =
-        "reportOverlay";
+}
 
-    overlay.innerHTML = `
 
-        <div class="reportContent">
+/* =========================================================
+   REPORT SYSTEM
+========================================================= */
 
-            <div class="reportIcon">
-                ⚠️
+cards.forEach(
+    card => {
+
+        const url =
+            card.href;
+
+
+        if (!url) {
+            return;
+        }
+
+
+        card.style.position =
+            "relative";
+
+
+        let holdTimer =
+            null;
+
+        let holdTriggered =
+            false;
+
+        let reporting =
+            false;
+
+
+        /* ==============================
+           OVERLAY
+        ============================== */
+
+        const overlay =
+            document.createElement(
+                "div"
+            );
+
+
+        overlay.className =
+            "reportOverlay";
+
+
+        overlay.innerHTML = `
+
+            <div class="reportContent">
+
+                <div class="reportIcon">
+                    ⚠️
+                </div>
+
+                <div class="reportTitle">
+                    Report this link?
+                </div>
+
+                <div class="reportURL">
+                    ${escapeHTML(url)}
+                </div>
+
+                <div class="reportButtons">
+
+                    <button
+                        type="button"
+                        class="cancelReport"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        class="confirmReport"
+                    >
+                        🚨 Report Link
+                    </button>
+
+                </div>
+
             </div>
 
-            <div class="reportTitle">
-                Report this link?
-            </div>
-
-            <div class="reportURL">
-                ${link.href}
-            </div>
-
-            <div class="reportButtons">
-
-                <button
-                    class="cancelReport"
-                    type="button"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    class="confirmReport"
-                    type="button"
-                >
-                    🚨 Report Link
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
-
-    card.appendChild(
-        overlay
-    );
-
-    let timer = null;
-    let held = false;
+        `;
 
 
-    function startHold() {
-
-        held = false;
-
-        clearTimeout(timer);
-
-        timer =
-            setTimeout(() => {
-
-                held = true;
-
-                overlay.classList.add(
-                    "show"
-                );
-
-            }, 2000);
-
-    }
+        card.appendChild(
+            overlay
+        );
 
 
-    function cancelHold() {
-
-        clearTimeout(timer);
-
-    }
-
-
-    card.addEventListener(
-        "mousedown",
-        startHold
-    );
-
-    card.addEventListener(
-        "mouseup",
-        cancelHold
-    );
-
-    card.addEventListener(
-        "mouseleave",
-        cancelHold
-    );
-
-    card.addEventListener(
-        "touchstart",
-        startHold,
-        { passive: true }
-    );
-
-    card.addEventListener(
-        "touchend",
-        cancelHold
-    );
-
-    card.addEventListener(
-        "touchcancel",
-        cancelHold
-    );
+        const cancelButton =
+            overlay.querySelector(
+                ".cancelReport"
+            );
 
 
-    card.addEventListener(
-        "click",
-        event => {
+        const confirmButton =
+            overlay.querySelector(
+                ".confirmReport"
+            );
 
-            if (held) {
 
-                event.preventDefault();
+        /* ==============================
+           HOLD
+        ============================== */
 
-                held = false;
+        function startHold(
+            event
+        ) {
 
+            if (
+                event.target.closest(
+                    ".reportOverlay"
+                )
+            ) {
+                return;
             }
 
+
+            holdTriggered =
+                false;
+
+
+            clearTimeout(
+                holdTimer
+            );
+
+
+            holdTimer =
+                setTimeout(
+                    () => {
+
+                        holdTriggered =
+                            true;
+
+                        overlay.classList.add(
+                            "show"
+                        );
+
+                    },
+                    HOLD_TIME
+                );
+
         }
-    );
 
 
-    overlay
-        .querySelector(
-            ".cancelReport"
-        )
-        .addEventListener(
+        function cancelHold() {
+
+            clearTimeout(
+                holdTimer
+            );
+
+            holdTimer =
+                null;
+
+        }
+
+
+        /* ==============================
+           MOUSE
+        ============================== */
+
+        card.addEventListener(
+            "mousedown",
+            startHold
+        );
+
+        card.addEventListener(
+            "mouseup",
+            cancelHold
+        );
+
+        card.addEventListener(
+            "mouseleave",
+            cancelHold
+        );
+
+
+        /* ==============================
+           TOUCH
+        ============================== */
+
+        card.addEventListener(
+            "touchstart",
+            startHold,
+            {
+                passive: true
+            }
+        );
+
+        card.addEventListener(
+            "touchend",
+            cancelHold
+        );
+
+        card.addEventListener(
+            "touchcancel",
+            cancelHold
+        );
+
+
+        /* ==============================
+           STOP LINK AFTER HOLD
+        ============================== */
+
+        card.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    holdTriggered
+                ) {
+
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+                    holdTriggered =
+                        false;
+
+                }
+
+            },
+            true
+        );
+
+
+        /* ==============================
+           CANCEL REPORT
+        ============================== */
+
+        cancelButton.addEventListener(
             "click",
             event => {
 
@@ -2477,21 +1771,24 @@ cards.forEach(card => {
 
                 event.stopPropagation();
 
+                cancelHold();
+
+                holdTriggered =
+                    false;
+
                 overlay.classList.remove(
                     "show"
                 );
-
-                held = false;
 
             }
         );
 
 
-    overlay
-        .querySelector(
-            ".confirmReport"
-        )
-        .addEventListener(
+        /* ==============================
+           SUBMIT REPORT
+        ============================== */
+
+        confirmButton.addEventListener(
             "click",
             async event => {
 
@@ -2499,54 +1796,81 @@ cards.forEach(card => {
 
                 event.stopPropagation();
 
-                const button =
-                    event.currentTarget;
 
-                button.disabled =
+                if (reporting) {
+                    return;
+                }
+
+
+                reporting =
                     true;
 
-                button.textContent =
+                confirmButton.disabled =
+                    true;
+
+                confirmButton.textContent =
                     "⏳ Reporting...";
 
 
                 try {
 
-                    const result =
-                        await api(
+                    const response =
+                        await fetch(
+                            WORKER_URL +
                             "/api/report",
                             {
-                                method: "POST",
+                                method:
+                                    "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
                                 body:
                                     JSON.stringify({
-                                        url:
-                                            link.href,
+
+                                        url: url,
+
                                         name:
-                                            new URL(
-                                                link.href
-                                            ).hostname
+                                            getHostname(
+                                                url
+                                            )
+
                                     })
+
                             }
                         );
 
 
+                    const data =
+                        await response.json();
+
+
                     if (
-                        !result.response.ok ||
-                        !result.data.success
+                        !response.ok ||
+                        !data.success
                     ) {
 
                         throw new Error(
-                            result.data.error ||
+                            data.error ||
                             "Report failed"
                         );
 
                     }
 
 
-                    button.textContent =
+                    confirmButton.textContent =
                         "✅ Reported!";
 
+
+                    showReportedBadge(
+                        card
+                    );
+
+
                     showToast(
-                        "Link reported successfully."
+                        "✅ Link reported successfully."
                     );
 
 
@@ -2557,30 +1881,43 @@ cards.forEach(card => {
                                 "show"
                             );
 
-                            button.disabled =
+                            confirmButton.disabled =
                                 false;
 
-                            button.textContent =
+                            confirmButton.textContent =
                                 "🚨 Report Link";
 
+                            reporting =
+                                false;
+
+                            holdTriggered =
+                                false;
+
                         },
-                        1000
+                        1200
                     );
+
 
                 } catch (error) {
 
                     console.error(
+                        "REPORT ERROR:",
                         error
                     );
 
-                    button.disabled =
+
+                    confirmButton.disabled =
                         false;
 
-                    button.textContent =
+                    confirmButton.textContent =
                         "❌ Try Again";
 
+                    reporting =
+                        false;
+
+
                     showToast(
-                        "Couldn't submit report."
+                        "❌ Couldn't submit report."
                     );
 
                 }
@@ -2588,11 +1925,48 @@ cards.forEach(card => {
             }
         );
 
-});
+    }
+);
 
 
 /* =========================================================
-   NAVIGATION
+   REPORTED BADGE
+========================================================= */
+
+function showReportedBadge(
+    card
+) {
+
+    let badge =
+        card.querySelector(
+            ".reportedBadge"
+        );
+
+
+    if (!badge) {
+
+        badge =
+            document.createElement(
+                "div"
+            );
+
+        badge.className =
+            "reportedBadge";
+
+        badge.textContent =
+            "⚠️ Reported as blocked";
+
+        card.appendChild(
+            badge
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BOTTOM NAVIGATION
 ========================================================= */
 
 const linksNav =
@@ -2610,30 +1984,33 @@ const accountNav =
         "accountNav"
     );
 
-const accountPanel =
-    document.getElementById(
-        "accountPanel"
-    );
-
-const adminPanel =
-    document.getElementById(
-        "adminPanel"
-    );
-
 
 linksNav.addEventListener(
     "click",
     () => {
 
-        closePanels();
+        document
+            .querySelectorAll(
+                ".navButton"
+            )
+            .forEach(
+                button =>
+                    button.classList.remove(
+                        "active"
+                    )
+            );
 
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
 
-        setActiveNav(
-            linksNav
+        linksNav.classList.add(
+            "active"
+        );
+
+
+        window.scrollTo(
+            {
+                top: 0,
+                behavior: "smooth"
+            }
         );
 
     }
@@ -2644,12 +2021,25 @@ accountNav.addEventListener(
     "click",
     () => {
 
-        accountPanel.classList.add(
-            "show"
+        document
+            .querySelectorAll(
+                ".navButton"
+            )
+            .forEach(
+                button =>
+                    button.classList.remove(
+                        "active"
+                    )
+            );
+
+
+        accountNav.classList.add(
+            "active"
         );
 
-        setActiveNav(
-            accountNav
+
+        showToast(
+            "👤 Account is coming next."
         );
 
     }
@@ -2660,1143 +2050,85 @@ adminNav.addEventListener(
     "click",
     () => {
 
-        if (
-            !currentUser ||
-            currentUser.role !==
-            "admin"
-        ) {
-
-            showToast(
-                "Admin access required."
+        document
+            .querySelectorAll(
+                ".navButton"
+            )
+            .forEach(
+                button =>
+                    button.classList.remove(
+                        "active"
+                    )
             );
 
-            return;
 
-        }
-
-        adminPanel.classList.add(
-            "show"
+        adminNav.classList.add(
+            "active"
         );
 
-        setActiveNav(
-            adminNav
-        );
 
-        loadAdminReports();
+        showToast(
+            "🤖 Admin Panel is coming next."
+        );
 
     }
 );
 
 
-function setActiveNav(
-    button
-) {
-
-    document
-        .querySelectorAll(
-            ".navButton"
-        )
-        .forEach(
-            item =>
-                item.classList.remove(
-                    "active"
-                )
-        );
-
-    button.classList.add(
-        "active"
-    );
-
-}
-
-
-function closePanels() {
-
-    accountPanel.classList.remove(
-        "show"
-    );
-
-    adminPanel.classList.remove(
-        "show"
-    );
-
-    setActiveNav(
-        linksNav
-    );
-
-}
-
-
-document
-    .querySelectorAll(
-        "[data-close]"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    closePanels();
-
-                }
-            );
-
-        }
-    );
-
-
 /* =========================================================
-   ACCOUNT
+   HELPERS
 ========================================================= */
 
-const loggedOut =
-    document.getElementById(
-        "accountLoggedOut"
-    );
-
-const loggedIn =
-    document.getElementById(
-        "accountLoggedIn"
-    );
-
-
-const usernameInput =
-    document.getElementById(
-        "accountUsername"
-    );
-
-const displayNameInput =
-    document.getElementById(
-        "accountDisplayName"
-    );
-
-const realNameInput =
-    document.getElementById(
-        "accountRealName"
-    );
-
-const emailInput =
-    document.getElementById(
-        "accountEmail"
-    );
-
-const passwordAccountInput =
-    document.getElementById(
-        "accountPassword"
-    );
-
-
-document
-    .getElementById(
-        "registerButton"
-    )
-    .addEventListener(
-        "click",
-        registerAccount
-    );
-
-
-document
-    .getElementById(
-        "loginAccountButton"
-    )
-    .addEventListener(
-        "click",
-        loginAccount
-    );
-
-
-document
-    .getElementById(
-        "logoutButton"
-    )
-    .addEventListener(
-        "click",
-        logoutAccount
-    );
-
-
-async function registerAccount() {
-
-    try {
-
-        const result =
-            await api(
-                "/api/register",
-                {
-                    method: "POST",
-
-                    body:
-                        JSON.stringify({
-                            username:
-                                usernameInput.value,
-
-                            displayName:
-                                displayNameInput.value,
-
-                            realName:
-                                realNameInput.value,
-
-                            email:
-                                emailInput.value,
-
-                            password:
-                                passwordAccountInput.value
-                        })
-                }
-            );
-
-
-        if (
-            !result.response.ok ||
-            !result.data.success
-        ) {
-
-            throw new Error(
-                result.data.error ||
-                "Registration failed"
-            );
-
-        }
-
-
-        showToast(
-            "✅ Account created. You can now log in."
-        );
-
-
-        passwordAccountInput.value =
-            "";
-
-    } catch (error) {
-
-        showToast(
-            "❌ " + error.message
-        );
-
-    }
-
-}
-
-
-async function loginAccount() {
-
-    try {
-
-        const result =
-            await api(
-                "/api/login",
-                {
-                    method: "POST",
-
-                    body:
-                        JSON.stringify({
-                            email:
-                                emailInput.value,
-
-                            password:
-                                passwordAccountInput.value
-                        })
-                }
-            );
-
-
-        if (
-            !result.response.ok ||
-            !result.data.success
-        ) {
-
-            throw new Error(
-                result.data.error ||
-                "Login failed"
-            );
-
-        }
-
-
-        authToken =
-            result.data.token;
-
-        localStorage.setItem(
-            "yaqub_session",
-            authToken
-        );
-
-
-        await restoreAccount();
-
-        showToast(
-            "✅ Logged in"
-        );
-
-
-    } catch (error) {
-
-        showToast(
-            "❌ " + error.message
-        );
-
-    }
-
-}
-
-
-async function restoreAccount() {
-
-    if (!authToken) {
-
-        showLoggedOut();
-
-        return;
-
-    }
-
-
-    try {
-
-        const result =
-            await api(
-                "/api/me"
-            );
-
-
-        if (
-            !result.response.ok ||
-            !result.data.success
-        ) {
-
-            localStorage.removeItem(
-                "yaqub_session"
-            );
-
-            authToken =
-                null;
-
-            showLoggedOut();
-
-            return;
-
-        }
-
-
-        currentUser =
-            result.data.user;
-
-        showLoggedIn(
-            currentUser
-        );
-
-
-        if (
-            currentUser.role ===
-            "admin"
-        ) {
-
-            adminNav.style.display =
-                "block";
-
-        } else {
-
-            adminNav.style.display =
-                "none";
-
-        }
-
-    } catch {
-
-        showLoggedOut();
-
-    }
-
-}
-
-
-function showLoggedOut() {
-
-    currentUser =
-        null;
-
-    loggedOut.style.display =
-        "block";
-
-    loggedIn.style.display =
-        "none";
-
-    adminNav.style.display =
-        "none";
-
-}
-
-
-function showLoggedIn(
-    user
-) {
-
-    loggedOut.style.display =
-        "none";
-
-    loggedIn.style.display =
-        "block";
-
-
-    document.getElementById(
-        "meUsername"
-    ).textContent =
-        user.username || "";
-
-
-    document.getElementById(
-        "meDisplayName"
-    ).textContent =
-        user.displayName || "";
-
-
-    document.getElementById(
-        "meEmail"
-    ).textContent =
-        user.email || "";
-
-
-    document.getElementById(
-        "meRole"
-    ).textContent =
-        user.role || "user";
-
-
-    document.getElementById(
-        "meStatus"
-    ).textContent =
-        user.status || "active";
-
-}
-
-
-async function logoutAccount() {
-
-    try {
-
-        await api(
-            "/api/logout",
-            {
-                method: "POST"
-            }
-        );
-
-    } finally {
-
-        localStorage.removeItem(
-            "yaqub_session"
-        );
-
-        authToken =
-            null;
-
-        showLoggedOut();
-
-        closePanels();
-
-        showToast(
-            "Logged out"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   ADMIN TABS
-========================================================= */
-
-document
-    .querySelectorAll(
-        ".adminTab"
-    )
-    .forEach(
-        tab => {
-
-            tab.addEventListener(
-                "click",
-                () => {
-
-                    document
-                        .querySelectorAll(
-                            ".adminTab"
-                        )
-                        .forEach(
-                            item =>
-                                item.classList.remove(
-                                    "active"
-                                )
-                        );
-
-                    document
-                        .querySelectorAll(
-                            ".adminSection"
-                        )
-                        .forEach(
-                            section =>
-                                section.classList.remove(
-                                    "active"
-                                )
-                        );
-
-
-                    tab.classList.add(
-                        "active"
-                    );
-
-
-                    const target =
-                        tab.dataset.tab;
-
-
-                    document
-                        .getElementById(
-                            target +
-                            "Section"
-                        )
-                        .classList.add(
-                            "active"
-                        );
-
-
-                    if (
-                        target ===
-                        "users"
-                    ) {
-
-                        loadAdminUsers();
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   ADMIN REPORTS
-========================================================= */
-
-async function loadAdminReports() {
-
-    const list =
-        document.getElementById(
-            "reportsList"
-        );
-
-    list.innerHTML =
-        "Loading reports...";
-
-
-    try {
-
-        const result =
-            await api(
-                "/api/reports"
-            );
-
-
-        if (
-            !result.response.ok ||
-            !result.data.success
-        ) {
-
-            throw new Error(
-                result.data.error ||
-                "Couldn't load reports"
-            );
-
-        }
-
-
-        const reports =
-            result.data.reports ||
-            [];
-
-
-        document.getElementById(
-            "adminReportCount"
-        ).textContent =
-            reports.length;
-
-
-        const total =
-            reports.reduce(
-                (
-                    sum,
-                    report
-                ) =>
-                    sum +
-                    Number(
-                        report.reports ||
-                        0
-                    ),
-                0
-            );
-
-
-        document.getElementById(
-            "adminTotalReports"
-        ).textContent =
-            total;
-
-
-        if (
-            reports.length === 0
-        ) {
-
-            list.innerHTML =
-                "🟢 No reported links.";
-
-            return;
-
-        }
-
-
-        list.innerHTML =
-            "";
-
-
-        reports.forEach(
-            report => {
-
-                const item =
-                    document.createElement(
-                        "div"
-                    );
-
-                item.className =
-                    "adminItem";
-
-
-                item.innerHTML = `
-
-                    <div class="adminItemTop">
-
-                        <strong>
-                            ${escapeHTML(
-                                report.url
-                            )}
-                        </strong>
-
-                        <span>
-                            ${Number(
-                                report.reports ||
-                                0
-                            )} reports
-                        </span>
-
-                    </div>
-
-                    <div class="adminMeta">
-                        Reported:
-                        ${escapeHTML(
-                            formatDate(
-                                report.lastReported ||
-                                report.time
-                            )
-                        )}
-                    </div>
-
-                    <div class="adminActions">
-
-                        <button
-                            type="button"
-                            class="restoreReportButton"
-                        >
-                            ♻️ Restore
-                        </button>
-
-                    </div>
-
-                `;
-
-
-                item
-                    .querySelector(
-                        ".restoreReportButton"
-                    )
-                    .addEventListener(
-                        "click",
-                        () =>
-                            restoreReport(
-                                report.url
-                            )
-                    );
-
-
-                list.appendChild(
-                    item
-                );
-
-            }
-        );
-
-
-    } catch (error) {
-
-        list.innerHTML =
-            "❌ " +
-            escapeHTML(
-                error.message
-            );
-
-    }
-
-}
-
-
-async function restoreReport(
+function getHostname(
     url
 ) {
 
-    const result =
-        await api(
-            "/api/restore",
-            {
-                method: "POST",
-
-                body:
-                    JSON.stringify({
-                        url
-                    })
-            }
-        );
-
-
-    if (
-        !result.response.ok ||
-        !result.data.success
-    ) {
-
-        showToast(
-            "❌ " +
-            (
-                result.data.error ||
-                "Restore failed"
-            )
-        );
-
-        return;
-
-    }
-
-
-    showToast(
-        "✅ Report restored"
-    );
-
-
-    loadAdminReports();
-
-}
-
-
-/* =========================================================
-   ADMIN USERS
-========================================================= */
-
-async function loadAdminUsers() {
-
-    const list =
-        document.getElementById(
-            "usersList"
-        );
-
-    list.innerHTML =
-        "Loading users...";
-
-
     try {
 
-        const result =
-            await api(
-                "/api/admin/users"
-            );
+        return new URL(
+            url
+        ).hostname;
 
+    } catch {
 
-        if (
-            !result.response.ok ||
-            !result.data.success
-        ) {
-
-            throw new Error(
-                result.data.error ||
-                "Couldn't load users"
-            );
-
-        }
-
-
-        const users =
-            result.data.users ||
-            [];
-
-
-        if (
-            users.length === 0
-        ) {
-
-            list.innerHTML =
-                "No accounts yet.";
-
-            return;
-
-        }
-
-
-        list.innerHTML =
-            "";
-
-
-        users.forEach(
-            user => {
-
-                const item =
-                    document.createElement(
-                        "div"
-                    );
-
-                item.className =
-                    "adminItem";
-
-
-                item.innerHTML = `
-
-                    <div class="adminItemTop">
-
-                        <strong>
-                            @${escapeHTML(
-                                user.username
-                            )}
-                        </strong>
-
-                        <span>
-                            ${escapeHTML(
-                                user.status
-                            )}
-                        </span>
-
-                    </div>
-
-                    <div class="adminMeta">
-                        ${escapeHTML(
-                            user.displayName
-                        )}
-                        ·
-                        ${escapeHTML(
-                            user.email
-                        )}
-                    </div>
-
-                    <div class="adminMeta">
-                        Real name:
-                        ${escapeHTML(
-                            user.realName
-                        )}
-                    </div>
-
-                    <div class="adminMeta">
-                        Role:
-                        ${escapeHTML(
-                            user.role
-                        )}
-                    </div>
-
-                    <div class="adminActions">
-
-                        <button
-                            type="button"
-                            data-action="block"
-                        >
-                            🚫 Block
-                        </button>
-
-                        <button
-                            type="button"
-                            data-action="unblock"
-                        >
-                            ✅ Unblock
-                        </button>
-
-                        <button
-                            type="button"
-                            class="dangerButton"
-                            data-action="ban"
-                        >
-                            🔨 Ban
-                        </button>
-
-                        ${
-                            user.role !== "admin"
-                            ? `
-                                <button
-                                    type="button"
-                                    data-action="promote"
-                                >
-                                    ⭐ Make Admin
-                                </button>
-                            `
-                            : ""
-                        }
-
-                    </div>
-
-                `;
-
-
-                item
-                    .querySelectorAll(
-                        "[data-action]"
-                    )
-                    .forEach(
-                        button => {
-
-                            button.addEventListener(
-                                "click",
-                                () =>
-                                    adminUserAction(
-                                        button.dataset.action,
-                                        user.id
-                                    )
-                            );
-
-                        }
-                    );
-
-
-                list.appendChild(
-                    item
-                );
-
-            }
-        );
-
-
-    } catch (error) {
-
-        list.innerHTML =
-            "❌ " +
-            escapeHTML(
-                error.message
-            );
+        return "unknown";
 
     }
 
 }
 
-
-async function adminUserAction(
-    action,
-    userId
-) {
-
-    const pathMap = {
-
-        block:
-            "/api/admin/block",
-
-        unblock:
-            "/api/admin/unblock",
-
-        ban:
-            "/api/admin/ban",
-
-        promote:
-            "/api/admin/promote"
-
-    };
-
-
-    const path =
-        pathMap[action];
-
-
-    if (!path) {
-        return;
-    }
-
-
-    const result =
-        await api(
-            path,
-            {
-                method: "POST",
-
-                body:
-                    JSON.stringify({
-                        userId
-                    })
-            }
-        );
-
-
-    if (
-        !result.response.ok ||
-        !result.data.success
-    ) {
-
-        showToast(
-            "❌ " +
-            (
-                result.data.error ||
-                "Action failed"
-            )
-        );
-
-        return;
-
-    }
-
-
-    showToast(
-        "✅ " +
-        result.data.message
-    );
-
-
-    loadAdminUsers();
-
-}
-
-
-/* =========================================================
-   UTILITIES
-========================================================= */
 
 function escapeHTML(
     value
 ) {
 
     return String(
-        value ?? ""
+        value
     )
-    .replaceAll(
-        "&",
-        "&amp;"
-    )
-    .replaceAll(
-        "<",
-        "&lt;"
-    )
-    .replaceAll(
-        ">",
-        "&gt;"
-    )
-    .replaceAll(
-        '"',
-        "&quot;"
-    )
-    .replaceAll(
-        "'",
-        "&#039;"
-    );
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 
-
-function formatDate(
-    timestamp
-) {
-
-    try {
-
-        return new Date(
-            timestamp
-        ).toLocaleString();
-
-    } catch {
-
-        return timestamp;
-
-    }
-
-}
-
-
-/* =========================================================
-   STARTUP
-========================================================= */
-
-restoreAccount();
-/* ================= BOTTOM NAV ================= */
-
-const linksNav =
-    document.getElementById("linksNav");
-
-const adminNav =
-    document.getElementById("adminNav");
-
-const accountNav =
-    document.getElementById("accountNav");
-
-
-function setActiveNav(button) {
-
-    document
-        .querySelectorAll(".navButton")
-        .forEach(item => {
-            item.classList.remove("active");
-        });
-
-    button.classList.add("active");
-}
-
-
-linksNav.addEventListener("click", () => {
-
-    setActiveNav(linksNav);
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-});
-
-
-accountNav.addEventListener("click", () => {
-
-    setActiveNav(accountNav);
-
-    alert("Account section coming next 👤");
-
-});
-
-
-adminNav.addEventListener("click", () => {
-
-    setActiveNav(adminNav);
-
-    alert("Admin Panel coming next 🤖");
-
-});
 </script>
-<!-- ================= BOTTOM NAV ================= -->
 
-<nav id="bottomNav">
-
-    <button class="navButton active" id="linksNav" type="button">
-        <span class="navIcon">🔗</span>
-        <span class="navLabel">Links</span>
-    </button>
-
-    <button class="navButton" id="adminNav" type="button">
-        <span class="navIcon">🤖</span>
-        <span class="navLabel">Admin Panel</span>
-    </button>
-
-    <button class="navButton" id="accountNav" type="button">
-        <span class="navIcon">👤</span>
-        <span class="navLabel">Account</span>
-    </button>
-
-</nav>
 </body>
 </html>
