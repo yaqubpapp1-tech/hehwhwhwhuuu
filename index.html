@@ -2857,30 +2857,256 @@ async function adminUserAction(
 
 /* ================= CHAT UI ================= */
 
+let chatSocket = null;
+let chatReconnectTimer = null;
+
+const chatMessages =
+  document.getElementById("messages");
+
+const chatInput =
+  document.getElementById("chatInput");
+
+const chatSend =
+  document.getElementById("chatSend");
+
+function addChatMessage(message) {
+  const item =
+    document.createElement("div");
+
+  item.className =
+    "chatMsg";
+
+  if (
+    user &&
+    message.userId === user.id
+  ) {
+    item.classList.add("mine");
+  }
+
+  const time =
+    message.time
+      ? new Date(message.time).toLocaleTimeString([], {
+          hour: "numeric",
+          minute: "2-digit"
+        })
+      : "";
+
+  item.innerHTML = `
+    <div class="chatMeta">
+      ${esc(message.displayName || message.username || "User")}
+      • ${esc(time)}
+    </div>
+
+    <div class="chatText">
+      ${esc(message.text || "")}
+    </div>
+  `;
+
+  chatMessages.appendChild(item);
+  chatMessages.scrollTop =
+    chatMessages.scrollHeight;
+}
+
+function clearChat() {
+  chatMessages.innerHTML = "";
+}
+
+function connectChat() {
+  if (!user) {
+    return;
+  }
+
+  if (
+    chatSocket &&
+    (
+      chatSocket.readyState === WebSocket.OPEN ||
+      chatSocket.readyState === WebSocket.CONNECTING
+    )
+  ) {
+    return;
+  }
+
+  const protocol =
+    location.protocol === "https:"
+      ? "wss:"
+      : "ws:";
+
+  /*
+   * Your Worker is on the same domain as
+   * the deployed hub. This keeps the cookie
+   * session attached to the WebSocket request.
+   */
+  const socketURL =
+    `${protocol}//${location.host}/api/chat`;
+
+  chatSocket =
+    new WebSocket(socketURL);
+
+  chatSocket.addEventListener(
+    "open",
+    () => {
+      chatSend.disabled = false;
+      chatInput.disabled = false;
+
+      chatInput.placeholder =
+        "Type a message...";
+
+      toast(
+        "🟢 Connected to chat."
+      );
+    }
+  );
+
+  chatSocket.addEventListener(
+    "message",
+    event => {
+      let data;
+
+      try {
+        data = JSON.parse(event.data);
+      } catch {
+        return;
+      }
+
+      if (
+        data.type === "history"
+      ) {
+        clearChat();
+
+        for (
+          const message
+          of data.messages || []
+        ) {
+          addChatMessage(message);
+        }
+
+        return;
+      }
+
+      if (
+        data.type === "message"
+      ) {
+        addChatMessage(data);
+        return;
+      }
+
+      if (
+        data.type === "error"
+      ) {
+        toast(
+          "❌ " +
+          (data.error || "Chat error")
+        );
+      }
+    }
+  );
+
+  chatSocket.addEventListener(
+    "close",
+    () => {
+      chatSend.disabled = true;
+      chatInput.disabled = true;
+
+      if (!user) {
+        return;
+      }
+
+      clearTimeout(
+        chatReconnectTimer
+      );
+
+      chatReconnectTimer =
+        setTimeout(
+          connectChat,
+          2500
+        );
+    }
+  );
+
+  chatSocket.addEventListener(
+    "error",
+    () => {
+      toast(
+        "❌ Chat connection error."
+      );
+    }
+  );
+}
+
+function sendChatMessage() {
+  if (!user) {
+    toast(
+      "Log in before using chat."
+    );
+
+    return;
+  }
+
+  if (
+    !chatSocket ||
+    chatSocket.readyState !== WebSocket.OPEN
+  ) {
+    toast(
+      "❌ Chat isn't connected yet."
+    );
+
+    connectChat();
+
+    return;
+  }
+
+  const text =
+    chatInput.value.trim();
+
+  if (!text) {
+    return;
+  }
+
+  chatSocket.send(
+    JSON.stringify({
+      type: "chat",
+      text
+    })
+  );
+
+  chatInput.value = "";
+  chatInput.focus();
+}
+
+chatSend.addEventListener(
+  "click",
+  sendChatMessage
+);
+
+chatInput.addEventListener(
+  "keydown",
+  event => {
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey
+    ) {
+      event.preventDefault();
+      sendChatMessage();
+    }
+  }
+);
+
 document.getElementById(
-  "chatSend"
+  "chatNav"
 ).addEventListener(
   "click",
   () => {
+    active("chatNav");
 
-    if (
-      !user
-    ) {
+    show("chatModal");
 
+    if (user) {
+      connectChat();
+    } else {
       toast(
         "Log in before using chat."
       );
-
-
-      return;
-
     }
-
-
-    toast(
-      "💬 Chat UI is ready; the live chat backend still needs to be added to the Worker."
-    );
-
   }
 );
 
