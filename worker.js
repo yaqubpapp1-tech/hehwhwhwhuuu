@@ -1365,28 +1365,52 @@ function bytesToBase64Url(
 }
 
 
-function getToken(
-  request
-) {
-  const authorization =
-    request.headers.get(
-      "Authorization"
-    );
+function getToken(request) {
+  const cookieHeader =
+    request.headers.get("Cookie");
 
-  if (
-    !authorization ||
-    !authorization.startsWith(
-      "Bearer "
-    )
-  ) {
-    return null;
+  if (cookieHeader) {
+    const cookies = {};
+
+    cookieHeader
+      .split(";")
+      .forEach(part => {
+        const index = part.indexOf("=");
+
+        if (index === -1) {
+          return;
+        }
+
+        const name =
+          part.slice(0, index).trim();
+
+        const value =
+          part.slice(index + 1).trim();
+
+        cookies[name] = value;
+      });
+
+    if (cookies.session) {
+      return cookies.session;
+    }
   }
 
-  return authorization
-    .slice(7)
-    .trim();
-}
+  // Keep Bearer-token support temporarily so
+  // your current frontend doesn't break.
+  const authorization =
+    request.headers.get("Authorization");
 
+  if (
+    authorization &&
+    authorization.startsWith("Bearer ")
+  ) {
+    return authorization
+      .slice(7)
+      .trim();
+  }
+
+  return null;
+}
 
 function normalizeUsername(
   value
