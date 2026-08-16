@@ -1,7 +1,10 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "WORKER-NAME",
+
+  "name": "yaqubs-link-hub",
+
   "main": "worker.js",
+
   "compatibility_date": "2025-02-04",
 
   "observability": {
@@ -10,8 +13,13 @@
 
   "kv_namespaces": [
     {
-      "binding": "KV",
+      "binding": "REPORTS",
       "id": "c620acf8aacf4ee89ddd73bf3d449714"
     }
-  ]
+  ],
+
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS"
+  }
 }
