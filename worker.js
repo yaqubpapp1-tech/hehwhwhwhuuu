@@ -1530,6 +1530,13 @@ export class ChatRoom {
   }
 
   async fetch(request) {
+    const auth = await authenticate(request, this.env);
+
+if (!auth.success) {
+  return new Response("Login required", {
+    status: auth.status || 401
+  });
+}
     const url = new URL(request.url);
 
     if (request.headers.get("Upgrade") !== "websocket") {
@@ -1546,7 +1553,10 @@ export class ChatRoom {
 
     const id = crypto.randomUUID();
 
-    this.sessions.set(id, server);
+this.sessions.set(id, {
+  socket: server,
+  user: auth.user
+});
 
     server.addEventListener("message", event => {
       this.handleMessage(id, event.data);
