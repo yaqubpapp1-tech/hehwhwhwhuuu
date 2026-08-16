@@ -15,14 +15,14 @@
 
 :root {
     --bg: #050505;
-    --panel: #111;
+    --panel: #101010;
     --panel2: #171717;
     --border: #303030;
     --muted: #888;
     --text: #fff;
     --danger: #ff3b3b;
     --warning: #ffd34d;
-    --success: #5fe39a;
+    --success: #59d98e;
 }
 
 html {
@@ -38,7 +38,8 @@ body {
 }
 
 button,
-input {
+input,
+textarea {
     font: inherit;
 }
 
@@ -50,21 +51,16 @@ button {
     display: none !important;
 }
 
-/* =========================================================
-   ACCESS SCREEN
-========================================================= */
+/* ACCESS */
 
 #accessScreen {
     position: fixed;
     inset: 0;
     z-index: 10000;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     padding: 20px;
-
     background:
         radial-gradient(circle at top, #252525 0%, #050505 58%);
 }
@@ -72,15 +68,11 @@ button {
 .accessBox {
     width: min(430px, 100%);
     padding: 34px;
-
-    background: rgba(18,18,18,.97);
+    background: rgba(18, 18, 18, .97);
     border: 1px solid #333;
     border-radius: 22px;
-
     text-align: center;
-
-    box-shadow:
-        0 25px 90px rgba(0,0,0,.65);
+    box-shadow: 0 25px 90px rgba(0, 0, 0, .65);
 }
 
 .accessIcon {
@@ -101,19 +93,13 @@ button {
 #accessPassword {
     width: 100%;
     padding: 14px 15px;
-
     background: #0b0b0b;
     border: 1px solid #444;
     border-radius: 12px;
-
     color: white;
     outline: none;
     text-align: center;
     font-size: 16px;
-}
-
-#accessPassword:focus {
-    border-color: white;
 }
 
 #accessButton {
@@ -121,16 +107,7 @@ button {
     margin-top: 10px;
 }
 
-.accessError {
-    display: none;
-    margin-top: 13px;
-    color: #ff6666;
-    font-weight: 700;
-}
-
-/* =========================================================
-   BUTTONS
-========================================================= */
+/* BUTTONS */
 
 .primaryButton,
 .secondaryButton,
@@ -138,22 +115,21 @@ button {
     border-radius: 11px;
     padding: 12px 14px;
     font-weight: 700;
+    border: none;
 }
 
 .primaryButton {
-    border: none;
     background: white;
     color: black;
 }
 
 .secondaryButton {
-    border: 1px solid #333;
     background: #222;
     color: white;
+    border: 1px solid #333;
 }
 
 .dangerButton {
-    border: none;
     background: var(--danger);
     color: white;
 }
@@ -167,9 +143,7 @@ button:disabled {
     cursor: wait;
 }
 
-/* =========================================================
-   APP
-========================================================= */
+/* MAIN */
 
 #app {
     display: none;
@@ -193,9 +167,7 @@ button:disabled {
     color: var(--muted);
 }
 
-/* =========================================================
-   SEARCH
-========================================================= */
+/* SEARCH */
 
 .search {
     max-width: 600px;
@@ -205,19 +177,15 @@ button:disabled {
 #searchBox {
     width: 100%;
     padding: 15px 18px;
-
     background: #111;
     border: 1px solid #333;
     border-radius: 14px;
-
     color: white;
     outline: none;
     font-size: 16px;
 }
 
-/* =========================================================
-   CATEGORIES / LINKS
-========================================================= */
+/* LINKS */
 
 .category {
     max-width: 1100px;
@@ -231,7 +199,6 @@ button:disabled {
 .category h2 {
     margin-bottom: 15px;
     padding-left: 12px;
-
     border-left: 4px solid white;
     font-size: 25px;
 }
@@ -246,20 +213,13 @@ button:disabled {
     display: block;
     position: relative;
     overflow: hidden;
-
     padding: 18px;
-
     background: #111;
     border: 1px solid #292929;
     border-radius: 14px;
-
     color: white;
     text-decoration: none;
-
-    transition:
-        transform .2s ease,
-        background .2s ease,
-        border-color .2s ease;
+    transition: transform .2s ease, background .2s ease, border-color .2s ease;
 }
 
 .linkCard:hover {
@@ -282,35 +242,25 @@ button:disabled {
 
 .reportedBadge {
     display: inline-block;
-
     margin-top: 12px;
     padding: 5px 8px;
-
     background: #5a4700;
     border: 1px solid #8a6b00;
     border-radius: 7px;
-
     color: var(--warning);
     font-size: 11px;
     font-weight: 700;
 }
 
-/* =========================================================
-   FEATURED
-========================================================= */
+/* FEATURED */
 
 .best {
     max-width: 1100px;
     margin: 50px auto;
-
     padding: 30px;
-
     border: 1px solid #555;
     border-radius: 22px;
-
-    background:
-        linear-gradient(135deg, #151515, #080808);
-
+    background: linear-gradient(135deg, #151515, #080808);
     text-align: center;
 }
 
@@ -320,56 +270,39 @@ button:disabled {
 
 .best a {
     display: inline-block;
-
     padding: 16px 28px;
-
     border-radius: 14px;
-
     background: white;
     color: black;
-
     text-decoration: none;
     font-weight: 900;
 }
 
-/* =========================================================
-   BOTTOM NAV
-========================================================= */
+/* BOTTOM NAV */
 
 #bottomNav {
     position: fixed;
     left: 50%;
     bottom: 12px;
     transform: translateX(-50%);
-
     z-index: 7000;
-
-    width: min(540px, calc(100% - 20px));
-
+    width: min(600px, calc(100% - 20px));
     display: flex;
     gap: 8px;
-
     padding: 9px;
-
-    background: rgba(15,15,15,.95);
+    background: rgba(15, 15, 15, .95);
     border: 1px solid #333;
     border-radius: 24px;
-
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-
-    box-shadow:
-        0 12px 40px rgba(0,0,0,.55);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .55);
 }
 
 .navButton {
     flex: 1;
-
     padding: 8px 5px;
-
     border: none;
     border-radius: 16px;
-
     background: transparent;
     color: #777;
 }
@@ -393,23 +326,17 @@ button:disabled {
     font-weight: 700;
 }
 
-/* =========================================================
-   MODALS
-========================================================= */
+/* MODALS */
 
 .modal {
     position: fixed;
     inset: 0;
     z-index: 8000;
-
     display: none;
     align-items: center;
     justify-content: center;
-
     padding: 18px;
-
-    background: rgba(0,0,0,.8);
-
+    background: rgba(0, 0, 0, .8);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
@@ -422,13 +349,10 @@ button:disabled {
     width: min(900px, 100%);
     max-height: 92vh;
     overflow: auto;
-
     background: #0e0e0e;
     border: 1px solid #333;
     border-radius: 22px;
-
-    box-shadow:
-        0 25px 80px rgba(0,0,0,.75);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, .75);
 }
 
 .smallModal {
@@ -439,14 +363,11 @@ button:disabled {
     position: sticky;
     top: 0;
     z-index: 2;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 18px 20px;
-
-    background: rgba(14,14,14,.97);
+    background: rgba(14, 14, 14, .97);
     border-bottom: 1px solid #292929;
 }
 
@@ -457,10 +378,8 @@ button:disabled {
 .closeButton {
     width: 40px;
     height: 40px;
-
     border: 1px solid #333;
     border-radius: 10px;
-
     background: #181818;
     color: white;
 }
@@ -469,14 +388,11 @@ button:disabled {
     padding: 20px;
 }
 
-/* =========================================================
-   ACCOUNT
-========================================================= */
+/* ACCOUNT */
 
 .accountForm {
     display: grid;
     gap: 10px;
-
     width: min(460px, 100%);
     margin: 0 auto;
 }
@@ -484,13 +400,15 @@ button:disabled {
 .accountForm input {
     width: 100%;
     padding: 13px;
-
     background: #0a0a0a;
     border: 1px solid #333;
     border-radius: 11px;
-
     color: white;
     outline: none;
+}
+
+.accountForm input:focus {
+    border-color: #777;
 }
 
 .formButtons {
@@ -508,9 +426,7 @@ button:disabled {
 .accountCard {
     width: min(600px, 100%);
     margin: 0 auto;
-
     padding: 18px;
-
     background: #151515;
     border: 1px solid #292929;
     border-radius: 15px;
@@ -520,9 +436,7 @@ button:disabled {
     display: flex;
     justify-content: space-between;
     gap: 15px;
-
     padding: 11px 0;
-
     border-bottom: 1px solid #292929;
 }
 
@@ -547,9 +461,68 @@ button:disabled {
     font-size: 13px;
 }
 
-/* =========================================================
-   REPORT MODAL
-========================================================= */
+/* CHAT */
+
+.chatShell {
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+}
+
+.chatMessages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chatMessage {
+    max-width: 82%;
+    padding: 10px 12px;
+    background: #171717;
+    border: 1px solid #292929;
+    border-radius: 14px;
+}
+
+.chatMessage.mine {
+    align-self: flex-end;
+    background: #202020;
+}
+
+.chatMeta {
+    margin-bottom: 4px;
+    color: #777;
+    font-size: 11px;
+}
+
+.chatText {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.chatComposer {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid #292929;
+}
+
+#chatInput {
+    flex: 1;
+    min-height: 45px;
+    max-height: 120px;
+    resize: vertical;
+    padding: 11px 12px;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 11px;
+    color: white;
+    outline: none;
+}
+
+/* REPORT */
 
 .reportIcon {
     margin-bottom: 10px;
@@ -559,7 +532,6 @@ button:disabled {
 
 .reportTitle {
     margin-bottom: 9px;
-
     font-size: 21px;
     font-weight: 900;
     text-align: center;
@@ -567,14 +539,11 @@ button:disabled {
 
 .reportURL {
     margin-bottom: 22px;
-
     color: #888;
     font-size: 12px;
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
     text-align: center;
 }
 
@@ -587,9 +556,7 @@ button:disabled {
     flex: 1;
 }
 
-/* =========================================================
-   ADMIN
-========================================================= */
+/* ADMIN */
 
 .adminTabs {
     display: flex;
@@ -599,11 +566,9 @@ button:disabled {
 
 .adminTab {
     padding: 9px 12px;
-
     background: #171717;
     border: 1px solid #333;
     border-radius: 10px;
-
     color: #aaa;
 }
 
@@ -624,13 +589,11 @@ button:disabled {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-
     margin-bottom: 15px;
 }
 
 .stat {
     padding: 15px;
-
     background: #151515;
     border: 1px solid #292929;
     border-radius: 13px;
@@ -653,7 +616,6 @@ button:disabled {
 
 .adminItem {
     padding: 15px;
-
     background: #151515;
     border: 1px solid #292929;
     border-radius: 13px;
@@ -681,45 +643,31 @@ button:disabled {
 
 .adminActions button {
     padding: 8px 10px;
-
     border: 1px solid #333;
     border-radius: 9px;
-
     background: #1a1a1a;
     color: white;
 }
 
-/* =========================================================
-   TOAST
-========================================================= */
+/* TOAST */
 
 #toast {
     position: fixed;
     right: 18px;
     bottom: 95px;
-
     z-index: 12000;
-
     display: none;
-
     max-width: 340px;
-
     padding: 13px 16px;
-
     background: #171717;
     border: 1px solid #444;
     border-radius: 12px;
-
     color: white;
     font-weight: 700;
-
-    box-shadow:
-        0 10px 35px rgba(0,0,0,.5);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .5);
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* MOBILE */
 
 @media (max-width: 600px) {
     #app {
@@ -746,6 +694,10 @@ button:disabled {
     .accountValue {
         text-align: left;
     }
+
+    .chatComposer {
+        flex-direction: column;
+    }
 }
 </style>
 
@@ -755,14 +707,11 @@ button:disabled {
 
 <div id="accessScreen">
     <div class="accessBox">
+        <div class="accessIcon">🔐</div>
+        <h1>Private Hub</h1>
+        <p>Enter the access password to continue.</p>
 
 ```
-    <div class="accessIcon">🔐</div>
-
-    <h1>Private Hub</h1>
-
-    <p>Enter the access password to continue.</p>
-
     <input
         id="accessPassword"
         type="password"
@@ -784,7 +733,6 @@ button:disabled {
     >
         ❌ Incorrect password
     </div>
-
 </div>
 ```
 
@@ -794,31 +742,22 @@ button:disabled {
 
 ```
 <div class="header">
-
     <h1>🌐 Link Hub</h1>
     <p>All links in one place</p>
-
 </div>
 
-
 <div class="search">
-
     <input
         id="searchBox"
         type="text"
         placeholder="🔎 Search links..."
     >
-
 </div>
-
 
 <main id="linkContainer"></main>
 
-
 <div class="best">
-
     <h2>⭐ FEATURED</h2>
-
     <a
         href="https://www.wikipedia.org/"
         target="_blank"
@@ -826,9 +765,7 @@ button:disabled {
     >
         OPEN FEATURED RESOURCE
     </a>
-
 </div>
-
 
 <footer>
     Yaqub's Hub • Private Access 🔐
@@ -849,6 +786,14 @@ button:disabled {
     <span class="navLabel">Links</span>
 </button>
 
+<button
+    id="chatNav"
+    class="navButton"
+    type="button"
+>
+    <span class="navIcon">💬</span>
+    <span class="navLabel">Chat</span>
+</button>
 
 <button
     id="adminNav"
@@ -857,9 +802,8 @@ button:disabled {
     style="display:none"
 >
     <span class="navIcon">🤖</span>
-    <span class="navLabel">Admin Panel</span>
+    <span class="navLabel">Admin</span>
 </button>
-
 
 <button
     id="accountNav"
@@ -879,12 +823,10 @@ button:disabled {
     id="accountModal"
     class="modal"
 >
+    <div class="modalBox smallModal">
 
 ```
-<div class="modalBox smallModal">
-
     <div class="modalHeader">
-
         <h2>👤 Account</h2>
 
         <button
@@ -894,14 +836,11 @@ button:disabled {
         >
             ✕
         </button>
-
     </div>
-
 
     <div class="modalBody">
 
         <div id="accountMessage"></div>
-
 
         <div id="signupView">
 
@@ -933,7 +872,6 @@ button:disabled {
                     autocomplete="new-password"
                 >
 
-
                 <div class="formButtons">
 
                     <button
@@ -943,7 +881,6 @@ button:disabled {
                     >
                         Create Account
                     </button>
-
 
                     <button
                         id="showLoginButton"
@@ -955,7 +892,6 @@ button:disabled {
 
                 </div>
 
-
                 <div class="accountNote">
                     Username + password only. No email is required.
                 </div>
@@ -963,7 +899,6 @@ button:disabled {
             </div>
 
         </div>
-
 
         <div
             id="loginView"
@@ -986,7 +921,6 @@ button:disabled {
                     autocomplete="current-password"
                 >
 
-
                 <div class="formButtons">
 
                     <button
@@ -996,7 +930,6 @@ button:disabled {
                     >
                         Login
                     </button>
-
 
                     <button
                         id="showSignupButton"
@@ -1012,7 +945,6 @@ button:disabled {
 
         </div>
 
-
         <div
             id="accountView"
             style="display:none"
@@ -1021,55 +953,38 @@ button:disabled {
             <div class="accountCard">
 
                 <div class="accountRow">
-                    <span class="accountLabel">
-                        Username
-                    </span>
-
+                    <span class="accountLabel">Username</span>
                     <span
                         id="accountUsernameValue"
                         class="accountValue"
                     ></span>
                 </div>
 
-
                 <div class="accountRow">
-                    <span class="accountLabel">
-                        Display name
-                    </span>
-
+                    <span class="accountLabel">Display name</span>
                     <span
                         id="accountDisplayNameValue"
                         class="accountValue"
                     ></span>
                 </div>
 
-
                 <div class="accountRow">
-                    <span class="accountLabel">
-                        Role
-                    </span>
-
+                    <span class="accountLabel">Role</span>
                     <span
                         id="accountRoleValue"
                         class="accountValue"
                     ></span>
                 </div>
 
-
                 <div class="accountRow">
-                    <span class="accountLabel">
-                        Status
-                    </span>
-
+                    <span class="accountLabel">Status</span>
                     <span
                         id="accountStatusValue"
                         class="accountValue"
                     ></span>
                 </div>
 
-
                 <br>
-
 
                 <button
                     id="logoutButton"
@@ -1084,7 +999,68 @@ button:disabled {
         </div>
 
     </div>
+</div>
+```
 
+</div>
+
+<!-- CHAT -->
+
+<div
+    id="chatModal"
+    class="modal"
+>
+    <div class="modalBox">
+
+```
+    <div class="modalHeader">
+        <h2>💬 Live Chat</h2>
+
+        <button
+            class="closeButton"
+            data-close="chatModal"
+            type="button"
+        >
+            ✕
+        </button>
+    </div>
+
+    <div class="modalBody">
+
+        <div class="chatShell">
+
+            <div
+                id="chatMessages"
+                class="chatMessages"
+            >
+                <div
+                    style="text-align:center;color:#777;padding:20px"
+                >
+                    Chat backend coming next.
+                </div>
+            </div>
+
+            <div class="chatComposer">
+
+                <textarea
+                    id="chatInput"
+                    placeholder="Type a message..."
+                    maxlength="1000"
+                ></textarea>
+
+                <button
+                    id="chatSendButton"
+                    class="primaryButton"
+                    type="button"
+                >
+                    Send
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 </div>
 ```
 
@@ -1096,12 +1072,10 @@ button:disabled {
     id="reportModal"
     class="modal"
 >
+    <div class="modalBox smallModal">
 
 ```
-<div class="modalBox smallModal">
-
     <div class="modalHeader">
-
         <h2>⚠️ Report</h2>
 
         <button
@@ -1111,15 +1085,11 @@ button:disabled {
         >
             ✕
         </button>
-
     </div>
-
 
     <div class="modalBody">
 
-        <div class="reportIcon">
-            ⚠️
-        </div>
+        <div class="reportIcon">⚠️</div>
 
         <div class="reportTitle">
             Report this link as blocked?
@@ -1130,7 +1100,6 @@ button:disabled {
             class="reportURL"
         ></div>
 
-
         <div class="reportActions">
 
             <button
@@ -1140,7 +1109,6 @@ button:disabled {
             >
                 Cancel
             </button>
-
 
             <button
                 id="confirmReportButton"
@@ -1153,7 +1121,6 @@ button:disabled {
         </div>
 
     </div>
-
 </div>
 ```
 
@@ -1165,12 +1132,10 @@ button:disabled {
     id="adminModal"
     class="modal"
 >
+    <div class="modalBox">
 
 ```
-<div class="modalBox">
-
     <div class="modalHeader">
-
         <h2>🤖 Admin Panel</h2>
 
         <button
@@ -1180,9 +1145,7 @@ button:disabled {
         >
             ✕
         </button>
-
     </div>
-
 
     <div class="modalBody">
 
@@ -1196,7 +1159,6 @@ button:disabled {
                 🚨 Reports
             </button>
 
-
             <button
                 class="adminTab"
                 data-tab="users"
@@ -1207,7 +1169,6 @@ button:disabled {
 
         </div>
 
-
         <section
             id="reportsSection"
             class="adminSection active"
@@ -1216,36 +1177,16 @@ button:disabled {
             <div class="adminStats">
 
                 <div class="stat">
-
-                    <small>
-                        Reported links
-                    </small>
-
-                    <strong
-                        id="reportCount"
-                    >
-                        0
-                    </strong>
-
+                    <small>Reported links</small>
+                    <strong id="reportCount">0</strong>
                 </div>
 
-
                 <div class="stat">
-
-                    <small>
-                        Total reports
-                    </small>
-
-                    <strong
-                        id="totalReports"
-                    >
-                        0
-                    </strong>
-
+                    <small>Total reports</small>
+                    <strong id="totalReports">0</strong>
                 </div>
 
             </div>
-
 
             <div
                 id="reportsList"
@@ -1255,7 +1196,6 @@ button:disabled {
             </div>
 
         </section>
-
 
         <section
             id="usersSection"
@@ -1272,23 +1212,24 @@ button:disabled {
         </section>
 
     </div>
-
 </div>
 ```
 
 </div>
 
-<!-- ACCESS POPUP -->
+<!-- ACCESS UNAVAILABLE -->
 
 <div
     id="accessUnavailable"
     class="modal"
 >
+    <div class="modalBox smallModal">
 
 ```
-<div class="modalBox smallModal">
-
-    <div class="modalBody" style="text-align:center">
+    <div
+        class="modalBody"
+        style="text-align:center"
+    >
 
         <div
             style="
@@ -1300,23 +1241,16 @@ button:disabled {
         </div>
 
         <h2
-            style="
-                margin-bottom:8px;
-            "
+            style="margin-bottom:8px"
         >
             Access unavailable
         </h2>
 
-        <p
-            style="
-                color:#888;
-            "
-        >
+        <p style="color:#888">
             Access is unavailable at this moment.
         </p>
 
     </div>
-
 </div>
 ```
 
@@ -1334,731 +1268,145 @@ button:disabled {
     const ACCESS_PASSWORD =
         "yaqubraphinha";
 
-    const MAX_ATTEMPTS =
-        3;
+    const MAX_ATTEMPTS = 3;
 
-    let attempts =
-        0;
+    let attempts = 0;
+    let currentUser = null;
+    let selectedReportURL = null;
 
-    let sessionToken = null;
-
-    let currentUser =
-        null;
-
-    let selectedReportURL =
-        null;
-async function api(path, options = {}) {
-    const headers = {
-        "Content-Type": "application/json",
-        ...(options.headers || {})
-    };
-
-    if (sessionToken) {
-        headers.Authorization =
-            `Bearer ${sessionToken}`;
+    function escapeHTML(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
     }
 
-    const response = await fetch(
-        API + path,
-        {
-            ...options,
-            headers
-            credentials: "include"
-        }
-    );
+    function showToast(message) {
+        const toast =
+            document.getElementById("toast");
 
-    let data = {};
+        toast.textContent =
+            message;
 
-    try {
-        data = await response.json();
-    } catch {
-        data = {};
-    }
+        toast.style.display =
+            "block";
 
-    return {
-        response,
-        data
-    };
-}
-function showToast(message) {
-    const toast = document.getElementById("toast");
-
-    if (!toast) {
-        console.warn(message);
-        return;
-    }
-
-    toast.textContent = message;
-    toast.style.display = "block";
-
-    clearTimeout(toast._timer);
-
-    toast._timer = setTimeout(() => {
-        toast.style.display = "none";
-    }, 3000);
-}
-    /* =====================================================
-       LINK DATA
-       First occurrence wins; duplicates are removed by
-       normalized URL.
-    ===================================================== */
-function escapeHTML(value) {
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-    const groups = {
-
-        "Solara": [
-            "https://solaraname.robertschulze.name/",
-            "https://like.krepche.com/",
-            "https://no.deepee.com/",
-            "https://just.flyredwing.ru/",
-            "https://home.ayresinn.com/",
-            "https://questionme.mrvillain.com",
-            "https://solara.glamourfreaks.com",
-            "https://schoolbook.berugy.hu",
-            "https://okiwell.adijaya.id",
-            "https://question.worldmicroscope.com",
-            "https://long.volticsolar.co.za",
-            "https://hmm.gynauto.ro",
-            "https://solora.blackmunk.com",
-            "https://club.claravia.cl",
-            "https://wouldget.priestella.xyz"
-        ],
-
-        "Triple T HD": [
-            "https://muchbe.robertschulze.name/",
-            "https://okmuchok.krepche.com/",
-            "https://cow.deepee.com/",
-            "https://flyingcan.flyredwing.ru/",
-            "https://armor.ayresinn.com/",
-            "https://forthe.mrvillain.com",
-            "https://triplethd.glamourfreaks.com",
-            "https://dome.berugy.hu",
-            "https://mathgood.adijaya.id",
-            "https://crossing.worldmicroscope.com",
-            "https://question.volticsolar.co.za",
-            "https://who.claravia.cl",
-            "https://gyro.gynauto.ro",
-            "https://black.blackmunk.com"
-        ],
-
-        "Study Hub": [
-            "https://hub.robertschulze.name/",
-            "https://coming.krepche.com/",
-            "https://longtime.deepee.com/",
-            "https://wecan.flyredwing.ru/",
-            "https://quickie.ayresinn.com/",
-            "https://goodget.mrvillain.com",
-            "https://getme.glamourfreaks.com",
-            "https://push.berugy.hu",
-            "https://homeme.adijaya.id",
-            "https://wipe.worldmicroscope.com",
-            "https://hound.volticsolar.co.za",
-            "https://class.claravia.cl",
-            "https://study.blackmunk.com",
-            "https://ro.gynauto.ro"
-        ],
-
-        "TUNG TUNG": [
-            "https://name.robertschulze.name/",
-            "https://getme.krepche.com/",
-            "https://gameplay.deepee.com/",
-            "https://drink.flyredwing.ru/",
-            "https://ttung.ayresinn.com/",
-            "https://might.mrvillain.com",
-            "https://glass.glamourfreaks.com",
-            "https://hungry.berugy.hu",
-            "https://weget.adijaya.id",
-            "https://scope.worldmicroscope.com",
-            "https://volume.volticsolar.co.za",
-            "https://tryit.claravia.cl",
-            "https://him.gynauto.ro",
-            "https://tung.blackmunk.com"
-        ],
-
-        "Strawberry": [
-            "https://strawberry.robertschulze.name/",
-            "https://message.krepche.com/",
-            "https://deposit.deepee.com/",
-            "https://run.flyredwing.ru/",
-            "https://flying.ayresinn.com/",
-            "https://following.mrvillain.com",
-            "https://cancel.adijaya.id",
-            "https://hillme.berugy.hu",
-            "https://stroberii.glamourfreaks.com",
-            "https://wider.worldmicroscope.com",
-            "https://coo.volticsolar.co.za",
-            "https://right.claravia.cl",
-            "https://hot.gynauto.ro",
-            "https://stroberri.blackmunk.com"
-        ],
-
-        "Space": [
-            "https://space.robertschulze.name/",
-            "https://himm.krepche.com/",
-            "https://canu.deepee.com/",
-            "https://questionme.flyredwing.ru/",
-            "https://around.ayresinn.com/",
-            "https://main.mrvillain.com",
-            "https://total.berugy.hu",
-            "https://newget.glamourfreaks.com",
-            "https://science.adijaya.id",
-            "https://k.worldmicroscope.com",
-            "https://good.volticsolar.co.za",
-            "https://home.gynauto.ro",
-            "https://school.claravia.cl",
-            "https://space.blackmunk.com"
-        ],
-
-        "Utopia": [
-            "https://utopial.robertschulze.name/",
-            "https://know.krepche.com/",
-            "https://deeply.deepee.com/",
-            "https://quickme.flyredwing.ru/",
-            "https://com.ayresinn.com/",
-            "https://zoomme.mrvillain.com",
-            "https://utopiame.glamourfreaks.com",
-            "https://matha.berugy.hu",
-            "https://andwe.adijaya.id",
-            "https://can.worldmicroscope.com",
-            "https://zoom.volticsolar.co.za",
-            "https://not.claravia.cl",
-            "https://work.gynauto.ro",
-            "https://utopia.blackmunk.com"
-        ],
-
-        "Lunar": [
-            "https://line.robertschulze.name/",
-            "https://cancan.krepche.com/",
-            "https://cooll.flyredwing.ru/",
-            "https://questionss.deepee.com/",
-            "https://not.ayresinn.com/",
-            "https://sciencei.mrvillain.com",
-            "https://doingme.glamourfreaks.com",
-            "https://hill.berugy.hu",
-            "https://usas.adijaya.id",
-            "https://okwell.worldmicroscope.com",
-            "https://cool.volticsolar.co.za",
-            "https://cell.claravia.cl",
-            "https://info.gynauto.ro",
-            "https://lunar.blackmunk.com"
-        ],
-
-        "Voya": [
-            "https://voyame.robertschulze.name/",
-            "https://butbut.krepche.com/",
-            "https://quickquestion.flyredwing.ru/",
-            "https://voyameem.deepee.com/",
-            "https://letgo.ayresinn.com/",
-            "https://voya.mrvillain.com",
-            "https://hillme.glamourfreaks.com",
-            "https://schoolmath.berugy.hu",
-            "https://questionme.adijaya.id",
-            "https://well.worldmicroscope.com",
-            "https://co.volticsolar.co.za",
-            "https://should.claravia.cl",
-            "https://in.gynauto.ro",
-            "https://science.blackmunk.com"
-        ],
-
-        "Cherri": [
-            "https://bull.psotc.org",
-            "https://wzlju.psotc.org",
-            "https://expzc.psotc.org",
-            "https://vlvw.psotc.org",
-            "https://fbw.psotc.org",
-            "https://lrfc.berugy.hu",
-            "https://psr.ghallonline.com",
-            "https://jaqrc.ayresinn.com",
-            "https://lyinm.localcito.com",
-            "https://sht.deepee.com",
-            "https://behind.cryptparty.com",
-            "https://mathbd.poloniacruz.com"
-        ],
-
-        "Infamous": [
-            "https://valoq.naturesciencenews.com",
-            "https://swiftnote10494.lilith.com.au/",
-            "https://steadyroom54969.justinsteiger.com/",
-            "https://boldscopefe.lastarria.cl/",
-            "https://bravelab.lotossutra.at/",
-            "https://quickdash494.lilith.com.au/",
-            "https://finescope4281.lotossutra.at/",
-            "https://calmprepa8.lilith.com.au/",
-            "https://cleanhub25187.lastarria.cl/",
-            "https://quickcore378.lotossutra.at/",
-            "https://deepspan847.lilith.com.au/",
-            "https://quick-plan.justinsteiger.com/",
-            "https://solidlearn5100.lastarria.cl/",
-            "https://nimblenode5084.lotossutra.at/",
-            "https://rapidnet8760.b-cdn.net/",
-            "https://litewave9206.b-cdn.net/",
-            "https://litenet8394.b-cdn.net/",
-            "https://meganode2515.b-cdn.net/",
-            "https://primecache3991.b-cdn.net/",
-            "https://megabeam3500.b-cdn.net/",
-            "https://quickhost3591.b-cdn.net/"
-        ],
-
-        "Xylora": [
-            "https://xylora.huangqirui.xyz",
-            "https://muffin.love.grei-grei.lt"
-        ],
-
-        "StudyHub": [
-            "https://vcsa.cneducation.site",
-            "https://vcsa.lumbinifashion.com.np",
-            "https://studyhub.heidibranlund.com"
-        ],
-
-        "Ford": [
-            "https://ford.cneducation.site",
-            "https://cars.srivaishnavam.org.au",
-            "https://pnandvcsa.unionvillelacrosse.com",
-            "https://ford.heidibranlund.com"
-        ],
-
-        "TungTung": [
-            "https://cneducation.site",
-            "https://vcsa.educationforall.sbs"
-        ],
-
-        "Yuki App": [
-            "https://yukios.edgeone.app",
-            "https://interesting-articles.pages.dev"
-        ],
-
-        "T9": [
-            "https://t9os.space/class",
-            "https://matheducation2day.b-cdn.net/class"
-        ],
-
-        "Equinox": [
-            "https://74.208.202.111.nip.io",
-            "https://alern.schoools.homes"
-        ],
-
-        "Luicide": [
-            "https://kaleo.b-cdn.net",
-            "https://classroom.poloniacruz.com"
-        ],
-
-        "Interstellar": [
-            "https://vcsaontop.unionvillelacrosse.com"
-        ],
-
-        "Fern": [
-            "https://s3.amazonaws.com/glwithfinals...",
-            "https://glwithfinals.s3.amazonaws.com...",
-            "https://s3.amazonaws.com/fstudentsare...",
-            "https://fstudentsareinventors.s3.amazonaws.com..."
-        ],
-
-        "Galaxy V7": [
-            "https://citizenship.itecono.ar/",
-            "https://abandoned.itecono.ar/",
-            "https://crawford.ks11.ru/",
-            "https://bacterial.marinelvis.com/",
-            "https://trash.stadsbor.com/"
-        ],
-
-        "Galaxy": [
-            "https://galaxy.aletiatours.com",
-            "https://galaxy.bclib.org",
-            "https://galaxy.blueprintdigital.ca",
-            "https://galaxy.roje.com.br",
-            "https://galaxy.techiscitsmt.xyz"
-        ],
-
-        "Overclocked": [
-            "https://over.jbworks.com/",
-            "https://over.focusmarketing.us/",
-            "https://over.itafricagroup.com/",
-            "https://over.bryankrawetz.ca/",
-            "https://over.chesan.com/",
-            "https://over.corficap.net/",
-            "https://over.ghallonline.com/",
-            "https://over.veranda.co.id/",
-            "https://over.blackmunk.com",
-            "https://over.claravia.cl",
-            "https://over.gynauto.ro",
-            "https://over.volticsolar.co.za",
-            "https://over.worldmicroscope.com",
-            "https://over.expo-vpa.ru",
-            "https://over.misem.or.id",
-            "https://over.nicodim-conta.ro",
-            "https://over.taminache.ru",
-            "https://over.valueromania.ro",
-            "https://over.bikalm.com.np",
-            "https://over.datafluvialtech.ch",
-            "https://over.prima-bel-canto.com",
-            "https://over.rako-bptechsolutions.ca",
-            "https://over.superiority.uk"
-        ],
-
-        "Boredom": [
-            "https://littleshrimpcupcakenamedjames.global.ssl.fastly.net/",
-            "https://malick-boredom.global.ssl.fastly.net/",
-            "https://saugatrboredom-dcqjf.mdll.cl/"
-        ],
-
-        "Selenite": [
-            "https://selenite.adijaya.id/",
-            "https://selenite.mantavyagajjar.com/",
-            "https://selenite.nenadic.hr/",
-            "https://selenite.studio16.ru/",
-            "https://selenite.suliaotongwang.com/"
-        ],
-
-        "Velara": [
-            "https://diqu.educations.mytunnel.org/",
-            "https://vurf.educations.mytunnel.org/",
-            "https://fmqn.educations.mytunnel.org/",
-            "https://lgqw.educations.mytunnel.org/",
-            "https://khyj.educations.mytunnel.org/",
-            "https://qijo.educations.mytunnel.org/",
-            "https://byko.educations.mytunnel.org/",
-            "https://kuln.educations.mytunnel.org/",
-            "https://zvld.educations.mytunnel.org/",
-            "https://history.math.drama.teacher.biology.mea-i.org/",
-            "https://geometry.vocabulary.computer.physics.engineering.pilotrights.com/",
-            "https://seminar.reading.student.lecture.learning.keycontact.co.za/",
-            "https://teacher.calculus.literature.classroom.algebra.sonywarner.com/"
-        ],
-
-        "Rosin": [
-            "https://meow.bastaff.ru/",
-            "https://curly.evaandering.com/",
-            "https://booksnread.jashish.com.np/",
-            "https://crepe.krepche.com/",
-            "https://ideas.orchid-idea.com/"
-        ],
-
-        "Truffle": [
-            "https://grids.secret.ck.link.drewmcphee.com/",
-            "https://grids.super.secret.ck.link.drewmcphee.com/"
-        ],
-
-        "Dogeub": [
-            "https://history.worksheets.krepche.com/"
-        ],
-
-        "Frogie Arcade": [
-            "https://frogiesarcade.xyz/"
-        ],
-
-        "Petezah": [
-            "https://123moviesgo.cfd/verify",
-            "https://pay2win.ayresinn.com/verify",
-            "https://math-practice.myonlineportal....",
-            "https://pay2win.ayresinn.com/",
-            "https://foxy.kasihinfo.com/",
-            "https://smartguy.kasihinfo.com/",
-            "https://bull.doremusiclessons.com",
-            "https://swzgf.doremusiclessons.com",
-            "https://rwgh.doremusiclessons.com",
-            "https://agh.doremusiclessons.com"
-        ],
-
-        "Uncategorized": [
-            "https://s3.amazonaws.comnewyearnewfernindex.html",
-            "https://newyearnewfern.s3.amazonaws.comindex.html",
-            "https://s3.amazonaws.comsubtobullindex.html",
-            "https://s3.amazonaws.comvcsa-suxindex.html",
-            "https://vcsa-sux.s3.amazonaws.comindex.html",
-            "https://s3.amazonaws.combull-bestindex.html",
-            "https://bull-best.s3.amazonaws.comindex.html",
-            "https://goschool.priestella.xyz",
-            "https://tellme.priestella.xyz",
-            "https://forme.priestella.xyz",
-            "https://wowme.priestella.xyz",
-            "https://person.priestella.xyz",
-            "https://nocaptions.cfd",
-            "https://canwill.priestella.xyz",
-            "https://manget.priestella.xyz",
-            "https://private.priestella.xyz"
-        ]
-    };
-
-
-    /* =====================================================
-       LINK RENDER + DEDUPE
-    ===================================================== */
-
-    const categoryIcons = {
-        "Solara": "☀️",
-        "Triple T HD": "📺",
-        "Study Hub": "📚",
-        "StudyHub": "📖",
-        "TUNG TUNG": "🗿",
-        "TungTung": "🔔",
-        "Strawberry": "🍓",
-        "Space": "🚀",
-        "Utopia": "🌌",
-        "Lunar": "🌙",
-        "Voya": "🛸",
-        "Cherri": "🌐",
-        "Infamous": "✨",
-        "Xylora": "📚",
-        "Ford": "🚗",
-        "Yuki App": "🌸",
-        "T9": "9️⃣",
-        "Equinox": "🌗",
-        "Luicide": "💀",
-        "Interstellar": "🌠",
-        "Fern": "🌿",
-        "Galaxy V7": "🌌",
-        "Galaxy": "🌌",
-        "Overclocked": "⚡",
-        "Boredom": "😴",
-        "Selenite": "🔮",
-        "Velara": "🪐",
-        "Rosin": "🧪",
-        "Truffle": "🍄",
-        "Dogeub": "🐕",
-        "Frogie Arcade": "🐸",
-        "Petezah": "🧩",
-        "Uncategorized": "📦"
-    };
-
-
-    const linkContainer =
-        document.getElementById(
-            "linkContainer"
+        clearTimeout(
+            toast._timer
         );
 
+        toast._timer =
+            setTimeout(() => {
+                toast.style.display =
+                    "none";
+            }, 3000);
+    }
 
-    const seen =
-        new Set();
-
-
-    function normalizeURL(
-        value
+    async function api(
+        path,
+        options = {}
     ) {
+        const headers = {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        };
+
+        const response =
+            await fetch(
+                API + path,
+                {
+                    ...options,
+                    headers,
+                    credentials: "include"
+                }
+            );
+
+        let data = {};
+
         try {
-            const u =
-                new URL(
-                    value.startsWith("http")
-                        ? value
-                        : `https://${value}`
-                );
-
-            u.hash = "";
-
-            const path =
-                u.pathname === "/"
-                    ? ""
-                    : u.pathname.replace(/\/+$/, "");
-
-            return (
-                u.protocol +
-                "//" +
-                u.hostname.toLowerCase() +
-                path +
-                u.search
-            ).toLowerCase();
-
+            data =
+                await response.json();
         } catch {
-            return value
-                .trim()
-                .toLowerCase()
-                .replace(/\/+$/, "");
+            data = {};
+        }
+
+        return {
+            response,
+            data
+        };
+    }
+
+    function showModal(id) {
+        document
+            .getElementById(id)
+            .classList.add("show");
+    }
+
+    function hideModal(id) {
+        document
+            .getElementById(id)
+            .classList.remove("show");
+    }
+
+    function setActiveNav(id) {
+        document
+            .querySelectorAll(".navButton")
+            .forEach(button => {
+                button.classList.remove("active");
+            });
+
+        document
+            .getElementById(id)
+            .classList.add("active");
+    }
+
+    function isAdmin() {
+        return Boolean(
+            currentUser &&
+            currentUser.role === "admin"
+        );
+    }
+
+    function getHostname(url) {
+        try {
+            return new URL(url).hostname;
+        } catch {
+            return "unknown";
         }
     }
 
-
-    Object.entries(groups)
-        .forEach(
-            ([category, links]) => {
-
-                const section =
-                    document.createElement(
-                        "section"
-                    );
-
-                section.className =
-                    "category";
-
-
-                const heading =
-                    document.createElement(
-                        "h2"
-                    );
-
-                heading.textContent =
-                    `${categoryIcons[category] || "🔗"} ${category}`;
-
-
-                const grid =
-                    document.createElement(
-                        "div"
-                    );
-
-                grid.className =
-                    "links";
-
-
-                let count =
-                    0;
-
-
-                links.forEach(
-                    rawURL => {
-
-                        const normalized =
-                            normalizeURL(
-                                rawURL
-                            );
-
-
-                        if (
-                            seen.has(
-                                normalized
-                            )
-                        ) {
-                            return;
-                        }
-
-
-                        seen.add(
-                            normalized
-                        );
-
-
-                        count++;
-
-
-                        const card =
-                            document.createElement(
-                                "a"
-                            );
-
-                        card.className =
-                            "linkCard";
-
-
-                        card.dataset.url =
-                            rawURL;
-
-
-                        card.href =
-                            rawURL;
-
-
-                        card.target =
-                            "_blank";
-
-
-                        card.rel =
-                            "noopener noreferrer";
-
-
-                        card.innerHTML = `
-                            <div class="linkNumber">
-                                ${String(count).padStart(2, "0")}
-                            </div>
-
-                            <div class="linkURL">
-                                ${escapeHTML(rawURL)}
-                            </div>
-                        `;
-
-
-                        grid.appendChild(
-                            card
-                        );
-
-                    }
-                );
-
-
-                if (
-                    grid.children.length
-                ) {
-
-                    section.appendChild(
-                        heading
-                    );
-
-                    section.appendChild(
-                        grid
-                    );
-
-                    linkContainer.appendChild(
-                        section
-                    );
-
-                }
-
-            }
-        );
-
-
-    const cards =
-        Array.from(
-            document.querySelectorAll(
-                ".linkCard"
-            )
-        );
-
-    const categories =
-        Array.from(
-            document.querySelectorAll(
-                ".category"
-            )
-        );
-
-
-    /* =====================================================
-       ACCESS
-    ===================================================== */
+    /* ACCESS */
 
     document
-        .getElementById(
-            "accessButton"
-        )
+        .getElementById("accessButton")
         .addEventListener(
             "click",
             unlock
         );
 
-
     document
-        .getElementById(
-            "accessPassword"
-        )
+        .getElementById("accessPassword")
         .addEventListener(
             "keydown",
             event => {
-
-                if (
-                    event.key === "Enter"
-                ) {
+                if (event.key === "Enter") {
                     unlock();
                 }
-
             }
         );
 
-
     function unlock() {
-
         const input =
             document.getElementById(
                 "accessPassword"
             );
 
-
         const error =
             document.getElementById(
                 "accessError"
             );
-
 
         if (
             input.value
@@ -2066,377 +1414,287 @@ function escapeHTML(value) {
                 .toLowerCase() ===
             ACCESS_PASSWORD
         ) {
-
             document.getElementById(
                 "accessScreen"
             ).style.display =
                 "none";
-
 
             document.getElementById(
                 "app"
             ).style.display =
                 "block";
 
-
             restoreSession();
 
-
             return;
-
         }
 
-
         attempts++;
-
-        input.value =
-            "";
-
+        input.value = "";
 
         if (
-            attempts >=
-            MAX_ATTEMPTS
+            attempts >= MAX_ATTEMPTS
         ) {
-
-            input.disabled =
-                true;
-
+            input.disabled = true;
 
             document.getElementById(
                 "accessButton"
-            ).disabled =
-                true;
-
+            ).disabled = true;
 
             showModal(
                 "accessUnavailable"
             );
-
-
         } else {
-
-            error.style.display =
-                "block";
-
+            error.style.display = "block";
         }
-
     }
 
+    /* LINK SEARCH */
 
-    /* =====================================================
-       SEARCH
-    ===================================================== */
-
-    document
-        .getElementById(
+    const searchBox =
+        document.getElementById(
             "searchBox"
-        )
-        .addEventListener(
-            "input",
-            event => {
-
-                const query =
-                    event.target.value
-                        .trim()
-                        .toLowerCase();
-
-
-                cards.forEach(
-                    card => {
-
-                        card.classList.toggle(
-                            "hidden",
-                            !card.innerText
-                                .toLowerCase()
-                                .includes(
-                                    query
-                                )
-                        );
-
-                    }
-                );
-
-
-                categories.forEach(
-                    category => {
-
-                        const visible =
-                            category.querySelectorAll(
-                                ".linkCard:not(.hidden)"
-                            ).length;
-
-
-                        category.classList.toggle(
-                            "hidden",
-                            visible === 0
-                        );
-
-                    }
-                );
-
-            }
         );
 
+    function getCards() {
+        return Array.from(
+            document.querySelectorAll(
+                ".linkCard"
+            )
+        );
+    }
 
-    /* =====================================================
-       REPORTING
-    ===================================================== */
+    function getCategories() {
+        return Array.from(
+            document.querySelectorAll(
+                ".category"
+            )
+        );
+    }
 
-    let pressTimer =
-        null;
+    searchBox.addEventListener(
+        "input",
+        event => {
+            const query =
+                event.target.value
+                    .trim()
+                    .toLowerCase();
 
+            const cards =
+                getCards();
 
-    cards.forEach(
-        card => {
+            const categories =
+                getCategories();
 
-            card.addEventListener(
-                "contextmenu",
-                event => {
-
-                    event.preventDefault();
-
-                    openReport(
-                        card.dataset.url
+            cards.forEach(
+                card => {
+                    card.classList.toggle(
+                        "hidden",
+                        !card.innerText
+                            .toLowerCase()
+                            .includes(query)
                     );
-
                 }
             );
 
+            categories.forEach(
+                category => {
+                    const visible =
+                        category.querySelectorAll(
+                            ".linkCard:not(.hidden)"
+                        ).length;
 
-            card.addEventListener(
-                "dblclick",
-                event => {
-
-                    event.preventDefault();
-
-                    openReport(
-                        card.dataset.url
+                    category.classList.toggle(
+                        "hidden",
+                        visible === 0
                     );
-
                 }
             );
-
-
-            card.addEventListener(
-                "touchstart",
-                () => {
-
-                    clearTimeout(
-                        pressTimer
-                    );
-
-
-                    pressTimer =
-                        setTimeout(
-                            () => {
-
-                                openReport(
-                                    card.dataset.url
-                                );
-
-                            },
-                            1200
-                        );
-
-                },
-                {
-                    passive: true
-                }
-            );
-
-
-            card.addEventListener(
-                "touchend",
-                () => {
-
-                    clearTimeout(
-                        pressTimer
-                    );
-
-                }
-            );
-
-
-            card.addEventListener(
-                "touchcancel",
-                () => {
-
-                    clearTimeout(
-                        pressTimer
-                    );
-
-                }
-            );
-
         }
     );
 
+    /* REPORTING */
 
-    function openReport(
-        url
-    ) {
+    let holdTimer = null;
+
+    document.addEventListener(
+        "contextmenu",
+        event => {
+            const card =
+                event.target.closest(
+                    ".linkCard"
+                );
+
+            if (!card) {
+                return;
+            }
+
+            event.preventDefault();
+
+            openReport(
+                card.dataset.url
+            );
+        }
+    );
+
+    document.addEventListener(
+        "touchstart",
+        event => {
+            const card =
+                event.target.closest(
+                    ".linkCard"
+                );
+
+            if (!card) {
+                return;
+            }
+
+            clearTimeout(
+                holdTimer
+            );
+
+            holdTimer =
+                setTimeout(() => {
+                    openReport(
+                        card.dataset.url
+                    );
+                }, 1200);
+        },
+        {
+            passive: true
+        }
+    );
+
+    document.addEventListener(
+        "touchend",
+        () => {
+            clearTimeout(
+                holdTimer
+            );
+        }
+    );
+
+    document.addEventListener(
+        "touchcancel",
+        () => {
+            clearTimeout(
+                holdTimer
+            );
+        }
+    );
+
+    function openReport(url) {
+        if (!url) {
+            return;
+        }
 
         selectedReportURL =
             url;
-
 
         document.getElementById(
             "reportURL"
         ).textContent =
             url;
 
-
         showModal(
             "reportModal"
         );
-
     }
 
-
-    document.getElementById(
-        "cancelReportButton"
-    ).addEventListener(
-        "click",
-        () => {
-
-            selectedReportURL =
-                null;
-
-            hideModal(
-                "reportModal"
-            );
-
-        }
-    );
-
-
-    document.getElementById(
-        "confirmReportButton"
-    ).addEventListener(
-        "click",
-        async () => {
-
-            if (
-                !selectedReportURL
-            ) {
-                return;
+    document
+        .getElementById(
+            "cancelReportButton"
+        )
+        .addEventListener(
+            "click",
+            () => {
+                selectedReportURL = null;
+                hideModal("reportModal");
             }
+        );
 
+    document
+        .getElementById(
+            "confirmReportButton"
+        )
+        .addEventListener(
+            "click",
+            async () => {
 
-            const button =
-                document.getElementById(
-                    "confirmReportButton"
-                );
-
-
-            button.disabled =
-                true;
-
-
-            button.textContent =
-                "Reporting...";
-
-
-            try {
-
-                const result =
-                    await api(
-                        "/api/report",
-                        {
-                            method: "POST",
-
-                            body:
-                                JSON.stringify({
-                                    url:
-                                        selectedReportURL,
-
-                                    name:
-                                        getHostname(
-                                            selectedReportURL
-                                        )
-                                })
-                        }
-                    );
-
-
-                if (
-                    !result.response.ok ||
-                    !result.data.success
-                ) {
-
-                    throw new Error(
-                        result.data.error ||
-                        "Report failed"
-                    );
-
-                }
-
-
-                markReported(
-                    selectedReportURL
-                );
-
-
-                showToast(
-                    "✅ Link reported."
-                );
-
-
-                selectedReportURL =
-                    null;
-
-
-                hideModal(
-                    "reportModal"
-                );
-
-
-            } catch (
-                error
-            ) {
-
-                showToast(
-                    "❌ " +
-                    error.message
-                );
-
-            } finally {
-
-                button.disabled =
-                    false;
-
-
-                button.textContent =
-                    "Report";
-
-            }
-
-        }
-    );
-
-
-    function markReported(
-        url
-    ) {
-
-        const normalized =
-            normalizeURL(
-                url
-            );
-
-
-        cards.forEach(
-            card => {
-
-                if (
-                    normalizeURL(
-                        card.dataset.url
-                    ) !==
-                    normalized
-                ) {
+                if (!selectedReportURL) {
                     return;
                 }
 
+                const button =
+                    document.getElementById(
+                        "confirmReportButton"
+                    );
+
+                button.disabled = true;
+                button.textContent = "Reporting...";
+
+                try {
+                    const result =
+                        await api(
+                            "/api/report",
+                            {
+                                method: "POST",
+                                body:
+                                    JSON.stringify({
+                                        url:
+                                            selectedReportURL,
+                                        name:
+                                            getHostname(
+                                                selectedReportURL
+                                            )
+                                    })
+                            }
+                        );
+
+                    if (
+                        !result.response.ok ||
+                        !result.data.success
+                    ) {
+                        throw new Error(
+                            result.data.error ||
+                            "Report failed"
+                        );
+                    }
+
+                    markReported(
+                        selectedReportURL
+                    );
+
+                    showToast(
+                        "✅ Link reported."
+                    );
+
+                    selectedReportURL = null;
+                    hideModal("reportModal");
+
+                } catch (error) {
+                    showToast(
+                        "❌ " +
+                        error.message
+                    );
+                } finally {
+                    button.disabled = false;
+                    button.textContent = "Report";
+                }
+            }
+        );
+
+    function markReported(url) {
+        document
+            .querySelectorAll(".linkCard")
+            .forEach(card => {
+
+                if (
+                    card.dataset.url !==
+                    url
+                ) {
+                    return;
+                }
 
                 if (
                     card.querySelector(
@@ -2446,128 +1704,215 @@ function escapeHTML(value) {
                     return;
                 }
 
-
                 const badge =
                     document.createElement(
                         "div"
                     );
 
-
                 badge.className =
                     "reportedBadge";
-
 
                 badge.textContent =
                     "⚠️ Reported";
 
-
                 card.appendChild(
                     badge
                 );
+            });
+    }
 
+    /* NAV */
+
+    document
+        .getElementById("linksNav")
+        .addEventListener(
+            "click",
+            () => {
+                setActiveNav(
+                    "linksNav"
+                );
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
             }
         );
 
-    }
+    document
+        .getElementById("accountNav")
+        .addEventListener(
+            "click",
+            () => {
+                setActiveNav(
+                    "accountNav"
+                );
 
+                showModal(
+                    "accountModal"
+                );
 
-    /* =====================================================
-       ACCOUNT
-    ===================================================== */
+                if (currentUser) {
+                    showAccount(
+                        currentUser
+                    );
+                } else {
+                    showSignup();
+                }
+            }
+        );
+
+    document
+        .getElementById("chatNav")
+        .addEventListener(
+            "click",
+            () => {
+                setActiveNav(
+                    "chatNav"
+                );
+
+                showModal(
+                    "chatModal"
+                );
+            }
+        );
+
+    document
+        .getElementById("adminNav")
+        .addEventListener(
+            "click",
+            () => {
+
+                if (!isAdmin()) {
+                    showToast(
+                        "Admin access required."
+                    );
+                    return;
+                }
+
+                setActiveNav(
+                    "adminNav"
+                );
+
+                showModal(
+                    "adminModal"
+                );
+
+                loadReports();
+            }
+        );
+
+    /* MODAL CLOSE */
+
+    document
+        .querySelectorAll(
+            "[data-close]"
+        )
+        .forEach(
+            button => {
+                button.addEventListener(
+                    "click",
+                    () => {
+                        hideModal(
+                            button.dataset.close
+                        );
+
+                        setActiveNav(
+                            "linksNav"
+                        );
+                    }
+                );
+            }
+        );
+
+    document
+        .querySelectorAll(
+            ".modal"
+        )
+        .forEach(
+            modal => {
+                modal.addEventListener(
+                    "click",
+                    event => {
+                        if (
+                            event.target ===
+                            modal
+                        ) {
+                            modal.classList.remove(
+                                "show"
+                            );
+
+                            setActiveNav(
+                                "linksNav"
+                            );
+                        }
+                    }
+                );
+            }
+        );
+
+    /* ACCOUNT */
 
     function showSignup() {
-
         document.getElementById(
             "signupView"
-        ).style.display =
-            "block";
-
+        ).style.display = "block";
 
         document.getElementById(
             "loginView"
-        ).style.display =
-            "none";
-
+        ).style.display = "none";
 
         document.getElementById(
             "accountView"
-        ).style.display =
-            "none";
-
+        ).style.display = "none";
     }
-
 
     function showLogin() {
-
         document.getElementById(
             "signupView"
-        ).style.display =
-            "none";
-
+        ).style.display = "none";
 
         document.getElementById(
             "loginView"
-        ).style.display =
-            "block";
-
+        ).style.display = "block";
 
         document.getElementById(
             "accountView"
-        ).style.display =
-            "none";
-
+        ).style.display = "none";
     }
 
-
-    function showAccount(
-        user
-    ) {
-
+    function showAccount(user) {
         document.getElementById(
             "signupView"
-        ).style.display =
-            "none";
-
+        ).style.display = "none";
 
         document.getElementById(
             "loginView"
-        ).style.display =
-            "none";
-
+        ).style.display = "none";
 
         document.getElementById(
             "accountView"
-        ).style.display =
-            "block";
-
+        ).style.display = "block";
 
         document.getElementById(
             "accountUsernameValue"
         ).textContent =
-            user.username ||
-            "";
-
+            user.username || "";
 
         document.getElementById(
             "accountDisplayNameValue"
         ).textContent =
-            user.displayName ||
-            "";
-
+            user.displayName || "";
 
         document.getElementById(
             "accountRoleValue"
         ).textContent =
-            user.role ||
-            "user";
-
+            user.role || "user";
 
         document.getElementById(
             "accountStatusValue"
         ).textContent =
-            user.status ||
-            "active";
-
+            user.status || "active";
 
         document.getElementById(
             "adminNav"
@@ -2575,423 +1920,269 @@ function escapeHTML(value) {
             user.role === "admin"
                 ? "block"
                 : "none";
-
     }
 
+    document
+        .getElementById(
+            "showLoginButton"
+        )
+        .addEventListener(
+            "click",
+            showLogin
+        );
 
-    document.getElementById(
-        "accountNav"
-    ).addEventListener(
-        "click",
-        () => {
+    document
+        .getElementById(
+            "showSignupButton"
+        )
+        .addEventListener(
+            "click",
+            showSignup
+        );
 
-            setActiveNav(
-                "accountNav"
-            );
+    document
+        .getElementById(
+            "signupButton"
+        )
+        .addEventListener(
+            "click",
+            async () => {
 
+                const button =
+                    document.getElementById(
+                        "signupButton"
+                    );
 
-            showModal(
-                "accountModal"
-            );
+                button.disabled = true;
+                button.textContent = "Creating...";
 
+                try {
+                    const result =
+                        await api(
+                            "/api/register",
+                            {
+                                method: "POST",
+                                body:
+                                    JSON.stringify({
+                                        username:
+                                            document.getElementById(
+                                                "signupUsername"
+                                            ).value,
 
-            if (
-                currentUser
-            ) {
+                                        displayName:
+                                            document.getElementById(
+                                                "signupDisplayName"
+                                            ).value,
 
-                showAccount(
-                    currentUser
-                );
+                                        realName:
+                                            document.getElementById(
+                                                "signupRealName"
+                                            ).value,
 
-            } else {
+                                        password:
+                                            document.getElementById(
+                                                "signupPassword"
+                                            ).value
+                                    })
+                            }
+                        );
+
+                    if (
+                        !result.response.ok ||
+                        !result.data.success
+                    ) {
+                        throw new Error(
+                            result.data.error ||
+                            "Could not create account"
+                        );
+                    }
+
+                    document.getElementById(
+                        "accountMessage"
+                    ).textContent =
+                        "✅ Account created. Log in below.";
+
+                    showLogin();
+
+                } catch (error) {
+                    document.getElementById(
+                        "accountMessage"
+                    ).textContent =
+                        "❌ " +
+                        error.message;
+                } finally {
+                    button.disabled = false;
+                    button.textContent = "Create Account";
+                }
+            }
+        );
+
+    document
+        .getElementById(
+            "loginAccountButton"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                const button =
+                    document.getElementById(
+                        "loginAccountButton"
+                    );
+
+                button.disabled = true;
+                button.textContent = "Logging in...";
+
+                try {
+                    const result =
+                        await api(
+                            "/api/login",
+                            {
+                                method: "POST",
+                                body:
+                                    JSON.stringify({
+                                        username:
+                                            document.getElementById(
+                                                "loginUsername"
+                                            ).value,
+
+                                        password:
+                                            document.getElementById(
+                                                "loginPassword"
+                                            ).value
+                                    })
+                            }
+                        );
+
+                    if (
+                        !result.response.ok ||
+                        !result.data.success
+                    ) {
+                        throw new Error(
+                            result.data.error ||
+                            "Login failed"
+                        );
+                    }
+
+                    currentUser =
+                        result.data.user;
+
+                    showAccount(
+                        currentUser
+                    );
+
+                    showToast(
+                        "✅ Logged in."
+                    );
+
+                } catch (error) {
+                    document.getElementById(
+                        "accountMessage"
+                    ).textContent =
+                        "❌ " +
+                        error.message;
+                } finally {
+                    button.disabled = false;
+                    button.textContent = "Login";
+                }
+            }
+        );
+
+    document
+        .getElementById(
+            "logoutButton"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                try {
+                    await api(
+                        "/api/logout",
+                        {
+                            method: "POST"
+                        }
+                    );
+                } catch {}
+
+                currentUser = null;
+
+                document.getElementById(
+                    "adminNav"
+                ).style.display = "none";
 
                 showSignup();
 
-            }
-
-        }
-    );
-
-
-    document.getElementById(
-        "showLoginButton"
-    ).addEventListener(
-        "click",
-        showLogin
-    );
-
-
-    document.getElementById(
-        "showSignupButton"
-    ).addEventListener(
-        "click",
-        showSignup
-    );
-
-
-    document.getElementById(
-        "signupButton"
-    ).addEventListener(
-        "click",
-        async () => {
-
-            const username =
-                document.getElementById(
-                    "signupUsername"
-                ).value;
-
-
-            const displayName =
-                document.getElementById(
-                    "signupDisplayName"
-                ).value;
-
-
-            const realName =
-                document.getElementById(
-                    "signupRealName"
-                ).value;
-
-
-            const password =
-                document.getElementById(
-                    "signupPassword"
-                ).value;
-
-
-            const button =
-                document.getElementById(
-                    "signupButton"
-                );
-
-
-            button.disabled =
-                true;
-
-
-            button.textContent =
-                "Creating...";
-
-
-            try {
-
-                const result =
-                    await api(
-                        "/api/register",
-                        {
-                            method: "POST",
-
-                            body:
-                                JSON.stringify({
-                                    username,
-                                    displayName,
-                                    realName,
-                                    password
-                                })
-                        }
-                    );
-
-
-                if (
-                    !result.response.ok ||
-                    !result.data.success
-                ) {
-
-                    throw new Error(
-                        result.data.error ||
-                        "Could not create account"
-                    );
-
-                }
-
-
-                document.getElementById(
-                    "accountMessage"
-                ).textContent =
-                    "✅ Account created. Log in below.";
-
-
-                showLogin();
-
-
-            } catch (
-                error
-            ) {
-
-                document.getElementById(
-                    "accountMessage"
-                ).textContent =
-                    "❌ " +
-                    error.message;
-
-            } finally {
-
-                button.disabled =
-                    false;
-
-
-                button.textContent =
-                    "Create Account";
-
-            }
-
-        }
-    );
-
-
-    document.getElementById(
-        "loginAccountButton"
-    ).addEventListener(
-        "click",
-        async () => {
-
-            const username =
-                document.getElementById(
-                    "loginUsername"
-                ).value;
-
-
-            const password =
-                document.getElementById(
-                    "loginPassword"
-                ).value;
-
-
-            const button =
-                document.getElementById(
-                    "loginAccountButton"
-                );
-
-
-            button.disabled =
-                true;
-
-
-            button.textContent =
-                "Logging in...";
-
-
-            try {
-
-                const result =
-                    await api(
-                        "/api/login",
-                        {
-                            method: "POST",
-
-                            body:
-                                JSON.stringify({
-                                    username,
-                                    password
-                                })
-                        }
-                    );
-
-
-                if (
-                    !result.response.ok ||
-                    !result.data.success
-                ) {
-
-                    throw new Error(
-                        result.data.error ||
-                        "Login failed"
-                    );
-
-                }
-
-
-                sessionToken =
-                    result.data.token;
-
-
-                currentUser =
-                    result.data.user;
-
-
-              
-
-
-                showAccount(
-                    currentUser
-                );
-
-
                 showToast(
-                    "✅ Logged in."
+                    "Logged out."
                 );
-
-
-            } catch (
-                error
-            ) {
-
-                document.getElementById(
-                    "accountMessage"
-                ).textContent =
-                    "❌ " +
-                    error.message;
-
-            } finally {
-
-                button.disabled =
-                    false;
-
-
-                button.textContent =
-                    "Login";
-
             }
-
-        }
-    );
-
-
-    document.getElementById(
-        "logoutButton"
-    ).addEventListener(
-        "click",
-        async () => {
-
-            try {
-
-                await api(
-                    "/api/logout",
-                    {
-                        method: "POST"
-                    }
-                );
-
-            } catch {}
-
-
-            sessionToken =
-                null;
-
-
-            currentUser =
-                null;
-
-
-            
-
-
-            document.getElementById(
-                "adminNav"
-            ).style.display =
-                "none";
-
-
-            showSignup();
-
-
-            showToast(
-                "Logged out."
-            );
-
-        }
-    );
-
-
-    /* =====================================================
-       SESSION RESTORE
-    ===================================================== */
+        );
 
     async function restoreSession() {
-
-        if (
-            !sessionToken
-        ) {
-            return;
-        }
-
-
         try {
-
             const result =
                 await api(
                     "/api/me"
                 );
 
-
             if (
                 !result.response.ok ||
                 !result.data.success
             ) {
-
                 throw new Error(
-                    "Session expired"
+                    "No valid session"
                 );
-
             }
-
 
             currentUser =
                 result.data.user;
-
 
             showAccount(
                 currentUser
             );
 
-
         } catch {
-
-            sessionToken =
-                null;
-
-
-            currentUser =
-                null;
-
-
-            
-
+            currentUser = null;
         }
-
     }
 
+    /* CHAT UI */
 
-    /* =====================================================
-       ADMIN
-    ===================================================== */
+    document
+        .getElementById(
+            "chatSendButton"
+        )
+        .addEventListener(
+            "click",
+            async () => {
 
-    document.getElementById(
-        "adminNav"
-    ).addEventListener(
-        "click",
-        () => {
+                const input =
+                    document.getElementById(
+                        "chatInput"
+                    );
 
-            if (
-                !currentUser ||
-                currentUser.role !== "admin"
-            ) {
+                const message =
+                    input.value.trim();
+
+                if (!message) {
+                    return;
+                }
+
+                if (!currentUser) {
+                    showToast(
+                        "Log in before using chat."
+                    );
+                    return;
+                }
 
                 showToast(
-                    "Admin access required."
+                    "Chat backend isn't connected yet."
                 );
-
-
-                return;
-
             }
+        );
 
-
-            setActiveNav(
-                "adminNav"
-            );
-
-
-            showModal(
-                "adminModal"
-            );
-
-
-            loadReports();
-
-        }
-    );
-
+    /* ADMIN TABS */
 
     document
         .querySelectorAll(
@@ -3015,7 +2206,6 @@ function escapeHTML(value) {
                                     )
                             );
 
-
                         document
                             .querySelectorAll(
                                 ".adminSection"
@@ -3027,15 +2217,12 @@ function escapeHTML(value) {
                                     )
                             );
 
-
                         tab.classList.add(
                             "active"
                         );
 
-
                         const target =
                             tab.dataset.tab;
-
 
                         document
                             .getElementById(
@@ -3046,76 +2233,56 @@ function escapeHTML(value) {
                                 "active"
                             );
 
-
                         if (
                             target ===
                             "reports"
                         ) {
-
                             loadReports();
-
                         }
-
 
                         if (
                             target ===
                             "users"
                         ) {
-
                             loadUsers();
-
                         }
-
                     }
                 );
-
             }
         );
 
-
     async function loadReports() {
-
         const list =
             document.getElementById(
                 "reportsList"
             );
 
-
         list.textContent =
             "Loading...";
 
-
         try {
-
             const result =
                 await api(
                     "/api/reports"
                 );
 
-
             if (
                 !result.response.ok ||
                 !result.data.success
             ) {
-
                 throw new Error(
                     result.data.error ||
                     "Couldn't load reports"
                 );
-
             }
 
-
             const reports =
-                result.data.reports ||
-                [];
-
+                result.data.reports || [];
 
             document.getElementById(
                 "reportCount"
             ).textContent =
                 reports.length;
-
 
             document.getElementById(
                 "totalReports"
@@ -3127,29 +2294,20 @@ function escapeHTML(value) {
                     ) =>
                         total +
                         Number(
-                            report.reports ||
-                            0
+                            report.reports || 0
                         ),
                     0
                 );
 
-
-            list.innerHTML =
-                "";
-
+            list.innerHTML = "";
 
             if (
-                reports.length ===
-                0
+                reports.length === 0
             ) {
-
                 list.textContent =
                     "🟢 No reported links.";
-
                 return;
-
             }
-
 
             reports.forEach(
                 report => {
@@ -3159,10 +2317,8 @@ function escapeHTML(value) {
                             "div"
                         );
 
-
                     item.className =
                         "adminItem";
-
 
                     item.innerHTML = `
                         <div class="adminTop">
@@ -3174,8 +2330,7 @@ function escapeHTML(value) {
 
                             <span>
                                 ${Number(
-                                    report.reports ||
-                                    0
+                                    report.reports || 0
                                 )}
                             </span>
                         </div>
@@ -3190,19 +2345,20 @@ function escapeHTML(value) {
                         </div>
 
                         <div class="adminActions">
+
                             <button
-                                class="secondaryButton restoreReportButton"
+                                class="secondaryButton restoreButton"
                                 type="button"
                             >
                                 ♻️ Restore
                             </button>
+
                         </div>
                     `;
 
-
                     item
                         .querySelector(
-                            ".restoreReportButton"
+                            ".restoreButton"
                         )
                         .addEventListener(
                             "click",
@@ -3212,40 +2368,26 @@ function escapeHTML(value) {
                                 )
                         );
 
-
                     list.appendChild(
                         item
                     );
-
                 }
             );
 
-
-        } catch (
-            error
-        ) {
-
+        } catch (error) {
             list.textContent =
                 "❌ " +
                 error.message;
-
         }
-
     }
 
-
-    async function restoreReport(
-        url
-    ) {
-
+    async function restoreReport(url) {
         try {
-
             const result =
                 await api(
                     "/api/restore",
                     {
                         method: "POST",
-
                         body:
                             JSON.stringify({
                                 url
@@ -3253,97 +2395,67 @@ function escapeHTML(value) {
                     }
                 );
 
-
             if (
                 !result.response.ok ||
                 !result.data.success
             ) {
-
                 throw new Error(
                     result.data.error ||
                     "Restore failed"
                 );
-
             }
-
 
             showToast(
                 "✅ Report restored."
             );
 
-
             loadReports();
 
-
-        } catch (
-            error
-        ) {
-
+        } catch (error) {
             showToast(
                 "❌ " +
                 error.message
             );
-
         }
-
     }
 
-
     async function loadUsers() {
-
         const list =
             document.getElementById(
                 "usersList"
             );
 
-
         list.textContent =
             "Loading...";
 
-
         try {
-
             const result =
                 await api(
                     "/api/admin/users"
                 );
 
-
             if (
                 !result.response.ok ||
                 !result.data.success
             ) {
-
                 throw new Error(
                     result.data.error ||
                     "Couldn't load users"
                 );
-
             }
-
 
             const users =
-                result.data.users ||
-                [];
+                result.data.users || [];
 
-
-            list.innerHTML =
-                "";
-
+            list.innerHTML = "";
 
             if (
-                users.length ===
-                0
+                users.length === 0
             ) {
-
                 list.textContent =
                     "No accounts yet.";
-
-
                 return;
-
             }
-
 
             users.forEach(
                 user => {
@@ -3353,10 +2465,8 @@ function escapeHTML(value) {
                             "div"
                         );
 
-
                     item.className =
                         "adminItem";
-
 
                     item.innerHTML = `
                         <div class="adminTop">
@@ -3389,22 +2499,22 @@ function escapeHTML(value) {
                         <div class="adminActions">
 
                             <button
-                                data-action="block"
                                 type="button"
+                                data-action="block"
                             >
                                 🚫 Block
                             </button>
 
                             <button
-                                data-action="unblock"
                                 type="button"
+                                data-action="unblock"
                             >
                                 ✅ Unblock
                             </button>
 
                             <button
-                                data-action="ban"
                                 type="button"
+                                data-action="ban"
                             >
                                 🔨 Ban
                             </button>
@@ -3413,8 +2523,8 @@ function escapeHTML(value) {
                                 user.role !== "admin"
                                 ? `
                                     <button
-                                        data-action="promote"
                                         type="button"
+                                        data-action="promote"
                                     >
                                         ⭐ Make Admin
                                     </button>
@@ -3424,7 +2534,6 @@ function escapeHTML(value) {
 
                         </div>
                     `;
-
 
                     item
                         .querySelectorAll(
@@ -3445,67 +2554,40 @@ function escapeHTML(value) {
                             }
                         );
 
-
                     list.appendChild(
                         item
                     );
-
                 }
             );
 
-
-        } catch (
-            error
-        ) {
-
+        } catch (error) {
             list.textContent =
                 "❌ " +
                 error.message;
-
         }
-
     }
-
 
     async function adminUserAction(
         action,
         userId
     ) {
-
         const routes = {
-
-            block:
-                "/api/admin/block",
-
-            unblock:
-                "/api/admin/unblock",
-
-            ban:
-                "/api/admin/ban",
-
-            promote:
-                "/api/admin/promote"
-
+            block: "/api/admin/block",
+            unblock: "/api/admin/unblock",
+            ban: "/api/admin/ban",
+            promote: "/api/admin/promote"
         };
 
-
-        const route =
-            routes[action];
-
-
-        if (!route) {
+        if (!routes[action]) {
             return;
         }
 
-
         try {
-
             const result =
                 await api(
-                    route,
+                    routes[action],
                     {
                         method: "POST",
-
                         body:
                             JSON.stringify({
                                 userId
@@ -3513,187 +2595,30 @@ function escapeHTML(value) {
                     }
                 );
 
-
             if (
                 !result.response.ok ||
                 !result.data.success
             ) {
-
                 throw new Error(
                     result.data.error ||
                     "Action failed"
                 );
-
             }
-
 
             showToast(
                 "✅ " +
                 result.data.message
             );
 
-
             loadUsers();
 
-
-        } catch (
-            error
-        ) {
-
+        } catch (error) {
             showToast(
                 "❌ " +
                 error.message
             );
-
         }
-
     }
-
-
-    /* =====================================================
-       MODALS
-    ===================================================== */
-
-    function showModal(
-        id
-    ) {
-
-        document
-            .getElementById(
-                id
-            )
-            .classList.add(
-                "show"
-            );
-
-    }
-
-
-    function hideModal(
-        id
-    ) {
-
-        document
-            .getElementById(
-                id
-            )
-            .classList.remove(
-                "show"
-            );
-
-    }
-
-
-    document
-        .querySelectorAll(
-            "[data-close]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        hideModal(
-                            button.dataset.close
-                        );
-
-
-                        setActiveNav(
-                            "linksNav"
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-
-    document
-        .querySelectorAll(
-            ".modal"
-        )
-        .forEach(
-            modal => {
-
-                modal.addEventListener(
-                    "click",
-                    event => {
-
-                        if (
-                            event.target ===
-                            modal
-                        ) {
-
-                            modal.classList.remove(
-                                "show"
-                            );
-
-
-                            setActiveNav(
-                                "linksNav"
-                            );
-
-                        }
-
-                    }
-                );
-
-            }
-        );
-
-
-    function setActiveNav(
-        id
-    ) {
-
-        document
-            .querySelectorAll(
-                ".navButton"
-            )
-            .forEach(
-                button =>
-                    button.classList.remove(
-                        "active"
-                    )
-            );
-
-
-        document
-            .getElementById(
-                id
-            )
-            .classList.add(
-                "active"
-            );
-
-    }
-
-
-    function getHostname(
-        url
-    ) {
-
-        try {
-
-            return new URL(
-                url
-            ).hostname;
-
-        } catch {
-
-            return "unknown";
-
-        }
-
-    }
-
-
-    /* =====================================================
-       START
-    ===================================================== */
 
     restoreSession();
 
@@ -3702,4 +2627,3 @@ function escapeHTML(value) {
 
 </body>
 </html>
-```
