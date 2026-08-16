@@ -2129,6 +2129,96 @@ function escapeHTML(
 }
 
 </script>
+<!-- ================= ACCOUNT PANEL ================= -->
 
+<div id="accountPanel" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:9000;
+    background:rgba(0,0,0,.82);
+    backdrop-filter:blur(10px);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+">
+
+    <div style="
+        width:min(440px,100%);
+        background:#111;
+        border:1px solid #333;
+        border-radius:22px;
+        padding:28px;
+        box-shadow:0 25px 80px rgba(0,0,0,.7);
+    ">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:22px;
+        ">
+
+            <h2>👤 Create Account</h2>
+
+            <button
+                id="closeAccount"
+                type="button"
+                style="
+                    width:38px;
+                    height:38px;
+                    border:1px solid #333;
+                    border-radius:10px;
+                    background:#191919;
+                    color:white;
+                    cursor:pointer;
+                "
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <input
+            id="signupUsername"
+            type="text"
+            placeholder="Username"
+            autocomplete="username"
+            style="
+                width:100%;
+                padding:13px;
+                margin-bottom:10px;
+                border:1px solid #333;
+                border-radius:11px;
+                background:#0b0b0b;
+                color:white;
+                outline:none;
+            "
+        >
+
+        <input
+            id="signupDisplayName"
+            type="text"
+            placeholder="Display name"
+            style="
+                width:100%;
+                padding:13px;
+                margin-bottom:10px;
+                border:1px solid #333;
+                border-radius:11px;
+                background:#0b0b0b;
+                color:white;
+                outline:none;
+            "
+        >
+
+        <input
+            id="signupRealName"
+            type="text"
+            placeholder="Real name"
+            style="
+                width:100%;
+                padding:13px;
+                margin-bottom:10px
 </body>
 </html>
