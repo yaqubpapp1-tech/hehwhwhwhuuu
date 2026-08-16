@@ -1357,7 +1357,14 @@ button:disabled {
        First occurrence wins; duplicates are removed by
        normalized URL.
     ===================================================== */
-
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
     const groups = {
 
         "Solara": [
