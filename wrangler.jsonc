@@ -25,7 +25,14 @@
       "id": "b93ee107b4b9404cbb1342306d2fa009"
     }
   ],
-
+"durable_objects": {
+  "bindings": [
+    {
+      "name": "CHAT_ROOM",
+      "class_name": "ChatRoom"
+    }
+  ]
+},
   "assets": {
     "directory": "./",
     "binding": "ASSETS"
