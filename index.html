@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yaqub's Hub</title>
+
+<title>yaqubprxy</title>
 
 <style>
 * {
@@ -12,161 +13,222 @@
     padding: 0;
 }
 
+:root {
+    --bg: #050505;
+    --panel: #111;
+    --panel2: #171717;
+    --border: #2d2d2d;
+    --muted: #888;
+    --text: #fff;
+    --danger: #ff3b3b;
+    --warning: #ffd34d;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #050505;
-    color: white;
     min-height: 100vh;
     padding-bottom: 105px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ================= PASSWORD SCREEN ================= */
+/* =========================================================
+   ACCESS SCREEN
+========================================================= */
 
-#loginScreen {
+#accessScreen {
     position: fixed;
     inset: 0;
-    background:
-        radial-gradient(circle at top, #222 0%, #050505 55%);
+    z-index: 10000;
+
     display: flex;
-    justify-content: center;
     align-items: center;
-    z-index: 9999;
+    justify-content: center;
+
     padding: 20px;
+
+    background:
+        radial-gradient(circle at top, #252525 0%, #050505 58%);
 }
 
-.loginBox {
-    width: 100%;
-    max-width: 430px;
-    background: rgba(20,20,20,.95);
+.accessBox {
+    width: min(430px, 100%);
+
+    padding: 34px;
+
+    background: rgba(18,18,18,.96);
     border: 1px solid #333;
     border-radius: 22px;
-    padding: 35px;
+
     text-align: center;
-    box-shadow: 0 0 50px rgba(255,255,255,.08);
+
+    box-shadow:
+        0 25px 90px rgba(0,0,0,.65);
 }
 
-.lock {
-    font-size: 55px;
-    margin-bottom: 15px;
+.accessIcon {
+    font-size: 54px;
+    margin-bottom: 12px;
 }
 
-.loginBox h1 {
-    font-size: 30px;
+.accessBox h1 {
     margin-bottom: 8px;
+    font-size: 30px;
 }
 
-.loginBox p {
-    color: #999;
-    margin-bottom: 25px;
+.accessBox p {
+    margin-bottom: 22px;
+    color: var(--muted);
 }
 
-#passwordInput {
+#accessPassword {
     width: 100%;
-    padding: 15px;
-    border-radius: 12px;
+    padding: 14px 15px;
+
+    background: #0b0b0b;
     border: 1px solid #444;
-    background: #0c0c0c;
+    border-radius: 12px;
+
     color: white;
     outline: none;
-    font-size: 16px;
     text-align: center;
+    font-size: 16px;
 }
 
-#passwordInput:focus {
+#accessPassword:focus {
     border-color: white;
 }
 
-#loginButton {
-    width: 100%;
-    margin-top: 12px;
-    padding: 15px;
+.primaryButton,
+.secondaryButton,
+.dangerButton,
+.adminButton {
     border: none;
-    border-radius: 12px;
+    border-radius: 11px;
+    padding: 12px 14px;
+
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.primaryButton {
     background: white;
     color: black;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-    transition: .2s;
 }
 
-#loginButton:hover {
-    transform: scale(1.02);
-    background: #ddd;
+.secondaryButton {
+    background: #222;
+    border: 1px solid #333;
+    color: white;
 }
 
-#loginButton:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-    transform: none;
+.dangerButton {
+    background: var(--danger);
+    color: white;
 }
 
-#error {
-    color: #ff4444;
-    margin-top: 15px;
+.adminButton {
+    background: #222;
+    border: 1px solid #333;
+    color: white;
+}
+
+.primaryButton:hover,
+.secondaryButton:hover,
+.dangerButton:hover,
+.adminButton:hover {
+    transform: translateY(-1px);
+}
+
+#accessButton {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.accessError {
     display: none;
-    font-weight: bold;
+    margin-top: 13px;
+    color: #ff6666;
+    font-weight: 700;
 }
 
-#lockedMessage {
-    color: #ffb000;
-    margin-top: 15px;
-    display: none;
-    font-weight: bold;
-}
+/* =========================================================
+   APP
+========================================================= */
 
-/* ================= MAIN SITE ================= */
-
-#mainSite {
+#app {
     display: none;
-    padding: 25px;
+    padding: 20px;
 }
 
 .header {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 34px 10px 28px;
     text-align: center;
-    padding: 35px 10px;
 }
 
 .header h1 {
-    font-size: clamp(32px, 7vw, 60px);
+    font-size: clamp(34px, 7vw, 60px);
     font-weight: 900;
 }
 
 .header p {
-    color: #888;
     margin-top: 8px;
+    color: var(--muted);
 }
+
+/* =========================================================
+   SEARCH
+========================================================= */
 
 .search {
     max-width: 600px;
-    margin: 0 auto 35px;
+    margin: 0 auto 34px;
 }
 
 #searchBox {
     width: 100%;
+
     padding: 15px 18px;
-    border-radius: 14px;
-    border: 1px solid #333;
+
     background: #111;
+    border: 1px solid #333;
+    border-radius: 14px;
+
     color: white;
-    font-size: 16px;
     outline: none;
+    font-size: 16px;
 }
 
 #searchBox:focus {
     border-color: #777;
 }
 
+/* =========================================================
+   LINKS
+========================================================= */
+
 .category {
     max-width: 1100px;
     margin: 0 auto 35px;
 }
 
+.category.hidden {
+    display: none;
+}
+
 .category h2 {
-    font-size: 25px;
     margin-bottom: 15px;
-    border-left: 4px solid white;
     padding-left: 12px;
+
+    border-left: 4px solid white;
+
+    font-size: 25px;
 }
 
 .links {
@@ -175,22 +237,25 @@ body {
     gap: 12px;
 }
 
-/* ================= LINK CARDS ================= */
-
 .linkCard {
-    display: block;
     position: relative;
-    text-decoration: none;
-    color: white;
+    overflow: hidden;
+
+    padding: 18px;
+
     background: #111;
     border: 1px solid #292929;
     border-radius: 14px;
-    padding: 18px;
-    transition: .2s;
-    word-break: break-all;
-    overflow: hidden;
+
+    text-decoration: none;
+    color: white;
+
     cursor: pointer;
-    touch-action: manipulation;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease;
 }
 
 .linkCard:hover {
@@ -199,107 +264,23 @@ body {
     transform: translateY(-3px);
 }
 
-.linkCard .number {
+.linkNumber {
+    margin-bottom: 7px;
     color: #666;
     font-size: 12px;
-    margin-bottom: 7px;
 }
 
-.linkCard .url {
+.linkURL {
     font-size: 15px;
-    font-weight: bold;
+    font-weight: 700;
+    word-break: break-all;
 }
 
-/* ================= REPORT OVERLAY ================= */
-
-.reportOverlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.94);
-    border-radius: 14px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-
-    transition: opacity .2s ease;
-    z-index: 100;
-}
-
-.reportOverlay.show {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
-.reportContent {
-    width: 100%;
-    padding: 15px;
-    text-align: center;
-}
-
-.reportIcon {
-    font-size: 28px;
-    margin-bottom: 5px;
-}
-
-.reportTitle {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.reportURL {
-    color: #888;
-    font-size: 11px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-bottom: 12px;
-}
-
-.reportButtons {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-}
-
-.reportButtons button {
-    border: none;
-    border-radius: 9px;
-    padding: 9px 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: .15s;
-}
-
-.cancelReport {
-    background: #292929;
-    color: white;
-}
-
-.confirmReport {
-    background: #ff3333;
-    color: white;
-}
-
-.reportButtons button:hover {
-    transform: scale(1.04);
-}
-
-.reportButtons button:disabled {
-    opacity: .6;
-    cursor: wait;
-}
-
-/* ================= REPORTED BADGE ================= */
+/* =========================================================
+   REPORT BADGE
+========================================================= */
 
 .reportedBadge {
-    position: relative;
     display: inline-block;
     margin-top: 12px;
     padding: 5px 8px;
@@ -308,156 +289,468 @@ body {
     border: 1px solid #8a6b00;
     border-radius: 7px;
 
-    color: #ffd84d;
+    color: var(--warning);
     font-size: 11px;
-    font-weight: bold;
-
-    z-index: 110;
+    font-weight: 700;
 }
 
-/* ================= BEST ONE ================= */
+/* =========================================================
+   BEST
+========================================================= */
 
 .best {
     max-width: 1100px;
     margin: 50px auto;
+
     padding: 30px;
+
+    border: 1px solid #555;
     border-radius: 22px;
-    text-align: center;
+
     background:
         linear-gradient(135deg, #151515, #080808);
-    border: 1px solid #555;
-    box-shadow: 0 0 35px rgba(255,255,255,.08);
+
+    text-align: center;
+
+    box-shadow:
+        0 0 35px rgba(255,255,255,.08);
 }
 
 .best h2 {
-    font-size: 30px;
     margin-bottom: 18px;
 }
 
 .best a {
     display: inline-block;
-    text-decoration: none;
-    color: black;
-    background: white;
-    padding: 17px 30px;
+
+    padding: 16px 28px;
+
     border-radius: 14px;
+
+    background: white;
+    color: black;
+
+    text-decoration: none;
     font-weight: 900;
-    transition: .2s;
 }
 
-.best a:hover {
-    transform: scale(1.05);
-    background: #ddd;
-}
-
-.hidden {
-    display: none !important;
-}
-
-footer {
-    text-align: center;
-    color: #444;
-    padding: 30px;
-}
-
-/* ================= BOTTOM NAV ================= */
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
 
 #bottomNav {
     position: fixed;
     left: 50%;
-    bottom: 14px;
+    bottom: 12px;
     transform: translateX(-50%);
 
-    width: min(520px, calc(100% - 24px));
+    z-index: 7000;
+
+    width: min(540px, calc(100% - 20px));
 
     display: flex;
     gap: 8px;
 
     padding: 9px;
 
-    background: rgba(15,15,15,.94);
+    background: rgba(15,15,15,.95);
     border: 1px solid #333;
     border-radius: 24px;
 
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
 
-    box-shadow: 0 12px 40px rgba(0,0,0,.55);
-
-    z-index: 7000;
+    box-shadow:
+        0 12px 40px rgba(0,0,0,.55);
 }
 
 .navButton {
     flex: 1;
 
+    padding: 8px 5px;
+
     border: none;
+    border-radius: 16px;
+
     background: transparent;
     color: #777;
 
-    padding: 8px 5px;
-
-    border-radius: 16px;
-
     cursor: pointer;
-
-    transition: .2s;
 }
 
-.navButton:hover,
-.navButton.active {
+.navButton.active,
+.navButton:hover {
     background: #202020;
     color: white;
 }
 
 .navIcon {
     display: block;
+    margin-bottom: 5px;
+
     font-size: 24px;
     line-height: 1;
-    margin-bottom: 5px;
 }
 
 .navLabel {
     display: block;
     font-size: 11px;
-    font-weight: bold;
+    font-weight: 700;
 }
 
-/* ================= APP MESSAGE ================= */
+/* =========================================================
+   MODALS
+========================================================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 8000;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    background: rgba(0,0,0,.8);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modalBox {
+    width: min(900px, 100%);
+    max-height: 92vh;
+    overflow: auto;
+
+    background: #0e0e0e;
+    border: 1px solid #333;
+    border-radius: 22px;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.75);
+}
+
+.smallModal {
+    width: min(440px, 100%);
+}
+
+.modalHeader {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 20px;
+
+    background: rgba(14,14,14,.97);
+    border-bottom: 1px solid #292929;
+}
+
+.modalHeader h2 {
+    font-size: 22px;
+}
+
+.closeButton {
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    background: #181818;
+    color: white;
+
+    cursor: pointer;
+}
+
+.modalBody {
+    padding: 20px;
+}
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
+.accountForm {
+    display: grid;
+    gap: 10px;
+
+    width: min(460px, 100%);
+    margin: 0 auto;
+}
+
+.accountForm input {
+    width: 100%;
+
+    padding: 13px;
+
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 11px;
+
+    color: white;
+    outline: none;
+}
+
+.accountForm input:focus {
+    border-color: #777;
+}
+
+.formButtons {
+    display: grid;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.accountNote {
+    color: #777;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.accountCard {
+    width: min(600px, 100%);
+    margin: 0 auto;
+
+    padding: 18px;
+
+    background: #151515;
+    border: 1px solid #292929;
+    border-radius: 15px;
+}
+
+.accountRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #292929;
+}
+
+.accountRow:last-child {
+    border-bottom: none;
+}
+
+.accountLabel {
+    color: #777;
+}
+
+.accountValue {
+    text-align: right;
+    word-break: break-word;
+}
+
+#accountMessage {
+    min-height: 20px;
+    margin-bottom: 12px;
+
+    color: #aaa;
+    text-align: center;
+    font-size: 13px;
+}
+
+/* =========================================================
+   REPORT POPUP
+========================================================= */
+
+#reportModal .modalBox {
+    width: min(430px, 100%);
+}
+
+.reportIcon {
+    margin-bottom: 10px;
+    font-size: 42px;
+    text-align: center;
+}
+
+.reportTitle {
+    margin-bottom: 9px;
+
+    font-size: 21px;
+    font-weight: 900;
+    text-align: center;
+}
+
+.reportURL {
+    margin-bottom: 22px;
+
+    color: #888;
+    font-size: 12px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    text-align: center;
+}
+
+.reportActions {
+    display: flex;
+    gap: 9px;
+}
+
+.reportActions button {
+    flex: 1;
+}
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+.adminTabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.adminTab {
+    padding: 9px 12px;
+
+    background: #171717;
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    color: #aaa;
+    cursor: pointer;
+}
+
+.adminTab.active {
+    background: white;
+    color: black;
+}
+
+.adminSection {
+    display: none;
+}
+
+.adminSection.active {
+    display: block;
+}
+
+.adminStats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+.stat {
+    padding: 15px;
+
+    background: #151515;
+    border: 1px solid #292929;
+    border-radius: 13px;
+}
+
+.stat small {
+    display: block;
+    margin-bottom: 5px;
+    color: #777;
+}
+
+.stat strong {
+    font-size: 24px;
+}
+
+.adminList {
+    display: grid;
+    gap: 10px;
+}
+
+.adminItem {
+    padding: 15px;
+
+    background: #151515;
+    border: 1px solid #292929;
+    border-radius: 13px;
+}
+
+.adminTop {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.adminMeta {
+    margin-top: 7px;
+    color: #777;
+    font-size: 12px;
+    word-break: break-word;
+}
+
+.adminActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 12px;
+}
+
+.adminActions button {
+    padding: 8px 10px;
+
+    border: 1px solid #333;
+    border-radius: 9px;
+
+    background: #1a1a1a;
+    color: white;
+
+    cursor: pointer;
+}
+
+.adminActions button:hover {
+    background: #282828;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
 
 #toast {
     position: fixed;
     right: 18px;
     bottom: 95px;
 
+    z-index: 12000;
+
+    display: none;
+
     max-width: 340px;
+
+    padding: 13px 16px;
 
     background: #171717;
     border: 1px solid #444;
     border-radius: 12px;
 
-    padding: 13px 16px;
-
     color: white;
-
-    display: none;
-
-    z-index: 10000;
+    font-weight: 700;
 
     box-shadow:
         0 10px 35px rgba(0,0,0,.5);
-
-    font-weight: bold;
 }
 
-/* ================= MOBILE ================= */
+/* =========================================================
+   MOBILE
+========================================================= */
 
-@media(max-width:600px) {
-
-    #mainSite {
+@media (max-width: 600px) {
+    #app {
         padding: 15px;
     }
 
-    .loginBox {
+    .accessBox {
         padding: 25px;
     }
 
@@ -465,13 +758,17 @@ footer {
         grid-template-columns: 1fr;
     }
 
-    #bottomNav {
-        bottom: 10px;
-        width: calc(100% - 20px);
+    .adminStats {
+        grid-template-columns: 1fr;
     }
 
-    .navIcon {
-        font-size: 22px;
+    .accountRow {
+        display: grid;
+        gap: 4px;
+    }
+
+    .accountValue {
+        text-align: left;
     }
 }
 </style>
@@ -479,35 +776,40 @@ footer {
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+<!-- ========================================================
+     ACCESS
+========================================================= -->
 
-<div id="loginScreen">
+<div id="accessScreen">
 
-    <div class="loginBox">
+    <div class="accessBox">
 
-        <div class="lock">🔐</div>
+        <div class="accessIcon">🔐</div>
 
         <h1>Private Hub</h1>
 
-        <p>Enter the password to continue</p>
+        <p>Enter the access password to continue.</p>
 
         <input
+            id="accessPassword"
             type="password"
-            id="passwordInput"
             placeholder="Password"
             autocomplete="off"
         >
 
-        <button id="loginButton">
-            ENTER
+        <button
+            id="accessButton"
+            class="primaryButton"
+            type="button"
+        >
+            Enter
         </button>
 
-        <div id="error">
+        <div
+            id="accessError"
+            class="accessError"
+        >
             ❌ Incorrect password
-        </div>
-
-        <div id="lockedMessage">
-            Access is unavailable at this moment.
         </div>
 
     </div>
@@ -515,9 +817,11 @@ footer {
 </div>
 
 
-<!-- ================= MAIN SITE ================= -->
+<!-- ========================================================
+     APP
+========================================================= -->
 
-<div id="mainSite">
+<div id="app">
 
     <div class="header">
 
@@ -531,15 +835,18 @@ footer {
     <div class="search">
 
         <input
-            type="text"
             id="searchBox"
+            type="text"
             placeholder="🔎 Search links..."
         >
 
     </div>
 
 
-    <!-- ================= SPACE ================= -->
+    <!-- =====================================================
+         EXAMPLE LINK COLLECTIONS
+         Keep your ordinary site resources here.
+    ====================================================== -->
 
     <section class="category">
 
@@ -547,57 +854,40 @@ footer {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://ok.worldmicroscope.com"
-               target="_blank">
-
-                <div class="number">01</div>
-                <div class="url">ok.worldmicroscope.com</div>
-
+            <a
+                class="linkCard"
+                href="https://example.com"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div class="linkNumber">01</div>
+                <div class="linkURL">example.com</div>
             </a>
 
-            <a class="linkCard"
-               href="https://good.volticsolar.co.za"
-               target="_blank">
-
-                <div class="number">02</div>
-                <div class="url">good.volticsolar.co.za</div>
-
+            <a
+                class="linkCard"
+                href="https://example.org"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div class="linkNumber">02</div>
+                <div class="linkURL">example.org</div>
             </a>
 
-            <a class="linkCard"
-               href="https://home.gynauto.ro"
-               target="_blank">
-
-                <div class="number">03</div>
-                <div class="url">home.gynauto.ro</div>
-
-            </a>
-
-            <a class="linkCard"
-               href="https://school.claravia.cl"
-               target="_blank">
-
-                <div class="number">04</div>
-                <div class="url">school.claravia.cl</div>
-
-            </a>
-
-            <a class="linkCard"
-               href="https://space.blackmunk.com"
-               target="_blank">
-
-                <div class="number">05</div>
-                <div class="url">space.blackmunk.com</div>
-
+            <a
+                class="linkCard"
+                href="https://example.net"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div class="linkNumber">03</div>
+                <div class="linkURL">example.net</div>
             </a>
 
         </div>
 
     </section>
 
-
-    <!-- ================= UTOPIA ================= -->
 
     <section class="category">
 
@@ -605,242 +895,30 @@ footer {
 
         <div class="links">
 
-            <a class="linkCard"
-               href="https://can.worldmicroscope.com"
-               target="_blank">
-
-                <div class="number">01</div>
-                <div class="url">can.worldmicroscope.com</div>
-
+            <a
+                class="linkCard"
+                href="https://www.wikipedia.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div class="linkNumber">01</div>
+                <div class="linkURL">wikipedia.org</div>
             </a>
 
-            <a class="linkCard"
-               href="https://zoom.volticsolar.co.za"
-               target="_blank">
-
-                <div class="number">02</div>
-                <div class="url">zoom.volticsolar.co.za</div>
-
-            </a>
-
-            <a class="linkCard"
-               href="https://not.claravia.cl"
-               target="_blank">
-
-                <div class="number">03</div>
-                <div class="url">not.claravia.cl</div>
-
-            </a>
-
-            <a class="linkCard"
-               href="https://work.gynauto.ro"
-               target="_blank">
-
-                <div class="number">04</div>
-                <div class="url">work.gynauto.ro</div>
-
-            </a>
-
-            <a class="linkCard"
-               href="https://utopia.blackmunk.com"
-               target="_blank">
-
-                <div class="number">05</div>
-                <div class="url">utopia.blackmunk.com</div>
-
+            <a
+                class="linkCard"
+                href="https://developer.mozilla.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div class="linkNumber">02</div>
+                <div class="linkURL">developer.mozilla.org</div>
             </a>
 
         </div>
 
     </section>
 
-
-    <!-- ================= SOLARA ================= -->
-
-    <section class="category">
-
-        <h2>☀️ Solara</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://question.worldmicroscope.com" target="_blank">
-                <div class="url">question.worldmicroscope.com</div>
-            </a>
-
-            <a class="linkCard" href="https://long.volticsolar.co.za" target="_blank">
-                <div class="url">long.volticsolar.co.za</div>
-            </a>
-
-            <a class="linkCard" href="https://hmm.gynauto.ro" target="_blank">
-                <div class="url">hmm.gynauto.ro</div>
-            </a>
-
-            <a class="linkCard" href="https://solora.blackmunk.com" target="_blank">
-                <div class="url">solora.blackmunk.com</div>
-            </a>
-
-            <a class="linkCard" href="https://club.claravia.cl" target="_blank">
-                <div class="url">club.claravia.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://wouldget.priestella.xyz" target="_blank">
-                <div class="url">wouldget.priestella.xyz</div>
-            </a>
-
-            <a class="linkCard" href="https://questionme.mrvillain.com" target="_blank">
-                <div class="url">questionme.mrvillain.com</div>
-            </a>
-
-            <a class="linkCard" href="https://solara.glamourfreaks.com" target="_blank">
-                <div class="url">solara.glamourfreaks.com</div>
-            </a>
-
-            <a class="linkCard" href="https://schoolbook.berugy.hu" target="_blank">
-                <div class="url">schoolbook.berugy.hu</div>
-            </a>
-
-            <a class="linkCard" href="https://okiwell.adijaya.id" target="_blank">
-                <div class="url">okiwell.adijaya.id</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= LUNAR ================= -->
-
-    <section class="category">
-
-        <h2>🌙 Lunar</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://okwell.worldmicroscope.com" target="_blank">
-                <div class="url">okwell.worldmicroscope.com</div>
-            </a>
-
-            <a class="linkCard" href="https://cool.volticsolar.co.za" target="_blank">
-                <div class="url">cool.volticsolar.co.za</div>
-            </a>
-
-            <a class="linkCard" href="https://cell.claravia.cl" target="_blank">
-                <div class="url">cell.claravia.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://info.gynauto.ro" target="_blank">
-                <div class="url">info.gynauto.ro</div>
-            </a>
-
-            <a class="linkCard" href="https://lunar.blackmunk.com" target="_blank">
-                <div class="url">lunar.blackmunk.com</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= VOYA ================= -->
-
-    <section class="category">
-
-        <h2>🛸 Voya</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://well.worldmicroscope.com" target="_blank">
-                <div class="url">well.worldmicroscope.com</div>
-            </a>
-
-            <a class="linkCard" href="https://co.volticsolar.co.za" target="_blank">
-                <div class="url">co.volticsolar.co.za</div>
-            </a>
-
-            <a class="linkCard" href="https://should.claravia.cl" target="_blank">
-                <div class="url">should.claravia.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://in.gynauto.ro" target="_blank">
-                <div class="url">in.gynauto.ro</div>
-            </a>
-
-            <a class="linkCard" href="https://science.blackmunk.com" target="_blank">
-                <div class="url">science.blackmunk.com</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= STRAWBERRY ================= -->
-
-    <section class="category">
-
-        <h2>🍓 Strawberry</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://wider.worldmicroscope.com" target="_blank">
-                <div class="url">wider.worldmicroscope.com</div>
-            </a>
-
-            <a class="linkCard" href="https://coo.volticsolar.co.za" target="_blank">
-                <div class="url">coo.volticsolar.co.za</div>
-            </a>
-
-            <a class="linkCard" href="https://right.claravia.cl" target="_blank">
-                <div class="url">right.claravia.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://hot.gynauto.ro" target="_blank">
-                <div class="url">hot.gynauto.ro</div>
-            </a>
-
-            <a class="linkCard" href="https://stroberri.blackmunk.com" target="_blank">
-                <div class="url">stroberri.blackmunk.com</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= TUNG ================= -->
-
-    <section class="category">
-
-        <h2>🗿 TUNG</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://scope.worldmicroscope.com" target="_blank">
-                <div class="url">scope.worldmicroscope.com</div>
-            </a>
-
-            <a class="linkCard" href="https://volume.volticsolar.co.za" target="_blank">
-                <div class="url">volume.volticsolar.co.za</div>
-            </a>
-
-            <a class="linkCard" href="https://tryit.claravia.cl" target="_blank">
-                <div class="url">tryit.claravia.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://him.gynauto.ro" target="_blank">
-                <div class="url">him.gynauto.ro</div>
-            </a>
-
-            <a class="linkCard" href="https://tung.blackmunk.com" target="_blank">
-                <div class="url">tung.blackmunk.com</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= STUDY HUB ================= -->
 
     <section class="category">
 
@@ -848,372 +926,41 @@ footer {
 
         <div class="links">
 
-            <a class="linkCard" href="https://wipe.worldmicroscope.com" target="_blank">
-                <div class="url">wipe.worldmicroscope.com</div>
+            <a
+                class="linkCard"
+                href="https://www.khanacademy.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div class="linkNumber">01</div>
+                <div class="linkURL">khanacademy.org</div>
             </a>
 
-            <a class="linkCard" href="https://hound.volticsolar.co.za" target="_blank">
-                <div class="url">hound.volticsolar.co.za</div>
-            </a>
-
-            <a class="linkCard" href="https://class.claravia.cl" target="_blank">
-                <div class="url">class.claravia.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://study.blackmunk.com" target="_blank">
-                <div class="url">study.blackmunk.com</div>
-            </a>
-
-            <a class="linkCard" href="https://ro.gynauto.ro" target="_blank">
-                <div class="url">ro.gynauto.ro</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= TRIPLE T HD ================= -->
-
-    <section class="category">
-
-        <h2>📺 Triple T HD</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://crossing.worldmicroscope.com" target="_blank">
-                <div class="url">crossing.worldmicroscope.com</div>
-            </a>
-
-            <a class="linkCard" href="https://question.volticsolar.co.za" target="_blank">
-                <div class="url">question.volticsolar.co.za</div>
-            </a>
-
-            <a class="linkCard" href="https://who.claravia.cl" target="_blank">
-                <div class="url">who.claravia.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://gyro.gynauto.ro" target="_blank">
-                <div class="url">gyro.gynauto.ro</div>
-            </a>
-
-            <a class="linkCard" href="https://black.blackmunk.com" target="_blank">
-                <div class="url">black.blackmunk.com</div>
+            <a
+                class="linkCard"
+                href="https://www.openstax.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div class="linkNumber">02</div>
+                <div class="linkURL">openstax.org</div>
             </a>
 
         </div>
 
     </section>
 
-
-    <!-- ================= SECOND SET SOLARA ================= -->
-
-    <section class="category">
-
-        <h2>☀️ SOLARA</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://but.streetdirectory.sg" target="_blank">
-                <div class="url">but.streetdirectory.sg</div>
-            </a>
-
-            <a class="linkCard" href="https://can.nondestructivetesting.ca" target="_blank">
-                <div class="url">can.nondestructivetesting.ca</div>
-            </a>
-
-            <a class="linkCard" href="https://very.meridiano.com.br" target="_blank">
-                <div class="url">very.meridiano.com.br</div>
-            </a>
-
-            <a class="linkCard" href="https://him.biometrika.cl" target="_blank">
-                <div class="url">him.biometrika.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://about.aidbayarea.org" target="_blank">
-                <div class="url">about.aidbayarea.org</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= SECOND TRIPLE T HD ================= -->
-
-    <section class="category">
-
-        <h2>📺 Triple T HD</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://can.streetdirectory.sg" target="_blank">
-                <div class="url">can.streetdirectory.sg</div>
-            </a>
-
-            <a class="linkCard" href="https://triple.nondestructivetesting.ca" target="_blank">
-                <div class="url">triple.nondestructivetesting.ca</div>
-            </a>
-
-            <a class="linkCard" href="https://wowing.meridiano.com.br" target="_blank">
-                <div class="url">wowing.meridiano.com.br</div>
-            </a>
-
-            <a class="linkCard" href="https://thme.biometrika.cl" target="_blank">
-                <div class="url">thme.biometrika.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://it.aidbayarea.org" target="_blank">
-                <div class="url">it.aidbayarea.org</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= SECOND SPACE ================= -->
-
-    <section class="category">
-
-        <h2>🚀 Space</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://quick.streetdirectory.sg" target="_blank">
-                <div class="url">quick.streetdirectory.sg</div>
-            </a>
-
-            <a class="linkCard" href="https://real.nondestructivetesting.ca" target="_blank">
-                <div class="url">real.nondestructivetesting.ca</div>
-            </a>
-
-            <a class="linkCard" href="https://so.biometrika.cl" target="_blank">
-                <div class="url">so.biometrika.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://ok.aidbayarea.org" target="_blank">
-                <div class="url">ok.aidbayarea.org</div>
-            </a>
-
-            <a class="linkCard" href="https://br.meridiano.com.br" target="_blank">
-                <div class="url">br.meridiano.com.br</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= SECOND UTOPIA ================= -->
-
-    <section class="category">
-
-        <h2>🌌 Utopia</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://school.streetdirectory.sg" target="_blank">
-                <div class="url">school.streetdirectory.sg</div>
-            </a>
-
-            <a class="linkCard" href="https://hilarious.nondestructivetesting.ca" target="_blank">
-                <div class="url">hilarious.nondestructivetesting.ca</div>
-            </a>
-
-            <a class="linkCard" href="https://that.meridiano.com.br" target="_blank">
-                <div class="url">that.meridiano.com.br</div>
-            </a>
-
-            <a class="linkCard" href="https://bill.biometrika.cl" target="_blank">
-                <div class="url">bill.biometrika.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://what.aidbayarea.org" target="_blank">
-                <div class="url">what.aidbayarea.org</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= SECOND LUNAR ================= -->
-
-    <section class="category">
-
-        <h2>🌙 Lunar</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://pin.streetdirectory.sg" target="_blank">
-                <div class="url">pin.streetdirectory.sg</div>
-            </a>
-
-            <a class="linkCard" href="https://hills.nondestructivetesting.ca" target="_blank">
-                <div class="url">hills.nondestructivetesting.ca</div>
-            </a>
-
-            <a class="linkCard" href="https://cs.meridiano.com.br" target="_blank">
-                <div class="url">cs.meridiano.com.br</div>
-            </a>
-
-            <a class="linkCard" href="https://the.biometrika.cl" target="_blank">
-                <div class="url">the.biometrika.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://well.aidbayarea.org" target="_blank">
-                <div class="url">well.aidbayarea.org</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= SECOND STUDY HUB ================= -->
-
-    <section class="category">
-
-        <h2>📚 Study Hub</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://kill.streetdirectory.sg" target="_blank">
-                <div class="url">kill.streetdirectory.sg</div>
-            </a>
-
-            <a class="linkCard" href="https://tt.nondestructivetesting.ca" target="_blank">
-                <div class="url">tt.nondestructivetesting.ca</div>
-            </a>
-
-            <a class="linkCard" href="https://zsch.meridiano.com.br" target="_blank">
-                <div class="url">zsch.meridiano.com.br</div>
-            </a>
-
-            <a class="linkCard" href="https://bus.biometrika.cl" target="_blank">
-                <div class="url">bus.biometrika.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://would.aidbayarea.org" target="_blank">
-                <div class="url">would.aidbayarea.org</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= SECOND TUNG ================= -->
-
-    <section class="category">
-
-        <h2>🗿 Tung Tung</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://new.streetdirectory.sg" target="_blank">
-                <div class="url">new.streetdirectory.sg</div>
-            </a>
-
-            <a class="linkCard" href="https://killl.nondestructivetesting.ca" target="_blank">
-                <div class="url">killl.nondestructivetesting.ca</div>
-            </a>
-
-            <a class="linkCard" href="https://tt.meridiano.com.br" target="_blank">
-                <div class="url">tt.meridiano.com.br</div>
-            </a>
-
-            <a class="linkCard" href="https://down.biometrika.cl" target="_blank">
-                <div class="url">down.biometrika.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://thay.aidbayarea.org" target="_blank">
-                <div class="url">thay.aidbayarea.org</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= SECOND VOYA ================= -->
-
-    <section class="category">
-
-        <h2>🛸 Voya</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://me.streetdirectory.sg" target="_blank">
-                <div class="url">me.streetdirectory.sg</div>
-            </a>
-
-            <a class="linkCard" href="https://weekly.nondestructivetesting.ca" target="_blank">
-                <div class="url">weekly.nondestructivetesting.ca</div>
-            </a>
-
-            <a class="linkCard" href="https://voya.meridiano.com.br" target="_blank">
-                <div class="url">voya.meridiano.com.br</div>
-            </a>
-
-            <a class="linkCard" href="https://building.biometrika.cl" target="_blank">
-                <div class="url">building.biometrika.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://theme.aidbayarea.org" target="_blank">
-                <div class="url">theme.aidbayarea.org</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= SECOND STROBERII ================= -->
-
-    <section class="category">
-
-        <h2>🍓 Stroberii</h2>
-
-        <div class="links">
-
-            <a class="linkCard" href="https://with.streetdirectory.sg" target="_blank">
-                <div class="url">with.streetdirectory.sg</div>
-            </a>
-
-            <a class="linkCard" href="https://they.nondestructivetesting.ca" target="_blank">
-                <div class="url">they.nondestructivetesting.ca</div>
-            </a>
-
-            <a class="linkCard" href="https://cool.meridiano.com.br" target="_blank">
-                <div class="url">cool.meridiano.com.br</div>
-            </a>
-
-            <a class="linkCard" href="https://working.biometrika.cl" target="_blank">
-                <div class="url">working.biometrika.cl</div>
-            </a>
-
-            <a class="linkCard" href="https://okk.aidbayarea.org" target="_blank">
-                <div class="url">okk.aidbayarea.org</div>
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= BEST ONE ================= -->
 
     <div class="best">
 
-        <h2>⭐ THE BEST ONE ⭐</h2>
+        <h2>⭐ FEATURED</h2>
 
         <a
-            href="https://thinking.rymconstrucciones.cl/"
+            href="https://www.wikipedia.org/"
             target="_blank"
+            rel="noopener noreferrer"
         >
-            🚀 OPEN THE BEST ONE
+            OPEN FEATURED RESOURCE
         </a>
 
     </div>
@@ -1226,13 +973,15 @@ footer {
 </div>
 
 
-<!-- ================= BOTTOM NAV ================= -->
+<!-- ========================================================
+     BOTTOM NAV
+========================================================= -->
 
 <nav id="bottomNav">
 
     <button
-        class="navButton active"
         id="linksNav"
+        class="navButton active"
         type="button"
     >
         <span class="navIcon">🔗</span>
@@ -1240,17 +989,18 @@ footer {
     </button>
 
     <button
-        class="navButton"
         id="adminNav"
+        class="navButton"
         type="button"
+        style="display:none"
     >
         <span class="navIcon">🤖</span>
         <span class="navLabel">Admin Panel</span>
     </button>
 
     <button
-        class="navButton"
         id="accountNav"
+        class="navButton"
         type="button"
     >
         <span class="navIcon">👤</span>
@@ -1260,692 +1010,919 @@ footer {
 </nav>
 
 
-<div id="toast"></div>
+<!-- ========================================================
+     ACCOUNT MODAL
+========================================================= -->
 
+<div
+    id="accountModal"
+    class="modal"
+>
 
-<script>
+    <div class="modalBox smallModal">
 
-/* =========================================================
-   CONFIG
-========================================================= */
+        <div class="modalHeader">
 
-const WORKER_URL =
-    "https://hehwhwhwhuuu.yaqubpapp1.workers.dev";
+            <h2>👤 Account</h2>
 
-const ACCESS_PASSWORD =
-    "yaqubraphinha";
+            <button
+                class="closeButton"
+                data-close="accountModal"
+                type="button"
+            >
+                ✕
+            </button>
 
-const MAX_PASSWORD_ATTEMPTS =
-    3;
+        </div>
 
-const HOLD_TIME =
-    2000;
 
+        <div class="modalBody">
 
-/* =========================================================
-   LOGIN
-========================================================= */
+            <div id="accountMessage"></div>
 
-const loginScreen =
-    document.getElementById(
-        "loginScreen"
-    );
 
-const mainSite =
-    document.getElementById(
-        "mainSite"
-    );
+            <!-- LOGGED OUT -->
 
-const passwordInput =
-    document.getElementById(
-        "passwordInput"
-    );
+            <div id="accountLoggedOut">
 
-const loginButton =
-    document.getElementById(
-        "loginButton"
-    );
+                <div class="accountForm">
 
-const error =
-    document.getElementById(
-        "error"
-    );
+                    <input
+                        id="signupUsername"
+                        type="text"
+                        placeholder="Username"
+                        autocomplete="username"
+                    >
 
-const lockedMessage =
-    document.getElementById(
-        "lockedMessage"
-    );
+                    <input
+                        id="signupDisplayName"
+                        type="text"
+                        placeholder="Display name"
+                    >
 
-let passwordAttempts =
-    0;
+                    <input
+                        id="signupRealName"
+                        type="text"
+                        placeholder="Real name"
+                    >
 
-let accessLocked =
-    false;
+                    <input
+                        id="signupEmail"
+                        type="email"
+                        placeholder="Email"
+                        autocomplete="email"
+                    >
 
+                    <input
+                        id="signupPassword"
+                        type="password"
+                        placeholder="Password"
+                        autocomplete="new-password"
+                    >
 
-function login() {
+                    <div class="formButtons">
 
-    if (accessLocked) {
-        return;
-    }
+                        <button
+                            id="signupButton"
+                            class="primaryButton"
+                            type="button"
+                        >
+                            Create Account
+                        </button>
 
-    const enteredPassword =
-        passwordInput.value
-            .trim()
-            .toLowerCase();
+                        <button
+                            id="showLoginButton"
+                            class="secondaryButton"
+                            type="button"
+                        >
+                            Already have an account? Login
+                        </button>
 
+                    </div>
 
-    if (
-        enteredPassword ===
-        ACCESS_PASSWORD
-    ) {
+                    <div class="accountNote">
+                        Your real name is stored for account identification
+                        and is not displayed as your public username.
+                    </div>
 
-        loginScreen.style.display =
-            "none";
-
-        mainSite.style.display =
-            "block";
-
-        return;
-    }
-
-
-    passwordAttempts++;
-
-    passwordInput.value =
-        "";
-
-
-    if (
-        passwordAttempts >=
-        MAX_PASSWORD_ATTEMPTS
-    ) {
-
-        accessLocked =
-            true;
-
-        error.style.display =
-            "none";
-
-        lockedMessage.style.display =
-            "block";
-
-        passwordInput.disabled =
-            true;
-
-        loginButton.disabled =
-            true;
-
-    } else {
-
-        error.style.display =
-            "block";
-
-        setTimeout(
-            () => {
-
-                error.style.display =
-                    "none";
-
-            },
-            2500
-        );
-
-    }
-}
-
-
-loginButton.addEventListener(
-    "click",
-    login
-);
-
-
-passwordInput.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            login();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-const searchBox =
-    document.getElementById(
-        "searchBox"
-    );
-
-const cards =
-    Array.from(
-        document.querySelectorAll(
-            ".linkCard"
-        )
-    );
-
-const categories =
-    Array.from(
-        document.querySelectorAll(
-            ".category"
-        )
-    );
-
-
-searchBox.addEventListener(
-    "input",
-    () => {
-
-        const query =
-            searchBox.value
-                .toLowerCase()
-                .trim();
-
-
-        cards.forEach(
-            card => {
-
-                const text =
-                    card.innerText
-                        .toLowerCase();
-
-
-                card.classList.toggle(
-                    "hidden",
-                    !text.includes(
-                        query
-                    )
-                );
-
-            }
-        );
-
-
-        categories.forEach(
-            category => {
-
-                const visibleCards =
-                    category.querySelectorAll(
-                        ".linkCard:not(.hidden)"
-                    );
-
-
-                category.classList.toggle(
-                    "hidden",
-                    visibleCards.length === 0
-                );
-
-            }
-        );
-
-    }
-);
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-const toast =
-    document.getElementById(
-        "toast"
-    );
-
-let toastTimer =
-    null;
-
-
-function showToast(
-    message
-) {
-
-    toast.textContent =
-        message;
-
-    toast.style.display =
-        "block";
-
-
-    clearTimeout(
-        toastTimer
-    );
-
-
-    toastTimer =
-        setTimeout(
-            () => {
-
-                toast.style.display =
-                    "none";
-
-            },
-            3000
-        );
-
-}
-
-
-/* =========================================================
-   REPORT SYSTEM
-========================================================= */
-
-cards.forEach(
-    card => {
-
-        const url =
-            card.href;
-
-
-        if (!url) {
-            return;
-        }
-
-
-        card.style.position =
-            "relative";
-
-
-        let holdTimer =
-            null;
-
-        let holdTriggered =
-            false;
-
-        let reporting =
-            false;
-
-
-        /* ==============================
-           OVERLAY
-        ============================== */
-
-        const overlay =
-            document.createElement(
-                "div"
-            );
-
-
-        overlay.className =
-            "reportOverlay";
-
-
-        overlay.innerHTML = `
-
-            <div class="reportContent">
-
-                <div class="reportIcon">
-                    ⚠️
                 </div>
 
-                <div class="reportTitle">
-                    Report this link?
+            </div>
+
+
+            <!-- LOGIN -->
+
+            <div
+                id="accountLogin"
+                style="display:none"
+            >
+
+                <div class="accountForm">
+
+                    <input
+                        id="loginEmail"
+                        type="email"
+                        placeholder="Email"
+                        autocomplete="email"
+                    >
+
+                    <input
+                        id="loginPassword"
+                        type="password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                    >
+
+                    <div class="formButtons">
+
+                        <button
+                            id="loginButton"
+                            class="primaryButton"
+                            type="button"
+                        >
+                            Login
+                        </button>
+
+                        <button
+                            id="showSignupButton"
+                            class="secondaryButton"
+                            type="button"
+                        >
+                            Create a new account
+                        </button>
+
+                    </div>
+
                 </div>
 
-                <div class="reportURL">
-                    ${escapeHTML(url)}
-                </div>
+            </div>
 
-                <div class="reportButtons">
+
+            <!-- LOGGED IN -->
+
+            <div
+                id="accountLoggedIn"
+                style="display:none"
+            >
+
+                <div class="accountCard">
+
+                    <div class="accountRow">
+                        <span class="accountLabel">Username</span>
+                        <span
+                            id="meUsername"
+                            class="accountValue"
+                        ></span>
+                    </div>
+
+                    <div class="accountRow">
+                        <span class="accountLabel">Display name</span>
+                        <span
+                            id="meDisplayName"
+                            class="accountValue"
+                        ></span>
+                    </div>
+
+                    <div class="accountRow">
+                        <span class="accountLabel">Email</span>
+                        <span
+                            id="meEmail"
+                            class="accountValue"
+                        ></span>
+                    </div>
+
+                    <div class="accountRow">
+                        <span class="accountLabel">Role</span>
+                        <span
+                            id="meRole"
+                            class="accountValue"
+                        ></span>
+                    </div>
+
+                    <div class="accountRow">
+                        <span class="accountLabel">Status</span>
+                        <span
+                            id="meStatus"
+                            class="accountValue"
+                        ></span>
+                    </div>
+
+                    <br>
 
                     <button
+                        id="logoutButton"
+                        class="secondaryButton"
                         type="button"
-                        class="cancelReport"
                     >
-                        Cancel
-                    </button>
-
-                    <button
-                        type="button"
-                        class="confirmReport"
-                    >
-                        🚨 Report Link
+                        Log Out
                     </button>
 
                 </div>
 
             </div>
 
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     REPORT MODAL
+========================================================= -->
+
+<div
+    id="reportModal"
+    class="modal"
+>
+
+    <div class="modalBox smallModal">
+
+        <div class="modalHeader">
+
+            <h2>⚠️ Report</h2>
+
+            <button
+                class="closeButton"
+                data-close="reportModal"
+                type="button"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="modalBody">
+
+            <div class="reportIcon">
+                ⚠️
+            </div>
+
+            <div class="reportTitle">
+                Report this link as blocked?
+            </div>
+
+            <div
+                id="reportURL"
+                class="reportURL"
+            ></div>
+
+            <div class="reportActions">
+
+                <button
+                    id="cancelReportButton"
+                    class="secondaryButton"
+                    type="button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    id="confirmReportButton"
+                    class="dangerButton"
+                    type="button"
+                >
+                    Report
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     ADMIN MODAL
+========================================================= -->
+
+<div
+    id="adminModal"
+    class="modal"
+>
+
+    <div class="modalBox">
+
+        <div class="modalHeader">
+
+            <h2>🤖 Admin Panel</h2>
+
+            <button
+                class="closeButton"
+                data-close="adminModal"
+                type="button"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="modalBody">
+
+            <div class="adminTabs">
+
+                <button
+                    class="adminTab active"
+                    data-admin-tab="reports"
+                    type="button"
+                >
+                    🚨 Reports
+                </button>
+
+                <button
+                    class="adminTab"
+                    data-admin-tab="users"
+                    type="button"
+                >
+                    👥 Users
+                </button>
+
+            </div>
+
+
+            <!-- REPORTS -->
+
+            <section
+                id="reportsSection"
+                class="adminSection active"
+            >
+
+                <div class="adminStats">
+
+                    <div class="stat">
+                        <small>Reported links</small>
+                        <strong id="reportCount">0</strong>
+                    </div>
+
+                    <div class="stat">
+                        <small>Total reports</small>
+                        <strong id="totalReports">0</strong>
+                    </div>
+
+                </div>
+
+                <div
+                    id="reportsList"
+                    class="adminList"
+                >
+                    Loading...
+                </div>
+
+            </section>
+
+
+            <!-- USERS -->
+
+            <section
+                id="usersSection"
+                class="adminSection"
+            >
+
+                <div
+                    id="usersList"
+                    class="adminList"
+                >
+                    Loading...
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div id="toast"></div>
+
+
+<script>
+(() => {
+    "use strict";
+
+    /* =====================================================
+       CONFIG
+    ===================================================== */
+
+    const API =
+        "https://hehwhwhwhuuu.yaqubpapp1.workers.dev";
+
+    const ACCESS_PASSWORD =
+        "yaqubraphinha";
+
+    const MAX_ACCESS_ATTEMPTS = 3;
+
+    let sessionToken =
+        localStorage.getItem("yaqub_session");
+
+    let currentUser = null;
+
+    let selectedReportURL = null;
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const accessScreen =
+        document.getElementById("accessScreen");
+
+    const app =
+        document.getElementById("app");
+
+    const accessPassword =
+        document.getElementById("accessPassword");
+
+    const accessButton =
+        document.getElementById("accessButton");
+
+    const accessError =
+        document.getElementById("accessError");
+
+
+    const searchBox =
+        document.getElementById("searchBox");
+
+    const linkCards =
+        Array.from(
+            document.querySelectorAll(".linkCard")
+        );
+
+    const categories =
+        Array.from(
+            document.querySelectorAll(".category")
+        );
+
+
+    const accountModal =
+        document.getElementById("accountModal");
+
+    const adminModal =
+        document.getElementById("adminModal");
+
+    const reportModal =
+        document.getElementById("reportModal");
+
+
+    const accountLoggedOut =
+        document.getElementById("accountLoggedOut");
+
+    const accountLogin =
+        document.getElementById("accountLogin");
+
+    const accountLoggedIn =
+        document.getElementById("accountLoggedIn");
+
+    const accountMessage =
+        document.getElementById("accountMessage");
+
+
+    const adminNav =
+        document.getElementById("adminNav");
+
+    const accountNav =
+        document.getElementById("accountNav");
+
+    const linksNav =
+        document.getElementById("linksNav");
+
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    function showToast(message) {
+        const toast =
+            document.getElementById("toast");
+
+        toast.textContent =
+            message;
+
+        toast.style.display =
+            "block";
+
+        clearTimeout(
+            toast._timer
+        );
+
+        toast._timer =
+            setTimeout(() => {
+                toast.style.display =
+                    "none";
+            }, 3000);
+    }
+
+
+    function escapeHTML(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+
+    async function api(
+        path,
+        options = {}
+    ) {
+        const headers = {
+            "Content-Type":
+                "application/json",
+            ...(options.headers || {})
+        };
+
+        if (sessionToken) {
+            headers.Authorization =
+                `Bearer ${sessionToken}`;
+        }
+
+        const response =
+            await fetch(
+                API + path,
+                {
+                    ...options,
+                    headers
+                }
+            );
+
+        let data = {};
+
+        try {
+            data =
+                await response.json();
+        } catch {
+            data = {};
+        }
+
+        return {
+            response,
+            data
+        };
+    }
+
+
+    function openModal(modal) {
+        modal.classList.add("show");
+    }
+
+
+    function closeModal(modal) {
+        modal.classList.remove("show");
+    }
+
+
+    function setActiveNav(button) {
+        document
+            .querySelectorAll(".navButton")
+            .forEach(item => {
+                item.classList.remove("active");
+            });
+
+        button.classList.add("active");
+    }
+
+
+    function isAdmin() {
+        return Boolean(
+            currentUser &&
+            currentUser.role === "admin"
+        );
+    }
+
+
+    /* =====================================================
+       ACCESS PASSWORD
+    ===================================================== */
+
+    let accessAttempts = 0;
+
+    function unlock() {
+        const value =
+            accessPassword.value
+                .trim()
+                .toLowerCase();
+
+        if (value === ACCESS_PASSWORD) {
+
+            accessScreen.style.display =
+                "none";
+
+            app.style.display =
+                "block";
+
+            restoreSession();
+
+            return;
+        }
+
+        accessAttempts++;
+
+        accessPassword.value = "";
+
+        if (
+            accessAttempts >=
+            MAX_ACCESS_ATTEMPTS
+        ) {
+            accessButton.disabled =
+                true;
+
+            accessPassword.disabled =
+                true;
+
+            accessError.textContent =
+                "Access unavailable.";
+
+            accessError.style.display =
+                "block";
+
+            showAccessUnavailable();
+
+        } else {
+            accessError.style.display =
+                "block";
+        }
+    }
+
+
+    function showAccessUnavailable() {
+        const modal =
+            document.createElement("div");
+
+        modal.className =
+            "modal show";
+
+        modal.innerHTML = `
+            <div class="modalBox smallModal">
+                <div class="modalBody" style="text-align:center">
+                    <div style="font-size:42px;margin-bottom:10px">
+                        🔒
+                    </div>
+
+                    <h2 style="margin-bottom:8px">
+                        Access unavailable
+                    </h2>
+
+                    <p style="color:#888">
+                        Access is unavailable at this moment.
+                    </p>
+                </div>
+            </div>
         `;
 
-
-        card.appendChild(
-            overlay
-        );
+        document.body.appendChild(modal);
+    }
 
 
-        const cancelButton =
-            overlay.querySelector(
-                ".cancelReport"
-            );
+    accessButton.addEventListener(
+        "click",
+        unlock
+    );
 
-
-        const confirmButton =
-            overlay.querySelector(
-                ".confirmReport"
-            );
-
-
-        /* ==============================
-           HOLD
-        ============================== */
-
-        function startHold(
-            event
-        ) {
-
-            if (
-                event.target.closest(
-                    ".reportOverlay"
-                )
-            ) {
-                return;
+    accessPassword.addEventListener(
+        "keydown",
+        event => {
+            if (event.key === "Enter") {
+                unlock();
             }
+        }
+    );
 
 
-            holdTriggered =
-                false;
+    /* =====================================================
+       SEARCH
+    ===================================================== */
 
+    searchBox.addEventListener(
+        "input",
+        () => {
+            const query =
+                searchBox.value
+                    .trim()
+                    .toLowerCase();
 
-            clearTimeout(
-                holdTimer
-            );
-
-
-            holdTimer =
-                setTimeout(
-                    () => {
-
-                        holdTriggered =
-                            true;
-
-                        overlay.classList.add(
-                            "show"
-                        );
-
-                    },
-                    HOLD_TIME
+            linkCards.forEach(card => {
+                card.classList.toggle(
+                    "hidden",
+                    !card.innerText
+                        .toLowerCase()
+                        .includes(query)
                 );
+            });
 
+            categories.forEach(category => {
+                const visible =
+                    category.querySelectorAll(
+                        ".linkCard:not(.hidden)"
+                    ).length;
+
+                category.classList.toggle(
+                    "hidden",
+                    visible === 0
+                );
+            });
         }
+    );
 
 
-        function cancelHold() {
+    /* =====================================================
+       LINK REPORTING
+    ===================================================== */
 
-            clearTimeout(
-                holdTimer
-            );
+    linkCards.forEach(card => {
 
-            holdTimer =
-                null;
-
-        }
-
-
-        /* ==============================
-           MOUSE
-        ============================== */
+        let timer = null;
 
         card.addEventListener(
-            "mousedown",
-            startHold
-        );
-
-        card.addEventListener(
-            "mouseup",
-            cancelHold
-        );
-
-        card.addEventListener(
-            "mouseleave",
-            cancelHold
+            "contextmenu",
+            event => {
+                event.preventDefault();
+                openReport(card.href);
+            }
         );
 
 
-        /* ==============================
-           TOUCH
-        ============================== */
+        card.addEventListener(
+            "dblclick",
+            event => {
+                event.preventDefault();
+                openReport(card.href);
+            }
+        );
+
 
         card.addEventListener(
             "touchstart",
-            startHold,
-            {
-                passive: true
-            }
+            () => {
+                clearTimeout(timer);
+
+                timer =
+                    setTimeout(() => {
+                        openReport(card.href);
+                    }, 1200);
+            },
+            { passive: true }
         );
+
 
         card.addEventListener(
             "touchend",
-            cancelHold
+            () => {
+                clearTimeout(timer);
+            }
         );
+
 
         card.addEventListener(
             "touchcancel",
-            cancelHold
+            () => {
+                clearTimeout(timer);
+            }
         );
+    });
 
 
-        /* ==============================
-           STOP LINK AFTER HOLD
-        ============================== */
+    function openReport(url) {
+        selectedReportURL =
+            url;
 
-        card.addEventListener(
-            "click",
-            event => {
+        document.getElementById(
+            "reportURL"
+        ).textContent =
+            url;
 
-                if (
-                    holdTriggered
-                ) {
-
-                    event.preventDefault();
-
-                    event.stopPropagation();
-
-                    holdTriggered =
-                        false;
-
-                }
-
-            },
-            true
+        openModal(
+            reportModal
         );
+    }
 
 
-        /* ==============================
-           CANCEL REPORT
-        ============================== */
+    document.getElementById(
+        "cancelReportButton"
+    ).addEventListener(
+        "click",
+        () => {
+            selectedReportURL =
+                null;
 
-        cancelButton.addEventListener(
-            "click",
-            event => {
+            closeModal(
+                reportModal
+            );
+        }
+    );
 
-                event.preventDefault();
 
-                event.stopPropagation();
+    document.getElementById(
+        "confirmReportButton"
+    ).addEventListener(
+        "click",
+        async () => {
 
-                cancelHold();
+            if (!selectedReportURL) {
+                return;
+            }
 
-                holdTriggered =
-                    false;
-
-                overlay.classList.remove(
-                    "show"
+            const button =
+                document.getElementById(
+                    "confirmReportButton"
                 );
 
-            }
-        );
+            button.disabled =
+                true;
 
+            button.textContent =
+                "Reporting...";
 
-        /* ==============================
-           SUBMIT REPORT
-        ============================== */
+            try {
 
-        confirmButton.addEventListener(
-            "click",
-            async event => {
+                const result =
+                    await api(
+                        "/api/report",
+                        {
+                            method: "POST",
+                            body:
+                                JSON.stringify({
+                                    url:
+                                        selectedReportURL,
+                                    name:
+                                        new URL(
+                                            selectedReportURL
+                                        ).hostname
+                                })
+                        }
+                    );
 
-                event.preventDefault();
-
-                event.stopPropagation();
-
-
-                if (reporting) {
-                    return;
+                if (
+                    !result.response.ok ||
+                    !result.data.success
+                ) {
+                    throw new Error(
+                        result.data.error ||
+                        "Report failed"
+                    );
                 }
 
+                showToast(
+                    "✅ Link reported."
+                );
 
-                reporting =
-                    true;
+                markReported(
+                    selectedReportURL
+                );
 
-                confirmButton.disabled =
-                    true;
+                selectedReportURL =
+                    null;
 
-                confirmButton.textContent =
-                    "⏳ Reporting...";
+                closeModal(
+                    reportModal
+                );
 
+            } catch (error) {
 
-                try {
+                showToast(
+                    "❌ " +
+                    error.message
+                );
 
-                    const response =
-                        await fetch(
-                            WORKER_URL +
-                            "/api/report",
-                            {
-                                method:
-                                    "POST",
+            } finally {
 
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
+                button.disabled =
+                    false;
 
-                                body:
-                                    JSON.stringify({
-
-                                        url: url,
-
-                                        name:
-                                            getHostname(
-                                                url
-                                            )
-
-                                    })
-
-                            }
-                        );
-
-
-                    const data =
-                        await response.json();
-
-
-                    if (
-                        !response.ok ||
-                        !data.success
-                    ) {
-
-                        throw new Error(
-                            data.error ||
-                            "Report failed"
-                        );
-
-                    }
-
-
-                    confirmButton.textContent =
-                        "✅ Reported!";
-
-
-                    showReportedBadge(
-                        card
-                    );
-
-
-                    showToast(
-                        "✅ Link reported successfully."
-                    );
-
-
-                    setTimeout(
-                        () => {
-
-                            overlay.classList.remove(
-                                "show"
-                            );
-
-                            confirmButton.disabled =
-                                false;
-
-                            confirmButton.textContent =
-                                "🚨 Report Link";
-
-                            reporting =
-                                false;
-
-                            holdTriggered =
-                                false;
-
-                        },
-                        1200
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "REPORT ERROR:",
-                        error
-                    );
-
-
-                    confirmButton.disabled =
-                        false;
-
-                    confirmButton.textContent =
-                        "❌ Try Again";
-
-                    reporting =
-                        false;
-
-
-                    showToast(
-                        "❌ Couldn't submit report."
-                    );
-
-                }
-
+                button.textContent =
+                    "Report";
             }
-        );
-
-    }
-);
+        }
+    );
 
 
-/* =========================================================
-   REPORTED BADGE
-========================================================= */
+    function markReported(url) {
+        const card =
+            linkCards.find(
+                item =>
+                    item.href === url
+            );
 
-function showReportedBadge(
-    card
-) {
+        if (!card) {
+            return;
+        }
 
-    let badge =
-        card.querySelector(
-            ".reportedBadge"
-        );
+        if (
+            card.querySelector(
+                ".reportedBadge"
+            )
+        ) {
+            return;
+        }
 
-
-    if (!badge) {
-
-        badge =
+        const badge =
             document.createElement(
                 "div"
             );
@@ -1954,271 +1931,1076 @@ function showReportedBadge(
             "reportedBadge";
 
         badge.textContent =
-            "⚠️ Reported as blocked";
+            "⚠️ Reported";
 
         card.appendChild(
             badge
         );
-
     }
 
-}
 
+    /* =====================================================
+       ACCOUNT NAV
+    ===================================================== */
 
-/* =========================================================
-   BOTTOM NAVIGATION
-========================================================= */
-
-const linksNav =
-    document.getElementById(
-        "linksNav"
-    );
-
-const adminNav =
-    document.getElementById(
-        "adminNav"
-    );
-
-const accountNav =
-    document.getElementById(
-        "accountNav"
-    );
-
-
-linksNav.addEventListener(
-    "click",
-    () => {
-
-        document
-            .querySelectorAll(
-                ".navButton"
-            )
-            .forEach(
-                button =>
-                    button.classList.remove(
-                        "active"
-                    )
+    accountNav.addEventListener(
+        "click",
+        () => {
+            setActiveNav(
+                accountNav
             );
 
+            openModal(
+                accountModal
+            );
+        }
+    );
 
-        linksNav.classList.add(
-            "active"
-        );
 
+    linksNav.addEventListener(
+        "click",
+        () => {
+            setActiveNav(
+                linksNav
+            );
 
-        window.scrollTo(
-            {
+            window.scrollTo({
                 top: 0,
                 behavior: "smooth"
+            });
+        }
+    );
+
+
+    adminNav.addEventListener(
+        "click",
+        () => {
+
+            if (!isAdmin()) {
+                showToast(
+                    "Admin access required."
+                );
+                return;
             }
-        );
 
+            setActiveNav(
+                adminNav
+            );
+
+            openModal(
+                adminModal
+            );
+
+            loadReports();
+        }
+    );
+
+
+    /* =====================================================
+       MODAL CLOSERS
+    ===================================================== */
+
+    document
+        .querySelectorAll("[data-close]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const modal =
+                        document.getElementById(
+                            button.dataset.close
+                        );
+
+                    if (modal) {
+                        closeModal(modal);
+                    }
+
+                    setActiveNav(
+                        linksNav
+                    );
+                }
+            );
+        });
+
+
+    document
+        .querySelectorAll(".modal")
+        .forEach(modal => {
+
+            modal.addEventListener(
+                "click",
+                event => {
+
+                    if (
+                        event.target === modal
+                    ) {
+                        closeModal(modal);
+                        setActiveNav(
+                            linksNav
+                        );
+                    }
+
+                }
+            );
+
+        });
+
+
+    /* =====================================================
+       ACCOUNT MODE SWITCHING
+    ===================================================== */
+
+    function showSignup() {
+
+        accountLoggedOut.style.display =
+            "block";
+
+        accountLogin.style.display =
+            "none";
+
+        accountLoggedIn.style.display =
+            "none";
+
+        accountMessage.textContent =
+            "";
     }
-);
 
 
-accountNav.addEventListener(
-    "click",
-    () => {
+    function showLogin() {
 
-        document
-            .querySelectorAll(
-                ".navButton"
-            )
-            .forEach(
-                button =>
-                    button.classList.remove(
+        accountLoggedOut.style.display =
+            "none";
+
+        accountLogin.style.display =
+            "block";
+
+        accountLoggedIn.style.display =
+            "none";
+
+        accountMessage.textContent =
+            "";
+    }
+
+
+    function showAccount(user) {
+
+        accountLoggedOut.style.display =
+            "none";
+
+        accountLogin.style.display =
+            "none";
+
+        accountLoggedIn.style.display =
+            "block";
+
+
+        document.getElementById(
+            "meUsername"
+        ).textContent =
+            user.username || "";
+
+
+        document.getElementById(
+            "meDisplayName"
+        ).textContent =
+            user.displayName || "";
+
+
+        document.getElementById(
+            "meEmail"
+        ).textContent =
+            user.email || "";
+
+
+        document.getElementById(
+            "meRole"
+        ).textContent =
+            user.role || "user";
+
+
+        document.getElementById(
+            "meStatus"
+        ).textContent =
+            user.status || "active";
+
+
+        adminNav.style.display =
+            isAdmin()
+                ? "block"
+                : "none";
+    }
+
+
+    /* =====================================================
+       SIGNUP
+    ===================================================== */
+
+    document.getElementById(
+        "signupButton"
+    ).addEventListener(
+        "click",
+        async () => {
+
+            const button =
+                document.getElementById(
+                    "signupButton"
+                );
+
+            button.disabled =
+                true;
+
+            button.textContent =
+                "Creating...";
+
+
+            try {
+
+                const result =
+                    await api(
+                        "/api/register",
+                        {
+                            method: "POST",
+
+                            body:
+                                JSON.stringify({
+                                    username:
+                                        document
+                                            .getElementById(
+                                                "signupUsername"
+                                            )
+                                            .value,
+
+                                    displayName:
+                                        document
+                                            .getElementById(
+                                                "signupDisplayName"
+                                            )
+                                            .value,
+
+                                    realName:
+                                        document
+                                            .getElementById(
+                                                "signupRealName"
+                                            )
+                                            .value,
+
+                                    email:
+                                        document
+                                            .getElementById(
+                                                "signupEmail"
+                                            )
+                                            .value,
+
+                                    password:
+                                        document
+                                            .getElementById(
+                                                "signupPassword"
+                                            )
+                                            .value
+                                })
+                        }
+                    );
+
+
+                if (
+                    !result.response.ok ||
+                    !result.data.success
+                ) {
+                    throw new Error(
+                        result.data.error ||
+                        "Could not create account"
+                    );
+                }
+
+
+                accountMessage.textContent =
+                    "✅ Account created. Login below.";
+
+                showLogin();
+
+            } catch (error) {
+
+                accountMessage.textContent =
+                    "❌ " +
+                    error.message;
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Create Account";
+            }
+        }
+    );
+
+
+    document.getElementById(
+        "showLoginButton"
+    ).addEventListener(
+        "click",
+        showLogin
+    );
+
+
+    document.getElementById(
+        "showSignupButton"
+    ).addEventListener(
+        "click",
+        showSignup
+    );
+
+
+    /* =====================================================
+       LOGIN
+    ===================================================== */
+
+    document.getElementById(
+        "loginButton"
+    ).addEventListener(
+        "click",
+        async () => {
+
+            const button =
+                document.getElementById(
+                    "loginButton"
+                );
+
+            button.disabled =
+                true;
+
+            button.textContent =
+                "Logging in...";
+
+
+            try {
+
+                const result =
+                    await api(
+                        "/api/login",
+                        {
+                            method: "POST",
+
+                            body:
+                                JSON.stringify({
+                                    email:
+                                        document
+                                            .getElementById(
+                                                "loginEmail"
+                                            )
+                                            .value,
+
+                                    password:
+                                        document
+                                            .getElementById(
+                                                "loginPassword"
+                                            )
+                                            .value
+                                })
+                        }
+                    );
+
+
+                if (
+                    !result.response.ok ||
+                    !result.data.success
+                ) {
+                    throw new Error(
+                        result.data.error ||
+                        "Login failed"
+                    );
+                }
+
+
+                sessionToken =
+                    result.data.token;
+
+                localStorage.setItem(
+                    "yaqub_session",
+                    sessionToken
+                );
+
+
+                currentUser =
+                    result.data.user;
+
+
+                showAccount(
+                    currentUser
+                );
+
+
+                accountMessage.textContent =
+                    "✅ Logged in.";
+
+            } catch (error) {
+
+                accountMessage.textContent =
+                    "❌ " +
+                    error.message;
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Login";
+            }
+        }
+    );
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    document.getElementById(
+        "logoutButton"
+    ).addEventListener(
+        "click",
+        async () => {
+
+            try {
+                await api(
+                    "/api/logout",
+                    {
+                        method: "POST"
+                    }
+                );
+            } catch {
+                // Session is cleared locally below.
+            }
+
+            sessionToken =
+                null;
+
+            currentUser =
+                null;
+
+            localStorage.removeItem(
+                "yaqub_session"
+            );
+
+            adminNav.style.display =
+                "none";
+
+            showSignup();
+
+            accountMessage.textContent =
+                "Logged out.";
+
+            showToast(
+                "Logged out."
+            );
+        }
+    );
+
+
+    /* =====================================================
+       RESTORE SESSION
+    ===================================================== */
+
+    async function restoreSession() {
+
+        if (!sessionToken) {
+            showSignup();
+            return;
+        }
+
+        try {
+
+            const result =
+                await api(
+                    "/api/me"
+                );
+
+
+            if (
+                !result.response.ok ||
+                !result.data.success
+            ) {
+
+                throw new Error(
+                    result.data.error ||
+                    "Session expired"
+                );
+            }
+
+
+            currentUser =
+                result.data.user;
+
+            showAccount(
+                currentUser
+            );
+
+        } catch {
+
+            sessionToken =
+                null;
+
+            currentUser =
+                null;
+
+            localStorage.removeItem(
+                "yaqub_session"
+            );
+
+            adminNav.style.display =
+                "none";
+
+            showSignup();
+        }
+    }
+
+
+    /* =====================================================
+       ADMIN TABS
+    ===================================================== */
+
+    document
+        .querySelectorAll(".adminTab")
+        .forEach(tab => {
+
+            tab.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            ".adminTab"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
+
+                    document
+                        .querySelectorAll(
+                            ".adminSection"
+                        )
+                        .forEach(
+                            section =>
+                                section.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    tab.classList.add(
                         "active"
-                    )
+                    );
+
+
+                    const target =
+                        tab.dataset.adminTab;
+
+
+                    document
+                        .getElementById(
+                            target +
+                            "Section"
+                        )
+                        .classList.add(
+                            "active"
+                        );
+
+
+                    if (
+                        target ===
+                        "reports"
+                    ) {
+                        loadReports();
+                    }
+
+                    if (
+                        target ===
+                        "users"
+                    ) {
+                        loadUsers();
+                    }
+
+                }
+            );
+        });
+
+
+    /* =====================================================
+       LOAD REPORTS
+    ===================================================== */
+
+    async function loadReports() {
+
+        if (!isAdmin()) {
+            return;
+        }
+
+        const list =
+            document.getElementById(
+                "reportsList"
+            );
+
+        list.textContent =
+            "Loading...";
+
+
+        try {
+
+            const result =
+                await api(
+                    "/api/reports"
+                );
+
+
+            if (
+                !result.response.ok ||
+                !result.data.success
+            ) {
+                throw new Error(
+                    result.data.error ||
+                    "Couldn't load reports"
+                );
+            }
+
+
+            const reports =
+                result.data.reports || [];
+
+
+            document.getElementById(
+                "reportCount"
+            ).textContent =
+                reports.length;
+
+
+            document.getElementById(
+                "totalReports"
+            ).textContent =
+                reports.reduce(
+                    (
+                        total,
+                        report
+                    ) =>
+                        total +
+                        Number(
+                            report.reports || 0
+                        ),
+                    0
+                );
+
+
+            list.innerHTML =
+                "";
+
+
+            if (
+                reports.length === 0
+            ) {
+
+                list.textContent =
+                    "🟢 No reported links.";
+
+                return;
+            }
+
+
+            reports.forEach(
+                report => {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+                    item.className =
+                        "adminItem";
+
+
+                    item.innerHTML = `
+                        <div class="adminTop">
+                            <strong>
+                                ${escapeHTML(
+                                    report.url
+                                )}
+                            </strong>
+
+                            <span>
+                                ${Number(
+                                    report.reports || 0
+                                )}
+                            </span>
+                        </div>
+
+                        <div class="adminMeta">
+                            Reported:
+                            ${escapeHTML(
+                                new Date(
+                                    report.lastReported ||
+                                    report.time
+                                ).toLocaleString()
+                            )}
+                        </div>
+
+                        <div class="adminActions">
+                            <button
+                                type="button"
+                                class="restoreButton"
+                            >
+                                ♻️ Restore
+                            </button>
+                        </div>
+                    `;
+
+
+                    item
+                        .querySelector(
+                            ".restoreButton"
+                        )
+                        .addEventListener(
+                            "click",
+                            () =>
+                                restoreReport(
+                                    report.url
+                                )
+                        );
+
+
+                    list.appendChild(
+                        item
+                    );
+                }
+            );
+
+        } catch (error) {
+
+            list.textContent =
+                "❌ " +
+                error.message;
+        }
+    }
+
+
+    /* =====================================================
+       RESTORE REPORT
+    ===================================================== */
+
+    async function restoreReport(
+        url
+    ) {
+
+        try {
+
+            const result =
+                await api(
+                    "/api/restore",
+                    {
+                        method: "POST",
+                        body:
+                            JSON.stringify({
+                                url
+                            })
+                    }
+                );
+
+
+            if (
+                !result.response.ok ||
+                !result.data.success
+            ) {
+                throw new Error(
+                    result.data.error ||
+                    "Restore failed"
+                );
+            }
+
+
+            showToast(
+                "✅ Report restored."
             );
 
 
-        accountNav.classList.add(
-            "active"
-        );
+            await loadReports();
 
+        } catch (error) {
 
-        showToast(
-            "👤 Account is coming next."
-        );
-
+            showToast(
+                "❌ " +
+                error.message
+            );
+        }
     }
-);
 
 
-adminNav.addEventListener(
-    "click",
-    () => {
+    /* =====================================================
+       LOAD USERS
+    ===================================================== */
 
-        document
-            .querySelectorAll(
-                ".navButton"
-            )
-            .forEach(
-                button =>
-                    button.classList.remove(
-                        "active"
-                    )
+    async function loadUsers() {
+
+        if (!isAdmin()) {
+            return;
+        }
+
+        const list =
+            document.getElementById(
+                "usersList"
+            );
+
+        list.textContent =
+            "Loading...";
+
+
+        try {
+
+            const result =
+                await api(
+                    "/api/admin/users"
+                );
+
+
+            if (
+                !result.response.ok ||
+                !result.data.success
+            ) {
+                throw new Error(
+                    result.data.error ||
+                    "Couldn't load users"
+                );
+            }
+
+
+            const users =
+                result.data.users || [];
+
+
+            list.innerHTML =
+                "";
+
+
+            if (
+                users.length === 0
+            ) {
+
+                list.textContent =
+                    "No accounts yet.";
+
+                return;
+            }
+
+
+            users.forEach(
+                user => {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+                    item.className =
+                        "adminItem";
+
+
+                    item.innerHTML = `
+                        <div class="adminTop">
+                            <strong>
+                                @${escapeHTML(
+                                    user.username
+                                )}
+                            </strong>
+
+                            <span>
+                                ${escapeHTML(
+                                    user.status
+                                )}
+                            </span>
+                        </div>
+
+                        <div class="adminMeta">
+                            ${escapeHTML(
+                                user.displayName
+                            )}
+                        </div>
+
+                        <div class="adminMeta">
+                            ${escapeHTML(
+                                user.email
+                            )}
+                        </div>
+
+                        <div class="adminMeta">
+                            Role:
+                            ${escapeHTML(
+                                user.role
+                            )}
+                        </div>
+
+                        <div class="adminActions">
+
+                            <button
+                                type="button"
+                                data-action="block"
+                            >
+                                🚫 Block
+                            </button>
+
+                            <button
+                                type="button"
+                                data-action="unblock"
+                            >
+                                ✅ Unblock
+                            </button>
+
+                            <button
+                                type="button"
+                                data-action="ban"
+                            >
+                                🔨 Ban
+                            </button>
+
+                            ${
+                                user.role !== "admin"
+                                ? `
+                                    <button
+                                        type="button"
+                                        data-action="promote"
+                                    >
+                                        ⭐ Make Admin
+                                    </button>
+                                `
+                                : ""
+                            }
+
+                        </div>
+                    `;
+
+
+                    item
+                        .querySelectorAll(
+                            "[data-action]"
+                        )
+                        .forEach(
+                            button => {
+
+                                button.addEventListener(
+                                    "click",
+                                    () =>
+                                        userAction(
+                                            button.dataset.action,
+                                            user.id
+                                        )
+                                );
+                            }
+                        );
+
+
+                    list.appendChild(
+                        item
+                    );
+                }
+            );
+
+        } catch (error) {
+
+            list.textContent =
+                "❌ " +
+                error.message;
+        }
+    }
+
+
+    /* =====================================================
+       ADMIN USER ACTION
+    ===================================================== */
+
+    async function userAction(
+        action,
+        userId
+    ) {
+
+        const routes = {
+            block:
+                "/api/admin/block",
+
+            unblock:
+                "/api/admin/unblock",
+
+            ban:
+                "/api/admin/ban",
+
+            promote:
+                "/api/admin/promote"
+        };
+
+
+        const route =
+            routes[action];
+
+
+        if (!route) {
+            return;
+        }
+
+
+        try {
+
+            const result =
+                await api(
+                    route,
+                    {
+                        method: "POST",
+
+                        body:
+                            JSON.stringify({
+                                userId
+                            })
+                    }
+                );
+
+
+            if (
+                !result.response.ok ||
+                !result.data.success
+            ) {
+
+                throw new Error(
+                    result.data.error ||
+                    "Action failed"
+                );
+            }
+
+
+            showToast(
+                "✅ " +
+                result.data.message
             );
 
 
-        adminNav.classList.add(
-            "active"
-        );
+            await loadUsers();
 
+        } catch (error) {
 
-        showToast(
-            "🤖 Admin Panel is coming next."
-        );
-
-    }
-);
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function getHostname(
-    url
-) {
-
-    try {
-
-        return new URL(
-            url
-        ).hostname;
-
-    } catch {
-
-        return "unknown";
-
+            showToast(
+                "❌ " +
+                error.message
+            );
+        }
     }
 
-}
 
+    /* =====================================================
+       START
+    ===================================================== */
 
-function escapeHTML(
-    value
-) {
+    restoreSession();
 
-    return String(
-        value
-    )
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-
-}
-
+})();
 </script>
-<!-- ================= ACCOUNT PANEL ================= -->
 
-<div id="accountPanel" style="
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:9000;
-    background:rgba(0,0,0,.82);
-    backdrop-filter:blur(10px);
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-">
-
-    <div style="
-        width:min(440px,100%);
-        background:#111;
-        border:1px solid #333;
-        border-radius:22px;
-        padding:28px;
-        box-shadow:0 25px 80px rgba(0,0,0,.7);
-    ">
-
-        <div style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:22px;
-        ">
-
-            <h2>👤 Create Account</h2>
-
-            <button
-                id="closeAccount"
-                type="button"
-                style="
-                    width:38px;
-                    height:38px;
-                    border:1px solid #333;
-                    border-radius:10px;
-                    background:#191919;
-                    color:white;
-                    cursor:pointer;
-                "
-            >
-                ✕
-            </button>
-
-        </div>
-
-        <input
-            id="signupUsername"
-            type="text"
-            placeholder="Username"
-            autocomplete="username"
-            style="
-                width:100%;
-                padding:13px;
-                margin-bottom:10px;
-                border:1px solid #333;
-                border-radius:11px;
-                background:#0b0b0b;
-                color:white;
-                outline:none;
-            "
-        >
-
-        <input
-            id="signupDisplayName"
-            type="text"
-            placeholder="Display name"
-            style="
-                width:100%;
-                padding:13px;
-                margin-bottom:10px;
-                border:1px solid #333;
-                border-radius:11px;
-                background:#0b0b0b;
-                color:white;
-                outline:none;
-            "
-        >
-
-        <input
-            id="signupRealName"
-            type="text"
-            placeholder="Real name"
-            style="
-                width:100%;
-                padding:13px;
-                margin-bottom:10px
 </body>
 </html>
