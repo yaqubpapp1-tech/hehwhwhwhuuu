@@ -1340,10 +1340,7 @@ button:disabled {
     let attempts =
         0;
 
-    let sessionToken =
-        localStorage.getItem(
-            "yaqub_session"
-        );
+    let sessionToken = null;
 
     let currentUser =
         null;
@@ -2811,10 +2808,7 @@ function escapeHTML(value) {
                     result.data.user;
 
 
-                localStorage.setItem(
-                    "yaqub_session",
-                    sessionToken
-                );
+              
 
 
                 showAccount(
@@ -2878,9 +2872,7 @@ function escapeHTML(value) {
                 null;
 
 
-            localStorage.removeItem(
-                "yaqub_session"
-            );
+            
 
 
             document.getElementById(
@@ -2952,9 +2944,7 @@ function escapeHTML(value) {
                 null;
 
 
-            localStorage.removeItem(
-                "yaqub_session"
-            );
+            
 
         }
 
