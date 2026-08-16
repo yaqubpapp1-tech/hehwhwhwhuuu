@@ -24,10 +24,5 @@
     "binding": "USERS",
     "id": "b93ee107b4b9404cbb1342306d2fa009"
   }
-]
-
-  "assets": {
-    "directory": ".",
-    "binding": "ASSETS"
-  }
-}
+],
+"assets": {
