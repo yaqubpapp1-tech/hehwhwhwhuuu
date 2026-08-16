@@ -1,20 +1,17 @@
 {
-  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "WORKER-NAME",
+  "main": "worker.js",
+  "compatibility_date": "2025-02-04",
 
-  "name": "hehwhwhwhuuu",
-
-  "main": "./worker.js",
-
-  "compatibility_date": "2026-08-15",
-
-  "assets": {
-    "directory": "./",
-    "binding": "ASSETS"
+  "observability": {
+    "enabled": true
   },
 
   "kv_namespaces": [
     {
-      "binding": "REPORTS"
+      "binding": "KV",
+      "id": "c620acf8aacf4ee89ddd73bf3d449714"
     }
   ]
 }
