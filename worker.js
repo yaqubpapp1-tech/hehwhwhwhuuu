@@ -428,13 +428,22 @@ async function loginUser(request, env) {
       }
     );
 
-    return json({
-      success: true,
-      message: "Login successful",
-      token,
-      expiresAt,
-      user: publicUser(user)
-    });
+    return new Response(
+  JSON.stringify({
+    success: true,
+    message: "Login successful",
+    user: publicUser(user)
+  }),
+  {
+    status: 200,
+    headers: {
+      ...CORS_HEADERS,
+      "Content-Type": "application/json; charset=UTF-8",
+      "Set-Cookie":
+        `session=${token}; Max-Age=${SESSION_TTL_SECONDS}; Path=/; HttpOnly; Secure; SameSite=Lax`
+    }
+  }
+);
 
   } catch (error) {
     console.error(
