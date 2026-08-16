@@ -3,24 +3,13 @@ export default {
 
         const url = new URL(request.url);
 
-        /*
-        ==================================================
-        CORS
-        ==================================================
-        */
-
         const corsHeaders = {
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
             "Access-Control-Allow-Headers": "Content-Type"
         };
 
-        /*
-        ==================================================
-        OPTIONS
-        ==================================================
-        */
-
+        // OPTIONS / CORS
         if (request.method === "OPTIONS") {
             return new Response(null, {
                 status: 204,
@@ -28,13 +17,28 @@ export default {
             });
         }
 
+        // ================================================
+        // HEALTH CHECK
+        // GET /api/health
+        // ================================================
 
-        /*
-        ==================================================
-        REPORT A LINK
-        POST /api/report
-        ==================================================
-        */
+        if (
+            url.pathname === "/api/health" &&
+            request.method === "GET"
+        ) {
+
+            return json({
+                success: true,
+                status: "online",
+                service: "Global Link Reports"
+            }, 200, corsHeaders);
+        }
+
+
+        // ================================================
+        // REPORT A LINK
+        // POST /api/report
+        // ================================================
 
         if (
             url.pathname === "/api/report" &&
@@ -46,124 +50,121 @@ export default {
                 const data = await request.json();
 
                 if (!data.url) {
-                    return json(
-                        {
-                            success: false,
-                            error: "Missing URL"
-                        },
-                        400,
-                        corsHeaders
-                    );
+                    return json({
+                        success: false,
+                        error: "Missing URL"
+                    }, 400, corsHeaders);
                 }
-
-
-                /*
-                Only allow normal HTTP/HTTPS URLs.
-                */
 
                 let parsedURL;
 
                 try {
                     parsedURL = new URL(data.url);
                 } catch {
-                    return json(
-                        {
-                            success: false,
-                            error: "Invalid URL"
-                        },
-                        400,
-                        corsHeaders
-                    );
+
+                    return json({
+                        success: false,
+                        error: "Invalid URL"
+                    }, 400, corsHeaders);
+
                 }
 
-
+                // Only HTTP / HTTPS
                 if (
                     parsedURL.protocol !== "https:" &&
                     parsedURL.protocol !== "http:"
                 ) {
-                    return json(
-                        {
-                            success: false,
-                            error: "Invalid protocol"
-                        },
-                        400,
-                        corsHeaders
-                    );
+
+                    return json({
+                        success: false,
+                        error: "Invalid protocol"
+                    }, 400, corsHeaders);
+
                 }
 
+                const normalizedURL = parsedURL.href;
 
-                const key =
-                    encodeURIComponent(
-                        parsedURL.href
-                    );
+                const key = encodeURIComponent(normalizedURL);
 
+                // Check if already reported
+                const existing = await env.KV.get(key, "json");
 
-                /*
-                Don't create duplicate reports.
-                */
+                if (existing) {
 
-                const existing =
-                    await env.REPORTS.get(key);
+                    // Increase report count
+                    existing.reports =
+                        Number(existing.reports || 1) + 1;
 
+                    existing.lastReported =
+                        new Date().toISOString();
 
-                if (!existing) {
-
-                    const report = {
-
-                        url: parsedURL.href,
-
-                        name:
-                            typeof data.name === "string"
-                                ? data.name.slice(0, 500)
-                                : parsedURL.hostname,
-
-                        time:
-                            new Date().toISOString(),
-
-                        reports: 1
-
-                    };
-
-
-                    await env.REPORTS.put(
+                    await env.KV.put(
                         key,
-                        JSON.stringify(report)
+                        JSON.stringify(existing)
                     );
 
+                    return json({
+                        success: true,
+                        message: "Link report updated",
+                        report: existing
+                    }, 200, corsHeaders);
                 }
 
+                // New report
+                const report = {
 
-                return json(
-                    {
-                        success: true,
-                        message: "Link reported"
-                    },
-                    200,
-                    corsHeaders
+                    id: crypto.randomUUID(),
+
+                    url: normalizedURL,
+
+                    name:
+                        typeof data.name === "string" &&
+                        data.name.trim()
+                            ? data.name.slice(0, 500)
+                            : parsedURL.hostname,
+
+                    time:
+                        new Date().toISOString(),
+
+                    lastReported:
+                        new Date().toISOString(),
+
+                    reports: 1,
+
+                    status: "reported"
+
+                };
+
+                await env.KV.put(
+                    key,
+                    JSON.stringify(report)
                 );
 
+                return json({
+                    success: true,
+                    message: "Link reported",
+                    report: report
+                }, 200, corsHeaders);
 
             } catch (error) {
 
-                return json(
-                    {
-                        success: false,
-                        error: "Invalid request"
-                    },
-                    400,
-                    corsHeaders
+                console.error(
+                    "REPORT ERROR:",
+                    error
                 );
 
+                return json({
+                    success: false,
+                    error: "Invalid request"
+                }, 400, corsHeaders);
             }
         }
 
 
-        /*
-        ==================================================
-        GET ALL REPORTS
-        GET /api/reports
-        ==================================================
-        */
+        // ================================================
+        // GET ALL REPORTS
+        // GET /api/reports
+        // ================================================
 
         if (
             url.pathname === "/api/reports" &&
@@ -176,39 +177,28 @@ export default {
 
                 let cursor = undefined;
 
-
-                /*
-                KV can return multiple pages.
-                Keep loading until everything is retrieved.
-                */
-
                 do {
 
                     const result =
-                        await env.REPORTS.list({
+                        await env.KV.list({
                             cursor: cursor,
                             limit: 1000
                         });
 
-
                     for (
-                        const item
-                        of result.keys
+                        const item of result.keys
                     ) {
 
                         const report =
-                            await env.REPORTS.get(
+                            await env.KV.get(
                                 item.name,
                                 "json"
                             );
 
-
                         if (report) {
                             reports.push(report);
                         }
-
                     }
-
 
                     cursor =
                         result.list_complete
@@ -217,28 +207,18 @@ export default {
 
                 } while (cursor);
 
-
-                /*
-                Newest reports first.
-                */
-
+                // Newest first
                 reports.sort(
                     (a, b) =>
-                        new Date(b.time) -
-                        new Date(a.time)
+                        new Date(b.lastReported || b.time) -
+                        new Date(a.lastReported || a.time)
                 );
 
-
-                return json(
-                    {
-                        success: true,
-                        reports: reports,
-                        count: reports.length
-                    },
-                    200,
-                    corsHeaders
-                );
-
+                return json({
+                    success: true,
+                    reports: reports,
+                    count: reports.length
+                }, 200, corsHeaders);
 
             } catch (error) {
 
@@ -247,26 +227,18 @@ export default {
                     error
                 );
 
-
-                return json(
-                    {
-                        success: false,
-                        error: "Could not load reports"
-                    },
-                    500,
-                    corsHeaders
-                );
-
+                return json({
+                    success: false,
+                    error: "Could not load reports"
+                }, 500, corsHeaders);
             }
         }
 
 
-        /*
-        ==================================================
-        RESTORE LINK
-        POST /api/restore
-        ==================================================
-        */
+        // ================================================
+        // RESTORE / REMOVE REPORT
+        // POST /api/restore
+        // ================================================
 
         if (
             url.pathname === "/api/restore" &&
@@ -278,105 +250,131 @@ export default {
                 const data =
                     await request.json();
 
-
                 if (!data.url) {
 
-                    return json(
-                        {
-                            success: false,
-                            error: "Missing URL"
-                        },
-                        400,
-                        corsHeaders
-                    );
+                    return json({
+                        success: false,
+                        error: "Missing URL"
+                    }, 400, corsHeaders);
 
                 }
 
+                let parsedURL;
 
-                const parsedURL =
-                    new URL(data.url);
+                try {
+                    parsedURL = new URL(data.url);
+                } catch {
 
+                    return json({
+                        success: false,
+                        error: "Invalid URL"
+                    }, 400, corsHeaders);
+
+                }
 
                 const key =
                     encodeURIComponent(
                         parsedURL.href
                     );
 
+                await env.KV.delete(key);
 
-                await env.REPORTS.delete(
-                    key
-                );
-
-
-                return json(
-                    {
-                        success: true,
-                        message: "Report restored"
-                    },
-                    200,
-                    corsHeaders
-                );
-
+                return json({
+                    success: true,
+                    message: "Report restored"
+                }, 200, corsHeaders);
 
             } catch (error) {
 
-                return json(
-                    {
-                        success: false,
-                        error: "Could not restore report"
-                    },
-                    400,
-                    corsHeaders
+                console.error(
+                    "RESTORE ERROR:",
+                    error
                 );
 
+                return json({
+                    success: false,
+                    error: "Could not restore report"
+                }, 400, corsHeaders);
             }
         }
 
 
-        /*
-        ==================================================
-        HEALTH CHECK
-        GET /api/health
-        ==================================================
-        */
+        // ================================================
+        // DELETE REPORT
+        // DELETE /api/report
+        // ================================================
 
         if (
-            url.pathname === "/api/health"
+            url.pathname === "/api/report" &&
+            request.method === "DELETE"
         ) {
 
-            return json(
-                {
-                    success: true,
-                    status: "online",
-                    service: "Global Link Reports"
-                },
-                200,
-                corsHeaders
-            );
+            try {
 
+                const data =
+                    await request.json();
+
+                if (!data.url) {
+
+                    return json({
+                        success: false,
+                        error: "Missing URL"
+                    }, 400, corsHeaders);
+
+                }
+
+                let parsedURL;
+
+                try {
+                    parsedURL = new URL(data.url);
+                } catch {
+
+                    return json({
+                        success: false,
+                        error: "Invalid URL"
+                    }, 400, corsHeaders);
+
+                }
+
+                const key =
+                    encodeURIComponent(
+                        parsedURL.href
+                    );
+
+                await env.KV.delete(key);
+
+                return json({
+                    success: true,
+                    message: "Report deleted"
+                }, 200, corsHeaders);
+
+            } catch (error) {
+
+                console.error(
+                    "DELETE ERROR:",
+                    error
+                );
+
+                return json({
+                    success: false,
+                    error: "Could not delete report"
+                }, 400, corsHeaders);
+            }
         }
 
 
-        /*
-        ==================================================
-        EVERYTHING ELSE
-        SERVE YOUR EXISTING index.html
-        ==================================================
-
-        This means your existing index.html stays
-        completely untouched.
-        */
+        // ================================================
+        // SERVE WEBSITE
+        // ================================================
 
         return env.ASSETS.fetch(request);
     }
 };
 
 
-/*
-==================================================
-JSON HELPER
-==================================================
-*/
+// ================================================
+// JSON RESPONSE HELPER
+// ================================================
 
 function json(
     data,
@@ -387,7 +385,7 @@ function json(
     return new Response(
         JSON.stringify(data),
         {
-            status,
+            status: status,
 
             headers: {
                 "Content-Type":
