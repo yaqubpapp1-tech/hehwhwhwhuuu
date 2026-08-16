@@ -180,6 +180,15 @@ export default {
       ) {
         return await promoteUser(request, env);
       }
+    if (
+  url.pathname === "/api/chat" &&
+  request.headers.get("Upgrade") === "websocket"
+) {
+  const id = env.CHAT_ROOM.idFromName("main");
+  const room = env.CHAT_ROOM.get(id);
+
+  return room.fetch(request);
+}
 
       return env.ASSETS.fetch(request);
 
