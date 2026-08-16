@@ -857,20 +857,17 @@ export default {
 
       return env.ASSETS.fetch(request);
 
-    } catch (error) {
+} catch (error) {
+  console.error(
+    "REGISTER ERROR:",
+    error?.stack || error
+  );
 
-      console.error(
-        "WORKER ERROR:",
-        error
-      );
-
-      return json({
-        success: false,
-        error: "Internal server error"
-      }, 500);
-    }
-  }
-};
+  return json({
+    success: false,
+    error: String(error?.message || error)
+  }, 500);
+}
 
 
 // =========================================
