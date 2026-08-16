@@ -12,17 +12,21 @@
   },
 
   "kv_namespaces": [
-  {
-    "binding": "REPORTS",
-    "id": "c620acf8aacf4ee89ddd73bf3d449714"
-  },
-  {
-    "binding": "SESSIONS",
-    "id": "cab8683b62194873a68790690e97f20e"
-  },
-  {
-    "binding": "USERS",
-    "id": "b93ee107b4b9404cbb1342306d2fa009"
+    {
+      "binding": "REPORTS",
+      "id": "c620acf8aacf4ee89ddd73bf3d449714"
+    },
+    {
+      "binding": "SESSIONS",
+      "id": "cab8683b62194873a68790690e97f20e"
+    },
+    {
+      "binding": "USERS",
+      "id": "b93ee107b4b9404cbb1342306d2fa009"
+    }
+  ],
+
+  "assets": {
+    "directory": "./"
   }
-],
-"assets": {
+}
