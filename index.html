@@ -2134,11 +2134,9 @@ async function restoreSession() {
 
     user =
       result.data.user;
-
-
-    showAccount(
-      user
-    );
+if (user) {
+  connectChat();
+}
 
 
     if (
