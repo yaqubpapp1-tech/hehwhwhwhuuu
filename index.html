@@ -1350,7 +1350,38 @@ button:disabled {
 
     let selectedReportURL =
         null;
+async function api(path, options = {}) {
+    const headers = {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+    };
 
+    if (sessionToken) {
+        headers.Authorization =
+            `Bearer ${sessionToken}`;
+    }
+
+    const response = await fetch(
+        API + path,
+        {
+            ...options,
+            headers
+        }
+    );
+
+    let data = {};
+
+    try {
+        data = await response.json();
+    } catch {
+        data = {};
+    }
+
+    return {
+        response,
+        data
+    };
+}
 
     /* =====================================================
        LINK DATA
