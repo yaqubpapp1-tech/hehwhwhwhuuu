@@ -11,7 +11,7 @@ export default {
     const html = await response.text();
     const injected = html.replace(
       /<\/body>/i,
-      '<script src="/enhancements.js" defer></script><script src="/yaprxy-labels.js" defer></script><script src="/yachat-enhance.js" defer></script></body>'
+      '<script src="/enhancements.js" defer></script><script src="/yaprxy-labels.js" defer></script><script src="/yachat-enhance.js" defer></script><script src="/admin-enhance.js" defer></script></body>'
     );
     const headers = new Headers(response.headers);
     headers.set("Cache-Control", "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400");
