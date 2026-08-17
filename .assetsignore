@@ -3,6 +3,7 @@ worker.js
 worker-v2.js
 wrangler.jsonc
 wrangler.toml
+.assetsignore
 .git/**
 .wrangler/**
 ems copy/**
