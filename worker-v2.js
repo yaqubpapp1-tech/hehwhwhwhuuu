@@ -1,8 +1,45 @@
 import legacyWorker, { ChatRoom } from "./worker.js";
 export { ChatRoom };
+
 const CORS={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"GET, POST, OPTIONS","Access-Control-Allow-Headers":"Content-Type, Authorization"};
 const MAX_AVATAR_LENGTH=180000;
+
+// Lightweight per-isolate rate limiting. This avoids an extra KV read/write on
+// every request, so protection does not become another source of latency.
+const RATE_BUCKETS = new Map();
+const RATE_RULES = [
+  [/^\/api\/(login|register)$/, 8, 60_000],
+  [/^\/api\/users\/search$/, 35, 60_000],
+  [/^\/api\/(dm\/create|group\/create|profile)$/, 20, 60_000],
+  [/^\/api\/(dms|groups)$/, 45, 60_000],
+  [/^\/api\/chat$/, 18, 60_000],
+  [/^\/api\//, 90, 60_000]
+];
+
+function rateLimit(request,url){
+  if(!url.pathname.startsWith("/api/")) return null;
+  const ip=request.headers.get("CF-Connecting-IP")||request.headers.get("X-Forwarded-For")||"unknown";
+  let rule=RATE_RULES.find(([pattern])=>pattern.test(url.pathname));
+  if(!rule) return null;
+  const [,limit,windowMs]=rule;
+  const now=Date.now();
+  const key=`${ip}:${url.pathname}`;
+  let bucket=RATE_BUCKETS.get(key);
+  if(!bucket||now-bucket.started>=windowMs) bucket={started:now,count:0};
+  bucket.count++;
+  RATE_BUCKETS.set(key,bucket);
+  if(RATE_BUCKETS.size>5000){
+    for(const [k,v] of RATE_BUCKETS){if(now-v.started>=windowMs)RATE_BUCKETS.delete(k);}
+  }
+  if(bucket.count>limit){
+    const retry=Math.max(1,Math.ceil((windowMs-(now-bucket.started))/1000));
+    return new Response(JSON.stringify({success:false,error:"Too many requests. Slow down a little.",retryAfter:retry}),{status:429,headers:{...CORS,"Content-Type":"application/json; charset=UTF-8","Retry-After":String(retry),"Cache-Control":"no-store"}});
+  }
+  return null;
+}
+
 export default{async fetch(request,env,ctx){const url=new URL(request.url);if(request.method==="OPTIONS")return new Response(null,{status:204,headers:CORS});try{
+const limited=rateLimit(request,url);if(limited)return limited;
 if(url.pathname==="/api/profile"&&request.method==="POST")return await updateProfile(request,env);
 if(url.pathname==="/api/users/search"&&request.method==="GET")return await searchUsers(request,env);
 if(url.pathname==="/api/dms"&&request.method==="GET")return await listDMs(request,env);
@@ -10,7 +47,7 @@ if(url.pathname==="/api/dm/create"&&request.method==="POST")return await createD
 if(url.pathname==="/api/groups"&&request.method==="GET")return await listGroups(request,env);
 if(url.pathname==="/api/group/create"&&request.method==="POST")return await createGroup(request,env);
 if(url.pathname==="/api/chat"&&isWebSocket(request))return await chatRoomSocket(request,env);
-if(request.method==="GET"&&acceptsHtml(request)){const asset=await env.ASSETS.fetch(request);if(asset.ok)return new HTMLRewriter().on("body",{element(el){el.append('<script src="/ws-route-fix.js?v=2" defer></script><script src="/app-enhance-v4.js?v=4" defer></script><script src="/ui-patch.js?v=4" defer></script><script src="/yprxy-fix-v5.js?v=1" defer></script><script src="/profile-fix.js?v=2" defer></script>',{html:true})}}).transform(asset)}
+if(request.method==="GET"&&acceptsHtml(request)){const asset=await env.ASSETS.fetch(request);if(asset.ok)return new HTMLRewriter().on("body",{element(el){el.append('<script src="/performance.js?v=1" defer></script><script src="/ws-route-fix.js?v=2" defer></script><script src="/app-enhance-v4.js?v=5" defer></script><script src="/ui-patch.js?v=4" defer></script><script src="/yprxy-fix-v5.js?v=1" defer></script><script src="/profile-fix.js?v=2" defer></script>',{html:true})}}).transform(asset)}
 return legacyWorker.fetch(request,env,ctx);
 }catch(error){console.error("V2 WORKER ERROR:",error?.stack||error);return json({success:false,error:"Internal server error"},500)}}};
 function isWebSocket(r){return r.method==="GET"&&r.headers.get("Upgrade")?.toLowerCase()==="websocket"}
