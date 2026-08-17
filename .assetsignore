@@ -1,0 +1,8 @@
+# Never publish server/config internals as static assets
+worker.js
+worker-v2.js
+wrangler.jsonc
+wrangler.toml
+.git/**
+.wrangler/**
+ems copy/**
