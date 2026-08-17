@@ -1,451 +1,1702 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Yaqub's Hub — Official</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0b0d12">
+<title>Yaqub's Hub</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#02040a;--panel:rgba(10,14,22,.82);--line:rgba(255,255,255,.09);--muted:#8892a5;--danger:#ff4b67;--warn:#ffd76a}
-html{scroll-behavior:smooth}
-body{min-height:100vh;padding-bottom:100px;background:var(--bg);color:#fff;font:15px Arial,Helvetica,sans-serif;overflow-x:hidden}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-#stars{position:fixed;inset:0;z-index:-2}
-.glow{position:fixed;width:300px;height:300px;border-radius:50%;pointer-events:none;z-index:-1;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(110,150,255,.11),transparent 68%);filter:blur(8px)}
-.glass{background:linear-gradient(180deg,rgba(19,23,33,.88),rgba(7,10,16,.9));border:1px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 24px 70px rgba(0,0,0,.28)}
-#access{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 20%,rgba(90,120,220,.14),transparent 42%),#02040a}
-.box{width:min(440px,100%);padding:30px;border-radius:24px;text-align:center}
-.box h1{font-size:32px;margin:8px 0}
-.muted{color:var(--muted)}
-input,textarea{width:100%;padding:13px;background:#080b12;border:1px solid var(--line);border-radius:12px;color:#fff;outline:none}
-input:focus,textarea:focus{border-color:rgba(255,255,255,.24);box-shadow:0 0 0 4px rgba(100,130,255,.06)}
-.btn{border:0;border-radius:12px;padding:12px 14px;font-weight:800}
-.primary{background:#f3f5fb;color:#090b10}
-.secondary{background:rgba(255,255,255,.05);color:#fff;border:1px solid var(--line)}
-.danger{background:var(--danger);color:#fff}
-#enter{width:100%;margin-top:10px}
-#error{display:none;color:#ff7b8d;margin-top:10px;font-weight:700}
-#app{display:none;padding:18px}
-header{text-align:center;max-width:1100px;margin:auto;padding:40px 10px 25px}
-header h1{font-size:clamp(38px,8vw,72px);letter-spacing:-.04em}
-header p{margin-top:8px;color:var(--muted)}
-.search{max-width:700px;margin:0 auto 30px}
-#search{font-size:16px;padding:15px 17px}
-.category{max-width:1100px;margin:0 auto 32px}
-.category h2{font-size:24px;border-left:3px solid rgba(255,255,255,.8);padding-left:12px;margin-bottom:13px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:11px}
-.card{display:block;padding:16px;border-radius:15px;color:#fff;text-decoration:none;background:rgba(12,16,24,.72);border:1px solid var(--line);position:relative;overflow:hidden;transition:.22s}
-.card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2);box-shadow:0 16px 42px rgba(0,0,0,.22)}
-.card::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(150,180,255,.12),transparent 35%);transition:.2s}
-.card:hover::after{opacity:1}
-.num{color:#687187;font-size:11px;margin-bottom:7px}.url{font-weight:700;word-break:break-all;position:relative;z-index:1}
-footer{text-align:center;color:#596174;padding:30px}
-#nav{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:40;width:min(760px,calc(100% - 20px));display:flex;gap:7px;padding:8px;border-radius:23px}
-.nav{flex:1;padding:9px 6px;border:0;background:transparent;color:#70798b;border-radius:16px}.nav.active,.nav:hover{background:rgba(255,255,255,.07);color:#fff}.ni{display:block;font-size:23px;margin-bottom:4px}.nl{font-size:11px;font-weight:800}
-.modal{position:fixed;inset:0;z-index:45;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.modal.show{display:flex}
-.modalBox{width:min(900px,100%);max-height:92vh;overflow:auto;border-radius:22px}
-.small{width:min(440px,100%)}
-.mh{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
-.mb{padding:18px}
-.close{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:#fff}
-.form{display:grid;gap:10px}
-.rows{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
-.rows:last-child{border:0}
-.lab{color:var(--muted)}
-.val{text-align:right}
-#msg{min-height:20px;text-align:center;color:#aab3c4;margin-bottom:10px}
-.actions{display:flex;gap:8px}
-.actions>*{flex:1}
-.tabs{display:flex;gap:8px;margin-bottom:14px}
-.tab{padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#9da7b8}
-.tab.active{background:#f3f5fb;color:#090b10}
-.section{display:none}
-.section.active{display:block}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
-.stat{padding:14px;border:1px solid var(--line);border-radius:13px}
-.stat small{display:block;color:var(--muted);margin-bottom:4px}
-.stat strong{font-size:24px}
-.list{display:grid;gap:10px}
-.item{padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
-.top{display:flex;justify-content:space-between;gap:12px}
-.meta{margin-top:7px;color:var(--muted);font-size:12px;word-break:break-word}
-.mini-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
-.mini-actions button{border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;border-radius:9px;padding:8px 10px}
-.chat{display:flex;flex-direction:column;height:70vh}
-.messages{flex:1;overflow:auto;display:flex;flex-direction:column;gap:9px;padding:10px}
-.composer{display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--line)}
-.composer textarea{flex:1;min-height:45px;max-height:120px;resize:vertical}
-.chatMsg{max-width:82%;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035)}
-.chatMsg.mine{align-self:flex-end;background:rgba(100,130,255,.09)}
-.chatMeta{color:#70798b;font-size:11px;margin-bottom:4px}
-.chatText{white-space:pre-wrap;overflow-wrap:anywhere}
-#toast{position:fixed;right:18px;bottom:95px;z-index:60;display:none;max-width:340px;padding:13px 16px;background:rgba(16,18,26,.95);border:1px solid var(--line);border-radius:13px;color:#fff;font-weight:750;box-shadow:0 18px 55px rgba(0,0,0,.4)}
-@media(max-width:600px){
-#app{padding:14px}.box{padding:24px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}
-.rows{display:grid;gap:4px}.val{text-align:left}.composer{flex-direction:column}.nl{font-size:10px}
+:root{
+    --bg:#0b0d12;
+    --bg2:#080a0f;
+    --sidebar:#11141a;
+    --panel:#171a21;
+    --panel2:#1d2129;
+    --hover:#252a34;
+    --line:rgba(255,255,255,.07);
+    --text:#f2f3f5;
+    --muted:#949baa;
+    --muted2:#666d7b;
+    --accent:#7289da;
+    --accent2:#8298ef;
+    --danger:#ed4245;
+    --success:#43b581;
+    --warning:#faa61a;
+    --ease:cubic-bezier(.2,.8,.2,1);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 15% 0%,rgba(114,137,218,.09),transparent 28%),
+        radial-gradient(circle at 100% 100%,rgba(88,101,242,.05),transparent 24%),
+        var(--bg);
+    color:var(--text);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+}
+
+button,input,textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+.hidden{
+    display:none !important;
+}
+
+/* background */
+#starCanvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-3;
+    pointer-events:none;
+}
+
+#mouseGlow{
+    position:fixed;
+    width:260px;
+    height:260px;
+    left:50%;
+    top:30%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(114,137,218,.085),transparent 70%);
+    filter:blur(7px);
+    pointer-events:none;
+    z-index:-2;
+    transition:left .12s ease-out,top .12s ease-out;
+}
+
+/* access */
+#access{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:
+        radial-gradient(circle at 50% 15%,rgba(114,137,218,.15),transparent 35%),
+        #080a0f;
+}
+
+.accessBox{
+    width:min(430px,100%);
+    padding:34px;
+    background:linear-gradient(180deg,rgba(27,31,41,.96),rgba(14,17,23,.98));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    box-shadow:0 35px 100px rgba(0,0,0,.6);
+    text-align:center;
+    animation:accessIn .65s var(--ease);
+}
+
+.accessLogo{
+    width:68px;
+    height:68px;
+    margin:0 auto 17px;
+    display:grid;
+    place-items:center;
+    border-radius:20px;
+    background:linear-gradient(135deg,#7289da,#5865f2);
+    box-shadow:0 16px 40px rgba(88,101,242,.23);
+    font-size:30px;
+}
+
+.accessBox h1{
+    font-size:30px;
+    letter-spacing:-.04em;
+}
+
+.accessBox p{
+    margin-top:8px;
+    margin-bottom:22px;
+    color:var(--muted);
+    line-height:1.5;
+}
+
+#accessPass{
+    width:100%;
+    padding:14px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#0b0e14;
+    color:#fff;
+    outline:none;
+    transition:.2s;
+}
+
+#accessPass:focus{
+    border-color:rgba(114,137,218,.65);
+    box-shadow:0 0 0 4px rgba(114,137,218,.09);
+}
+
+#enter{
+    width:100%;
+    margin-top:10px;
+}
+
+#error{
+    display:none;
+    margin-top:10px;
+    color:#ff7182;
+    font-size:13px;
+    font-weight:800;
+}
+
+/* app */
+#app{
+    display:none;
+    min-height:100vh;
+    padding-bottom:92px;
+}
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    min-height:68px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    padding:0 25px;
+    background:rgba(11,13,18,.88);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+}
+
+.brandBlock h1{
+    font-size:20px;
+    font-weight:900;
+    letter-spacing:-.03em;
+}
+
+.brandBlock p{
+    margin-top:2px;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.statusPill{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 10px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    color:#c0c5cf;
+    background:rgba(255,255,255,.03);
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.05em;
+}
+
+.statusDot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--success);
+    box-shadow:0 0 10px rgba(67,181,129,.55);
+}
+
+.searchWrap{
+    max-width:1120px;
+    margin:20px auto 25px;
+    padding:0 18px;
+}
+
+#search{
+    width:100%;
+    padding:14px 16px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#0e1117;
+    color:#fff;
+    outline:none;
+    transition:.2s;
+}
+
+#search:focus{
+    border-color:rgba(114,137,218,.5);
+    box-shadow:0 0 0 4px rgba(114,137,218,.08);
+}
+
+/* categories */
+#links{
+    max-width:1120px;
+    margin:auto;
+    padding:0 18px;
+}
+
+.category{
+    margin-bottom:31px;
+    animation:riseIn .5s var(--ease) both;
+}
+
+.categoryTitle{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:12px;
+    color:#dfe2e8;
+    font-size:17px;
+    font-weight:900;
+    letter-spacing:-.015em;
+}
+
+.categoryTitle::after{
+    content:"";
+    flex:1;
+    height:1px;
+    margin-left:4px;
+    background:linear-gradient(90deg,rgba(255,255,255,.08),transparent);
+}
+
+.linkGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(235px,1fr));
+    gap:9px;
+}
+
+.linkCard{
+    position:relative;
+    display:block;
+    overflow:hidden;
+    padding:15px;
+    border:1px solid rgba(255,255,255,.055);
+    border-radius:11px;
+    background:#14171e;
+    transition:
+        transform .19s var(--ease),
+        background .19s ease,
+        border-color .19s ease,
+        box-shadow .19s ease;
+}
+
+.linkCard::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    opacity:0;
+    pointer-events:none;
+    background:radial-gradient(
+        circle at var(--mx,50%) var(--my,50%),
+        rgba(114,137,218,.12),
+        transparent 40%
+    );
+    transition:opacity .18s;
+}
+
+.linkCard:hover{
+    transform:translateY(-3px) scale(1.018);
+    background:#1a1e26;
+    border-color:rgba(114,137,218,.28);
+    box-shadow:0 14px 34px rgba(0,0,0,.22);
+}
+
+.linkCard:hover::after{
+    opacity:1;
+}
+
+.linkNumber{
+    position:relative;
+    z-index:1;
+    margin-bottom:6px;
+    color:var(--muted2);
+    font-size:10px;
+    font-weight:900;
+}
+
+.linkURL{
+    position:relative;
+    z-index:1;
+    color:#e8eaf0;
+    font-size:13px;
+    font-weight:700;
+    line-height:1.45;
+    word-break:break-all;
+}
+
+.incomplete{
+    cursor:default;
+}
+
+.incomplete .linkURL{
+    color:#aab1bf;
+}
+
+.incomplete .warningText{
+    position:relative;
+    z-index:1;
+    margin-top:8px;
+    color:var(--warning);
+    font-size:11px;
+    font-weight:800;
+}
+
+/* bottom nav */
+#nav{
+    position:fixed;
+    left:50%;
+    bottom:12px;
+    transform:translateX(-50%);
+    z-index:5000;
+    width:min(720px,calc(100% - 18px));
+    display:flex;
+    gap:5px;
+    padding:7px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    background:rgba(17,20,27,.94);
+    box-shadow:0 18px 55px rgba(0,0,0,.42);
+    backdrop-filter:blur(17px);
+    -webkit-backdrop-filter:blur(17px);
+    animation:navIn .6s var(--ease);
+}
+
+.navButton{
+    flex:1;
+    min-width:0;
+    padding:8px 6px;
+    border:0;
+    border-radius:13px;
+    background:transparent;
+    color:#717887;
+    transition:.18s var(--ease);
+}
+
+.navButton:hover{
+    color:#e3e5e9;
+    background:rgba(255,255,255,.045);
+    transform:translateY(-1px);
+}
+
+.navButton.active{
+    color:#fff;
+    background:rgba(114,137,218,.14);
+}
+
+.navIcon{
+    display:block;
+    margin-bottom:4px;
+    font-size:19px;
+}
+
+.navLabel{
+    display:block;
+    font-size:10px;
+    font-weight:900;
+}
+
+/* modals */
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:8000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    background:rgba(4,5,8,.75);
+    backdrop-filter:blur(13px);
+    -webkit-backdrop-filter:blur(13px);
+}
+
+.modal.show{
+    display:flex;
+    animation:fadeIn .18s ease;
+}
+
+.modalBox{
+    width:min(920px,100%);
+    max-height:90vh;
+    overflow:auto;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:19px;
+    background:linear-gradient(180deg,#191d25,#11141a);
+    box-shadow:0 35px 110px rgba(0,0,0,.58);
+    animation:modalIn .27s var(--ease);
+}
+
+.smallModal{
+    width:min(460px,100%);
+}
+
+.modalHeader{
+    position:sticky;
+    top:0;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 18px;
+    background:rgba(25,29,37,.95);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+}
+
+.modalHeader h2{
+    font-size:17px;
+    font-weight:900;
+}
+
+.closeButton{
+    display:grid;
+    place-items:center;
+    width:36px;
+    height:36px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:rgba(255,255,255,.04);
+    color:#bac0cb;
+    transition:.18s;
+}
+
+.closeButton:hover{
+    background:rgba(237,66,69,.1);
+    color:#fff;
+    transform:scale(1.05);
+}
+
+.modalBody{
+    padding:18px;
+}
+
+/* account */
+.accountForm{
+    display:grid;
+    gap:9px;
+}
+
+.accountForm input{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    background:#0d1015;
+    color:#fff;
+    outline:none;
+    transition:.2s;
+}
+
+.accountForm input:focus{
+    border-color:rgba(114,137,218,.5);
+    box-shadow:0 0 0 4px rgba(114,137,218,.08);
+}
+
+.accountButtons{
+    display:grid;
+    gap:8px;
+    margin-top:2px;
+}
+
+.btn{
+    width:100%;
+    padding:12px 14px;
+    border-radius:11px;
+    font-weight:900;
+    transition:.18s var(--ease);
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.primary{
+    border:0;
+    background:var(--accent);
+    color:#fff;
+}
+
+.primary:hover{
+    background:var(--accent2);
+    box-shadow:0 10px 25px rgba(114,137,218,.2);
+}
+
+.secondary{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.045);
+    color:#fff;
+}
+
+.secondary:hover{
+    background:rgba(255,255,255,.075);
+}
+
+.danger{
+    border:0;
+    background:var(--danger);
+    color:#fff;
+}
+
+.accountNote{
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.5;
+    text-align:center;
+}
+
+.accountCard{
+    padding:15px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:rgba(255,255,255,.02);
+}
+
+.accountRow{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:11px 0;
+    border-bottom:1px solid var(--line);
+}
+
+.accountRow:last-child{
+    border-bottom:0;
+}
+
+.accountLabel{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.accountValue{
+    color:#e7e9ed;
+    font-size:12px;
+    font-weight:800;
+    text-align:right;
+    word-break:break-word;
+}
+
+/* chat */
+.chatWindow{
+    display:flex;
+    flex-direction:column;
+    height:min(68vh,650px);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    background:#11141a;
+}
+
+#messages{
+    flex:1;
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    padding:12px 10px;
+}
+
+.chatMessage{
+    max-width:min(80%,680px);
+    padding:9px 11px;
+    border-radius:10px;
+    background:rgba(255,255,255,.025);
+    transition:.18s;
+}
+
+.chatMessage.mine{
+    align-self:flex-end;
+    background:rgba(114,137,218,.12);
+}
+
+.chatMessage:hover{
+    background:rgba(255,255,255,.05);
+}
+
+.chatMeta{
+    margin-bottom:3px;
+    color:var(--muted);
+    font-size:10px;
+    font-weight:800;
+}
+
+.chatText{
+    color:#eaebee;
+    line-height:1.45;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+}
+
+.chatComposer{
+    display:flex;
+    gap:8px;
+    padding:10px;
+    border-top:1px solid var(--line);
+    background:#0f1217;
+}
+
+#chatInput{
+    flex:1;
+    min-height:44px;
+    max-height:120px;
+    resize:vertical;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:#090c11;
+    color:#fff;
+    outline:none;
+}
+
+#chatSend{
+    width:85px;
+    flex:0 0 auto;
+}
+
+/* report */
+.reportIcon{
+    text-align:center;
+    font-size:42px;
+    margin-bottom:7px;
+}
+
+.reportTitle{
+    text-align:center;
+    font-size:20px;
+    font-weight:900;
+}
+
+#reportUrl{
+    margin:13px 0 20px;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:#0d1015;
+    color:var(--muted);
+    font-size:11px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.reportActions{
+    display:flex;
+    gap:8px;
+}
+
+.reportActions>*{
+    flex:1;
+}
+
+/* admin */
+.adminTabs{
+    display:flex;
+    gap:5px;
+    margin-bottom:13px;
+    border-bottom:1px solid var(--line);
+}
+
+.adminTab{
+    padding:9px 12px;
+    border:0;
+    border-radius:10px 10px 0 0;
+    background:transparent;
+    color:var(--muted);
+    font-size:12px;
+    font-weight:900;
+}
+
+.adminTab:hover{
+    color:#fff;
+    background:rgba(255,255,255,.04);
+}
+
+.adminTab.active{
+    color:#fff;
+    background:rgba(114,137,218,.13);
+}
+
+.adminSection{
+    display:none;
+}
+
+.adminSection.active{
+    display:block;
+    animation:panelIn .23s var(--ease);
+}
+
+.adminStats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+    margin-bottom:11px;
+}
+
+.stat{
+    padding:13px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:rgba(255,255,255,.025);
+}
+
+.stat small{
+    display:block;
+    margin-bottom:4px;
+    color:var(--muted);
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
+}
+
+.stat strong{
+    font-size:22px;
+}
+
+.adminList{
+    display:grid;
+    gap:8px;
+}
+
+.adminItem{
+    padding:14px;
+    border:1px solid var(--line);
+    border-radius:13px;
+    background:rgba(255,255,255,.025);
+}
+
+.adminTop{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.adminMeta{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:11px;
+    word-break:break-word;
+}
+
+.adminActions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:10px;
+}
+
+.adminActions button{
+    padding:7px 9px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:rgba(255,255,255,.04);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+}
+
+.adminActions button:hover{
+    background:rgba(255,255,255,.08);
+    transform:translateY(-1px);
+}
+
+/* toast */
+#toast{
+    position:fixed;
+    right:17px;
+    bottom:92px;
+    z-index:12000;
+    display:none;
+    max-width:340px;
+    padding:12px 15px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    background:rgba(18,21,28,.97);
+    color:#fff;
+    font-size:13px;
+    font-weight:800;
+    box-shadow:0 18px 50px rgba(0,0,0,.42);
+    animation:toastIn .25s var(--ease);
+}
+
+/* animations */
+@keyframes accessIn{
+    from{opacity:0;transform:translateY(16px) scale(.97)}
+    to{opacity:1;transform:none}
+}
+
+@keyframes riseIn{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:none}
+}
+
+@keyframes navIn{
+    from{opacity:0;transform:translate(-50%,20px)}
+    to{opacity:1;transform:translate(-50%,0)}
+}
+
+@keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+}
+
+@keyframes modalIn{
+    from{opacity:0;transform:translateY(12px) scale(.97)}
+    to{opacity:1;transform:none}
+}
+
+@keyframes panelIn{
+    from{opacity:0;transform:translateY(5px)}
+    to{opacity:1;transform:none}
+}
+
+@keyframes toastIn{
+    from{opacity:0;transform:translateY(8px) scale(.98)}
+    to{opacity:1;transform:none}
+}
+
+@media(max-width:760px){
+    .topbar{
+        min-height:62px;
+        padding:0 16px;
+    }
+
+    .brandBlock h1{
+        font-size:18px;
+    }
+
+    .brandBlock p{
+        display:none;
+    }
+
+    .statusPill{
+        padding:6px 8px;
+    }
+
+    .searchWrap{
+        padding:0 12px;
+        margin-top:16px;
+    }
+
+    #links{
+        padding:0 12px;
+    }
+
+    .linkGrid{
+        grid-template-columns:1fr;
+    }
+
+    .modal{
+        align-items:flex-end;
+        padding:8px;
+    }
+
+    .modalBox,
+    .smallModal{
+        width:100%;
+        max-height:92vh;
+        border-radius:18px 18px 12px 12px;
+        animation:mobileModalIn .28s var(--ease);
+    }
+
+    .adminStats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .accountRow{
+        display:grid;
+        gap:4px;
+    }
+
+    .accountValue{
+        text-align:left;
+    }
+
+    .chatWindow{
+        height:68vh;
+    }
+}
+
+@keyframes mobileModalIn{
+    from{opacity:0;transform:translateY(25px)}
+    to{opacity:1;transform:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+    *,
+    *::before,
+    *::after{
+        animation-duration:.001ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.001ms !important;
+        scroll-behavior:auto !important;
+    }
 }
 </style>
-</head>
 
-<body>
+<canvas id="starCanvas"></canvas>
 
-<canvas id="stars"></canvas>
-
-<div class="glow" id="glow"></div>
+<div id="mouseGlow"></div>
 
 <div id="access">
-  <div class="box glass">
-    <div style="font-size:50px">🔐</div>
-    <h1>Private Hub</h1>
-    <p class="muted">Verified accounts can skip this screen.</p>
-    <input id="accessPass" type="password" placeholder="Access password" autocomplete="off">
-    <button id="enter" class="btn primary" type="button">Enter</button>
-    <div id="error">❌ Incorrect password</div>
-  </div>
+    <div class="accessBox">
+
+```
+    <div class="accessLogo">🌐</div>
+
+    <h1>Welcome back</h1>
+
+    <p>
+        Enter the access password to continue.
+        Verified accounts can skip this screen.
+    </p>
+
+    <input
+        id="accessPass"
+        type="password"
+        placeholder="Access password"
+        autocomplete="off"
+    >
+
+    <button
+        id="enter"
+        class="btn primary"
+        type="button"
+    >
+        Enter Hub
+    </button>
+
+    <div id="error">
+        ❌ Incorrect password
+    </div>
+
+</div>
+```
+
 </div>
 
 <div id="app">
-<header>
-  <h1>🌐 Link Hub</h1>
-  <p>Official release</p>
+
+```
+<header class="topbar">
+
+    <div class="brandBlock">
+
+        <h1>
+            🌐 Yaqub's Hub
+        </h1>
+
+        <p>
+            Official release
+        </p>
+
+    </div>
+
+    <div class="statusPill">
+        <span class="statusDot"></span>
+        ONLINE
+    </div>
+
 </header>
 
-<div class="search">
-  <input id="search" type="text" placeholder="🔎 Search links...">
+
+<div class="searchWrap">
+
+    <input
+        id="search"
+        type="text"
+        placeholder="🔎 Search links..."
+        autocomplete="off"
+    >
+
 </div>
+
 
 <main id="links"></main>
 
-<footer>Yaqub's Hub • Official Release</footer>
+
+<footer>
+    Yaqub's Hub • Official Release
+</footer>
+```
+
 </div>
 
-<nav id="nav" class="glass">
+<nav id="nav">
 
-  <button class="nav active" id="linksNav" type="button">
-    <span class="ni">🔗</span>
-    <span class="nl">Links</span>
-  </button>
+```
+<button
+    id="linksNav"
+    class="navButton active"
+    type="button"
+>
+    <span class="navIcon">🔗</span>
+    <span class="navLabel">Links</span>
+</button>
 
-  <button class="nav" id="chatNav" type="button">
-    <span class="ni">💬</span>
-    <span class="nl">Chat</span>
-  </button>
+<button
+    id="chatNav"
+    class="navButton"
+    type="button"
+>
+    <span class="navIcon">💬</span>
+    <span class="navLabel">Chat</span>
+</button>
 
-  <button class="nav" id="adminNav" type="button" style="display:none">
-    <span class="ni">🤖</span>
-    <span class="nl">Admin</span>
-  </button>
+<button
+    id="adminNav"
+    class="navButton"
+    type="button"
+    style="display:none"
+>
+    <span class="navIcon">🤖</span>
+    <span class="navLabel">Admin</span>
+</button>
 
-  <button class="nav" id="accountNav" type="button">
-    <span class="ni">👤</span>
-    <span class="nl">Account</span>
-  </button>
+<button
+    id="accountNav"
+    class="navButton"
+    type="button"
+>
+    <span class="navIcon">👤</span>
+    <span class="navLabel">Account</span>
+</button>
+```
 
 </nav>
 
-<div class="modal" id="accountModal">
- <div class="modalBox small glass">
-  <div class="mh">
-    <h2>👤 Account</h2>
-    <button class="close" data-close="accountModal" type="button">✕</button>
-  </div>
-
-  <div class="mb">
-
-   <div id="msg"></div>
-
-   <div id="signup">
-    <div class="form">
-
-```
- <input id="su" type="text" placeholder="Username" autocomplete="username">
- <input id="sd" type="text" placeholder="Display name">
- <input id="sr" type="text" placeholder="Real name">
- <input id="sp" type="password" placeholder="Password" autocomplete="new-password">
-
- <button id="signupBtn" class="btn primary" type="button">
-   Create Account
- </button>
-
- <button id="toLogin" class="btn secondary" type="button">
-   Already have an account? Login
- </button>
-
- <small class="muted">
-   Username + password only. No email.
- </small>
-
-</div>
-```
-
-   </div>
-
-   <div id="login" style="display:none">
-    <div class="form">
-
-```
- <input id="lu" type="text" placeholder="Username" autocomplete="username">
- <input id="lp" type="password" placeholder="Password" autocomplete="current-password">
-
- <button id="loginBtn" class="btn primary" type="button">
-   Login
- </button>
-
- <button id="toSignup" class="btn secondary" type="button">
-   Create an account
- </button>
-
-</div>
-```
-
-   </div>
-
-   <div id="account" style="display:none">
-
-```
-<div class="item">
-
- <div class="rows">
-   <span class="lab">Username</span>
-   <span id="aU" class="val"></span>
- </div>
-
- <div class="rows">
-   <span class="lab">Display name</span>
-   <span id="aD" class="val"></span>
- </div>
-
- <div class="rows">
-   <span class="lab">Role</span>
-   <span id="aR" class="val"></span>
- </div>
-
- <div class="rows">
-   <span class="lab">Status</span>
-   <span id="aS" class="val"></span>
- </div>
-
- <div class="rows">
-   <span class="lab">Verified</span>
-   <span id="aV" class="val"></span>
- </div>
-
- <br>
-
- <button id="logout" class="btn secondary" type="button">
-   Log Out
- </button>
-
-</div>
-```
-
-   </div>
-
-  </div>
- </div>
-</div>
-
-<div class="modal" id="reportModal">
- <div class="modalBox small glass">
-
-  <div class="mh">
-    <h2>⚠️ Report</h2>
-    <button class="close" data-close="reportModal" type="button">✕</button>
-  </div>
-
-  <div class="mb">
-
-   <div style="text-align:center;font-size:42px;margin-bottom:10px">
-     ⚠️
-   </div>
-
-   <div style="text-align:center;font-size:20px;font-weight:900;margin-bottom:9px">
-     Report this link as blocked?
-   </div>
-
-   <div
-     id="reportUrl"
-     style="text-align:center;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:22px"
-   ></div>
-
-   <div class="actions">
-
-```
- <button
-   id="cancelReport"
-   class="btn secondary"
-   type="button"
- >
-   Cancel
- </button>
-
- <button
-   id="sendReport"
-   class="btn danger"
-   type="button"
- >
-   Report
- </button>
-```
-
-   </div>
-
-  </div>
- </div>
-</div>
-
-<div class="modal" id="chatModal">
- <div class="modalBox glass">
-
-  <div class="mh">
-    <h2>💬 Live Chat</h2>
-    <button class="close" data-close="chatModal" type="button">✕</button>
-  </div>
-
-  <div class="mb">
-
-   <div class="chat">
-
-```
-<div id="messages" class="messages">
-  <div class="muted" style="text-align:center;padding:20px">
-    Live chat UI is ready.
-  </div>
-</div>
-
-<div class="composer">
-
-  <textarea
-    id="chatInput"
-    maxlength="1000"
-    placeholder="Type a message..."
-  ></textarea>
-
-  <button
-    id="chatSend"
-    class="btn primary"
-    type="button"
-  >
-    Send
-  </button>
-
-</div>
-```
-
-   </div>
-
-  </div>
- </div>
-</div>
-
-<div class="modal" id="adminModal">
- <div class="modalBox glass">
-
-  <div class="mh">
-    <h2>🤖 Admin Panel</h2>
-    <button class="close" data-close="adminModal" type="button">✕</button>
-  </div>
-
-  <div class="mb">
-
-   <div class="tabs">
-
-```
-<button
-  class="tab active"
-  data-tab="reports"
-  type="button"
->
-  🚨 Reports
-</button>
-
-<button
-  class="tab"
-  data-tab="users"
-  type="button"
->
-  👥 Users
-</button>
-```
-
-   </div>
-
-   <section
-     id="reportsSection"
-     class="section active"
-   >
-
-```
-<div class="stats">
-
-  <div class="stat">
-    <small>Reported links</small>
-    <strong id="rc">0</strong>
-  </div>
-
-  <div class="stat">
-    <small>Total reports</small>
-    <strong id="tr">0</strong>
-  </div>
-
-</div>
+<!-- ACCOUNT -->
 
 <div
-  id="reportsList"
-  class="list"
+    id="accountModal"
+    class="modal"
 >
-  Loading...
+
+```
+<div class="modalBox smallModal">
+
+    <div class="modalHeader">
+
+        <h2>
+            👤 Account
+        </h2>
+
+        <button
+            class="closeButton"
+            data-close="accountModal"
+            type="button"
+        >
+            ✕
+        </button>
+
+    </div>
+
+
+    <div class="modalBody">
+
+        <div
+            id="msg"
+            style="
+                min-height:20px;
+                margin-bottom:12px;
+                color:#969dac;
+                text-align:center;
+                font-size:12px;
+                font-weight:800;
+            "
+        ></div>
+
+
+        <div id="signup">
+
+            <div class="accountForm">
+
+                <input
+                    id="su"
+                    type="text"
+                    placeholder="Username"
+                    autocomplete="username"
+                >
+
+                <input
+                    id="sd"
+                    type="text"
+                    placeholder="Display name"
+                >
+
+                <input
+                    id="sr"
+                    type="text"
+                    placeholder="Real name"
+                >
+
+                <input
+                    id="sp"
+                    type="password"
+                    placeholder="Password"
+                    autocomplete="new-password"
+                >
+
+                <div class="accountButtons">
+
+                    <button
+                        id="signupBtn"
+                        class="btn primary"
+                        type="button"
+                    >
+                        Create Account
+                    </button>
+
+                    <button
+                        id="toLogin"
+                        class="btn secondary"
+                        type="button"
+                    >
+                        Already have an account? Login
+                    </button>
+
+                </div>
+
+                <div class="accountNote">
+                    Username + password only. No email required.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="login"
+            style="display:none"
+        >
+
+            <div class="accountForm">
+
+                <input
+                    id="lu"
+                    type="text"
+                    placeholder="Username"
+                    autocomplete="username"
+                >
+
+                <input
+                    id="lp"
+                    type="password"
+                    placeholder="Password"
+                    autocomplete="current-password"
+                >
+
+                <div class="accountButtons">
+
+                    <button
+                        id="loginBtn"
+                        class="btn primary"
+                        type="button"
+                    >
+                        Login
+                    </button>
+
+                    <button
+                        id="toSignup"
+                        class="btn secondary"
+                        type="button"
+                    >
+                        Create an account
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="account"
+            style="display:none"
+        >
+
+            <div class="accountCard">
+
+                <div class="accountRow">
+
+                    <span class="accountLabel">
+                        Username
+                    </span>
+
+                    <span
+                        id="aU"
+                        class="accountValue"
+                    ></span>
+
+                </div>
+
+
+                <div class="accountRow">
+
+                    <span class="accountLabel">
+                        Display name
+                    </span>
+
+                    <span
+                        id="aD"
+                        class="accountValue"
+                    ></span>
+
+                </div>
+
+
+                <div class="accountRow">
+
+                    <span class="accountLabel">
+                        Role
+                    </span>
+
+                    <span
+                        id="aR"
+                        class="accountValue"
+                    ></span>
+
+                </div>
+
+
+                <div class="accountRow">
+
+                    <span class="accountLabel">
+                        Status
+                    </span>
+
+                    <span
+                        id="aS"
+                        class="accountValue"
+                    ></span>
+
+                </div>
+
+
+                <div class="accountRow">
+
+                    <span class="accountLabel">
+                        Verified
+                    </span>
+
+                    <span
+                        id="aV"
+                        class="accountValue"
+                    ></span>
+
+                </div>
+
+
+                <div style="margin-top:14px">
+
+                    <button
+                        id="logout"
+                        class="btn secondary"
+                        type="button"
+                    >
+                        Log Out
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 ```
 
-   </section>
+</div>
 
-   <section
-     id="usersSection"
-     class="section"
-   >
+<!-- CHAT -->
 
-```
 <div
-  id="usersList"
-  class="list"
+    id="chatModal"
+    class="modal"
 >
-  Loading...
+
+```
+<div class="modalBox">
+
+    <div class="modalHeader">
+
+        <div>
+
+            <h2>
+                💬 Live Chat
+            </h2>
+
+            <div
+                style="
+                    margin-top:3px;
+                    color:#687187;
+                    font-size:10px;
+                    font-weight:800;
+                "
+            >
+                Community
+            </div>
+
+        </div>
+
+
+        <button
+            class="closeButton"
+            data-close="chatModal"
+            type="button"
+        >
+            ✕
+        </button>
+
+    </div>
+
+
+    <div class="modalBody">
+
+        <div class="chatWindow">
+
+            <div
+                id="messages"
+            >
+
+                <div
+                    style="
+                        margin:auto;
+                        padding:25px;
+                        color:#697386;
+                        text-align:center;
+                    "
+                >
+                    <div
+                        style="
+                            font-size:34px;
+                            margin-bottom:9px;
+                        "
+                    >
+                        💬
+                    </div>
+
+                    <div
+                        style="
+                            color:#a3a9b5;
+                            font-weight:850;
+                        "
+                    >
+                        Welcome to chat
+                    </div>
+
+                    <div
+                        style="
+                            margin-top:5px;
+                            font-size:12px;
+                        "
+                    >
+                        Connect to start chatting.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="chatComposer">
+
+                <textarea
+                    id="chatInput"
+                    maxlength="1000"
+                    placeholder="Message the community..."
+                ></textarea>
+
+
+                <button
+                    id="chatSend"
+                    class="btn primary"
+                    type="button"
+                >
+                    Send
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 ```
 
-   </section>
-
-  </div>
- </div>
 </div>
 
-<div class="modal" id="accessUnavailable">
- <div class="modalBox small glass">
+<!-- REPORT -->
 
-  <div
-    class="mb"
-    style="text-align:center"
-  >
+<div
+    id="reportModal"
+    class="modal"
+>
 
-   <div style="font-size:42px">
-     🔒
-   </div>
+```
+<div class="modalBox smallModal">
 
-   <h2 style="margin:8px 0">
-     Access unavailable
-   </h2>
+    <div class="modalHeader">
 
-   <p class="muted">
-     Access is unavailable at this moment.
-   </p>
+        <h2>
+            ⚠️ Report Link
+        </h2>
 
-  </div>
+        <button
+            class="closeButton"
+            data-close="reportModal"
+            type="button"
+        >
+            ✕
+        </button>
 
- </div>
+    </div>
+
+
+    <div class="modalBody">
+
+        <div class="reportIcon">
+            ⚠️
+        </div>
+
+        <div class="reportTitle">
+            Report this link as blocked?
+        </div>
+
+        <div id="reportUrl"></div>
+
+        <div class="reportActions">
+
+            <button
+                id="cancelReport"
+                class="btn secondary"
+                type="button"
+            >
+                Cancel
+            </button>
+
+            <button
+                id="sendReport"
+                class="btn danger"
+                type="button"
+            >
+                Report
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- ADMIN -->
+
+<div
+    id="adminModal"
+    class="modal"
+>
+
+```
+<div class="modalBox">
+
+    <div class="modalHeader">
+
+        <div>
+
+            <h2>
+                🤖 Admin Panel
+            </h2>
+
+            <div
+                style="
+                    margin-top:3px;
+                    color:#687187;
+                    font-size:10px;
+                    font-weight:800;
+                "
+            >
+                Moderation & users
+            </div>
+
+        </div>
+
+
+        <button
+            class="closeButton"
+            data-close="adminModal"
+            type="button"
+        >
+            ✕
+        </button>
+
+    </div>
+
+
+    <div class="modalBody">
+
+        <div class="adminTabs">
+
+            <button
+                class="adminTab active"
+                data-tab="reports"
+                type="button"
+            >
+                🚨 Reports
+            </button>
+
+
+            <button
+                class="adminTab"
+                data-tab="users"
+                type="button"
+            >
+                👥 Users
+            </button>
+
+        </div>
+
+
+        <section
+            id="reportsSection"
+            class="adminSection active"
+        >
+
+            <div class="adminStats">
+
+                <div class="stat">
+
+                    <small>
+                        Reported Links
+                    </small>
+
+                    <strong id="rc">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <small>
+                        Total Reports
+                    </small>
+
+                    <strong id="tr">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="reportsList"
+                class="adminList"
+            >
+                Loading...
+            </div>
+
+        </section>
+
+
+        <section
+            id="usersSection"
+            class="adminSection"
+        >
+
+            <div
+                id="usersList"
+                class="adminList"
+            >
+                Loading...
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- ACCESS UNAVAILABLE -->
+
+<div
+    id="accessUnavailable"
+    class="modal"
+>
+
+```
+<div class="modalBox smallModal">
+
+    <div
+        class="modalBody"
+        style="text-align:center"
+    >
+
+        <div
+            style="
+                width:64px;
+                height:64px;
+                display:grid;
+                place-items:center;
+                margin:0 auto 13px;
+                border-radius:18px;
+                background:rgba(237,66,69,.1);
+                font-size:30px;
+            "
+        >
+            🔒
+        </div>
+
+        <h2>
+            Access unavailable
+        </h2>
+
+        <p
+            style="
+                margin-top:7px;
+                color:var(--muted);
+            "
+        >
+            Access is unavailable at this moment.
+        </p>
+
+    </div>
+
+</div>
+```
+
 </div>
 
 <div id="toast"></div>
@@ -454,1365 +1705,1478 @@ footer{text-align:center;color:#596174;padding:30px}
 (() => {
 "use strict";
 
+/* =========================================================
+   CONFIG
+========================================================= */
+
 const API =
-  "https://hehwhwhwhuuu.yaqubpapp1.workers.dev";
+    "https://hehwhwhwhuuu.yaqubpapp1.workers.dev";
 
 const ACCESS_PASSWORD =
-  "yaqubraphinha";
+    "yaqubraphinha";
 
-let user = null;
-let currentReport = null;
-let tries = 0;
+const MAX_ACCESS_ATTEMPTS =
+    3;
 
 
-/* ================= HELPERS ================= */
+/* =========================================================
+   STATE
+========================================================= */
 
-function esc(value) {
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
+let currentUser =
+    null;
 
-function toast(message) {
-  const element =
-    document.getElementById(
-      "toast"
-    );
+let currentReport =
+    null;
 
-  element.textContent =
-    message;
+let accessAttempts =
+    0;
 
-  element.style.display =
-    "block";
+let chatSocket =
+    null;
 
-  clearTimeout(
-    element._timer
-  );
+let chatReconnectTimer =
+    null;
 
-  element._timer =
-    setTimeout(
-      () => {
-        element.style.display =
-          "none";
-      },
-      3200
-    );
-}
-
-async function api(
-  path,
-  options = {}
-) {
-  const headers = {
-    "Content-Type":
-      "application/json",
-
-    ...(options.headers || {})
-  };
-
-  const response =
-    await fetch(
-      API + path,
-      {
-        ...options,
-        headers,
-        credentials: "include"
-      }
-    );
-
-  let data = {};
-
-  try {
-    data =
-      await response.json();
-  } catch {}
-
-  return {
-    response,
-    data
-  };
-}
-
-function show(id) {
-  document
-    .getElementById(id)
-    .classList.add("show");
-}
-
-function hide(id) {
-  document
-    .getElementById(id)
-    .classList.remove("show");
-}
-
-function active(id) {
-  document
-    .querySelectorAll(".nav")
-    .forEach(
-      item =>
-        item.classList.remove(
-          "active"
-        )
-    );
-
-  document
-    .getElementById(id)
-    ?.classList.add("active");
-}
-
-function admin() {
-  return Boolean(
-    user &&
-    user.role === "admin"
-  );
-}
-
-
-/* ================= DOM REFERENCES ================= */
-
-const accessPass =
-  document.getElementById(
-    "accessPass"
-  );
-
-const enterBtn =
-  document.getElementById(
-    "enter"
-  );
-
-const errorBox =
-  document.getElementById(
-    "error"
-  );
-
-const su =
-  document.getElementById("su");
-
-const sd =
-  document.getElementById("sd");
-
-const sr =
-  document.getElementById("sr");
-
-const sp =
-  document.getElementById("sp");
-
-const lu =
-  document.getElementById("lu");
-
-const lp =
-  document.getElementById("lp");
-
-const msg =
-  document.getElementById("msg");
-
-const rc =
-  document.getElementById("rc");
-
-const tr =
-  document.getElementById("tr");
-
-const reportUrlBox =
-  document.getElementById(
-    "reportUrl"
-  );
-
-
-/* ================= ICONS ================= */
-
-const icons = {
-  "Solara":"☀️",
-  "Triple T HD":"📺",
-  "Study Hub":"📚",
-  "StudyHub":"📖",
-  "TUNG TUNG":"🗿",
-  "TungTung":"🔔",
-  "Strawberry":"🍓",
-  "Space":"🚀",
-  "Utopia":"🌌",
-  "Lunar":"🌙",
-  "Voya":"🛸",
-  "Cherri":"🌐",
-  "Petezah":"🧩",
-  "Infamous":"✨",
-  "Xylora":"📚",
-  "Ford":"🚗",
-  "Yuki App":"🌸",
-  "T9":"9️⃣",
-  "Equinox":"🌗",
-  "Luicide":"💀",
-  "Interstellar":"🌠",
-  "Fern":"🌿",
-  "Galaxy V7":"🌌",
-  "Galaxy":"🌌",
-  "Overclocked":"⚡",
-  "Boredom":"😴",
-  "Selenite":"🔮",
-  "Velara":"🪐",
-  "Rosin":"🧪",
-  "Truffle":"🍄",
-  "Dogeub":"🐕",
-  "Frogie Arcade":"🐸",
-  "Other":"📦"
-};
-
-
-/* ================= LINK DATA ================= */
-
-const GROUPS = {
-  "Solara": [
-    "solaraname.robertschulze.name",
-    "like.krepche.com",
-    "no.deepee.com",
-    "just.flyredwing.ru",
-    "home.ayresinn.com",
-    "questionme.mrvillain.com",
-    "solara.glamourfreaks.com",
-    "schoolbook.berugy.hu",
-    "okiwell.adijaya.id",
-    "question.worldmicroscope.com",
-    "long.volticsolar.co.za",
-    "hmm.gynauto.ro",
-    "solora.blackmunk.com",
-    "club.claravia.cl",
-    "wouldget.priestella.xyz"
-  ],
-
-  "Triple T HD": [
-    "muchbe.robertschulze.name",
-    "okmuchok.krepche.com",
-    "cow.deepee.com",
-    "flyingcan.flyredwing.ru",
-    "armor.ayresinn.com",
-    "forthe.mrvillain.com",
-    "triplethd.glamourfreaks.com",
-    "dome.berugy.hu",
-    "mathgood.adijaya.id",
-    "crossing.worldmicroscope.com",
-    "question.volticsolar.co.za",
-    "who.claravia.cl",
-    "gyro.gynauto.ro",
-    "black.blackmunk.com"
-  ],
-
-  "Study Hub": [
-    "hub.robertschulze.name",
-    "coming.krepche.com",
-    "longtime.deepee.com",
-    "wecan.flyredwing.ru",
-    "quickie.ayresinn.com",
-    "goodget.mrvillain.com",
-    "getme.glamourfreaks.com",
-    "push.berugy.hu",
-    "homeme.adijaya.id",
-    "wipe.worldmicroscope.com",
-    "hound.volticsolar.co.za",
-    "class.claravia.cl",
-    "study.blackmunk.com",
-    "ro.gynauto.ro"
-  ],
-
-  "TUNG TUNG": [
-    "name.robertschulze.name",
-    "getme.krepche.com",
-    "gameplay.deepee.com",
-    "drink.flyredwing.ru",
-    "ttung.ayresinn.com",
-    "might.mrvillain.com",
-    "glass.glamourfreaks.com",
-    "hungry.berugy.hu",
-    "weget.adijaya.id",
-    "scope.worldmicroscope.com",
-    "volume.volticsolar.co.za",
-    "tryit.claravia.cl",
-    "him.gynauto.ro",
-    "tung.blackmunk.com"
-  ],
-
-  "Strawberry": [
-    "strawberry.robertschulze.name",
-    "message.krepche.com",
-    "deposit.deepee.com",
-    "run.flyredwing.ru",
-    "flying.ayresinn.com",
-    "following.mrvillain.com",
-    "cancel.adijaya.id",
-    "hillme.berugy.hu",
-    "stroberii.glamourfreaks.com",
-    "wider.worldmicroscope.com",
-    "coo.volticsolar.co.za",
-    "right.claravia.cl",
-    "hot.gynauto.ro",
-    "stroberri.blackmunk.com"
-  ],
-
-  "Space": [
-    "space.robertschulze.name",
-    "himm.krepche.com",
-    "canu.deepee.com",
-    "questionme.flyredwing.ru",
-    "around.ayresinn.com",
-    "main.mrvillain.com",
-    "total.berugy.hu",
-    "newget.glamourfreaks.com",
-    "science.adijaya.id",
-    "k.worldmicroscope.com",
-    "good.volticsolar.co.za",
-    "home.gynauto.ro",
-    "school.claravia.cl",
-    "space.blackmunk.com"
-  ],
-
-  "Utopia": [
-    "utopial.robertschulze.name",
-    "know.krepche.com",
-    "deeply.deepee.com",
-    "quickme.flyredwing.ru",
-    "com.ayresinn.com",
-    "zoomme.mrvillain.com",
-    "utopiame.glamourfreaks.com",
-    "matha.berugy.hu",
-    "andwe.adijaya.id",
-    "can.worldmicroscope.com",
-    "zoom.volticsolar.co.za",
-    "not.claravia.cl",
-    "work.gynauto.ro",
-    "utopia.blackmunk.com"
-  ],
-
-  "Lunar": [
-    "line.robertschulze.name",
-    "cancan.krepche.com",
-    "cooll.flyredwing.ru",
-    "questionss.deepee.com",
-    "not.ayresinn.com",
-    "sciencei.mrvillain.com",
-    "doingme.glamourfreaks.com",
-    "hill.berugy.hu",
-    "usas.adijaya.id",
-    "okwell.worldmicroscope.com",
-    "cool.volticsolar.co.za",
-    "cell.claravia.cl",
-    "info.gynauto.ro",
-    "lunar.blackmunk.com"
-  ],
-
-  "Voya": [
-    "voyame.robertschulze.name",
-    "butbut.krepche.com",
-    "quickquestion.flyredwing.ru",
-    "voyameem.deepee.com",
-    "letgo.ayresinn.com",
-    "voya.mrvillain.com",
-    "hillme.glamourfreaks.com",
-    "schoolmath.berugy.hu",
-    "questionme.adijaya.id",
-    "well.worldmicroscope.com",
-    "co.volticsolar.co.za",
-    "should.claravia.cl",
-    "in.gynauto.ro",
-    "science.blackmunk.com"
-  ],
-
-  "Cherri": [
-    "bull.psotc.org",
-    "wzlju.psotc.org",
-    "expzc.psotc.org",
-    "vlvw.psotc.org",
-    "fbw.psotc.org",
-    "lrfc.berugy.hu",
-    "psr.ghallonline.com",
-    "jaqrc.ayresinn.com",
-    "lyinm.localcito.com",
-    "sht.deepee.com",
-    "behind.cryptparty.com",
-    "mathbd.poloniacruz.com"
-  ],
-
-  "Infamous": [
-    "valoq.naturesciencenews.com",
-    "swiftnote10494.lilith.com.au",
-    "steadyroom54969.justinsteiger.com",
-    "boldscopefe.lastarria.cl",
-    "bravelab.lotossutra.at",
-    "quickdash494.lilith.com.au",
-    "finescope4281.lotossutra.at",
-    "calmprepa8.lilith.com.au",
-    "cleanhub25187.lastarria.cl",
-    "quickcore378.lotossutra.at",
-    "deepspan847.lilith.com.au",
-    "quick-plan.justinsteiger.com",
-    "solidlearn5100.lastarria.cl",
-    "nimblenode5084.lotossutra.at",
-    "rapidnet8760.b-cdn.net",
-    "litewave9206.b-cdn.net",
-    "litenet8394.b-cdn.net",
-    "meganode2515.b-cdn.net",
-    "primecache3991.b-cdn.net",
-    "megabeam3500.b-cdn.net",
-    "quickhost3591.b-cdn.net"
-  ],
-
-  "Xylora": [
-    "xylora.huangqirui.xyz",
-    "muffin.love.grei-grei.lt"
-  ],
-
-  "StudyHub": [
-    "vcsa.cneducation.site",
-    "vcsa.lumbinifashion.com.np",
-    "studyhub.heidibranlund.com"
-  ],
-
-  "Ford": [
-    "ford.cneducation.site",
-    "cars.srivaishnavam.org.au",
-    "pnandvcsa.unionvillelacrosse.com",
-    "ford.heidibranlund.com"
-  ],
-
-  "TungTung": [
-    "cneducation.site",
-    "vcsa.educationforall.sbs"
-  ],
-
-  "Yuki App": [
-    "yukios.edgeone.app",
-    "interesting-articles.pages.dev"
-  ],
-
-  "T9": [
-    "t9os.space/class",
-    "matheducation2day.b-cdn.net/class"
-  ],
-
-  "Equinox": [
-    "74.208.202.111.nip.io",
-    "alern.schoools.homes"
-  ],
-
-  "Luicide": [
-    "kaleo.b-cdn.net",
-    "classroom.poloniacruz.com"
-  ],
-
-  "Interstellar": [
-    "vcsaontop.unionvillelacrosse.com"
-  ],
-
-  "Fern": [
-    "s3.amazonaws.com/glwithfinals...",
-    "glwithfinals.s3.amazonaws.com...",
-    "s3.amazonaws.com/fstudentsare...",
-    "fstudentsareinventors.s3.amazonaws.com..."
-  ],
-
-  "Galaxy V7": [
-    "citizenship.itecono.ar",
-    "abandoned.itecono.ar",
-    "crawford.ks11.ru",
-    "bacterial.marinelvis.com",
-    "trash.stadsbor.com"
-  ],
-
-  "Overclocked": [
-    "over.jbworks.com",
-    "over.focusmarketing.us",
-    "over.itafricagroup.com",
-    "over.bryankrawetz.ca",
-    "over.chesan.com",
-    "over.corficap.net",
-    "over.ghallonline.com",
-    "over.veranda.co.id",
-    "over.blackmunk.com",
-    "over.claravia.cl",
-    "over.gynauto.ro",
-    "over.volticsolar.co.za",
-    "over.worldmicroscope.com",
-    "over.expo-vpa.ru",
-    "over.misem.or.id",
-    "over.nicodim-conta.ro",
-    "over.taminache.ru",
-    "over.valueromania.ro",
-    "over.bikalm.com.np",
-    "over.datafluvialtech.ch",
-    "over.prima-bel-canto.com",
-    "over.rako-bptechsolutions.ca",
-    "over.superiority.uk"
-  ],
-
-  "Boredom": [
-    "littleshrimpcupcakenamedjames.global.ssl.fastly.net",
-    "malick-boredom.global.ssl.fastly.net",
-    "saugatrboredom-dcqjf.mdll.cl"
-  ],
-
-  "Selenite": [
-    "selenite.adijaya.id",
-    "selenite.mantavyagajjar.com",
-    "selenite.nenadic.hr",
-    "selenite.studio16.ru",
-    "selenite.suliaotongwang.com"
-  ],
-
-  "Velara": [
-    "diqu.educations.mytunnel.org",
-    "vurf.educations.mytunnel.org",
-    "fmqn.educations.mytunnel.org",
-    "lgqw.educations.mytunnel.org",
-    "khyj.educations.mytunnel.org",
-    "qijo.educations.mytunnel.org",
-    "byko.educations.mytunnel.org",
-    "kuln.educations.mytunnel.org",
-    "zvld.educations.mytunnel.org",
-    "history.math.drama.teacher.biology.mea-i.org",
-    "geometry.vocabulary.computer.physics.engineering.pilotrights.com",
-    "seminar.reading.student.lecture.learning.keycontact.co.za",
-    "teacher.calculus.literature.classroom.algebra.sonywarner.com"
-  ],
-
-  "Rosin": [
-    "meow.bastaff.ru",
-    "curly.evaandering.com",
-    "booksnread.jashish.com.np",
-    "crepe.krepche.com",
-    "ideas.orchid-idea.com"
-  ],
-
-  "Truffle": [
-    "grids.secret.ck.link.drewmcphee.com",
-    "grids.super.secret.ck.link.drewmcphee.com"
-  ],
-
-  "Dogeub": [
-    "history.worksheets.krepche.com"
-  ],
-
-  "Frogie Arcade": [
-    "frogiesarcade.xyz"
-  ],
-
-  "Petezah": [
-    "123moviesgo.cfd/verify",
-    "pay2win.ayresinn.com/verify",
-    "math-practice.myonlineportal....",
-    "pay2win.ayresinn.com",
-    "foxy.kasihinfo.com",
-    "smartguy.kasihinfo.com",
-    "bull.doremusiclessons.com",
-    "swzgf.doremusiclessons.com",
-    "rwgh.doremusiclessons.com",
-    "agh.doremusiclessons.com"
-  ],
-
-  "Other": [
-    "s3.amazonaws.comnewyearnewfernindex.html",
-    "newyearnewfern.s3.amazonaws.comindex.html",
-    "s3.amazonaws.comsubtobullindex.html",
-    "s3.amazonaws.comvcsa-suxindex.html",
-    "vcsa-sux.s3.amazonaws.comindex.html",
-    "s3.amazonaws.combull-bestindex.html",
-    "bull-best.s3.amazonaws.comindex.html",
-    "goschool.priestella.xyz",
-    "tellme.priestella.xyz",
-    "forme.priestella.xyz",
-    "wowme.priestella.xyz",
-    "person.priestella.xyz",
-    "nocaptions.cfd",
-    "canwill.priestella.xyz",
-    "manget.priestella.xyz",
-    "private.priestella.xyz"
-  ]
-};
-
-
-/* ================= RENDER LINKS ================= */
-
-const seen =
-  new Set();
-
-const container =
-  document.getElementById(
-    "links"
-  );
-
-function normalizeURL(
-  value
-) {
-  let url =
-    /^https?:\/\//i.test(value)
-      ? value
-      : "https://" + value;
-
-  try {
-    const parsed =
-      new URL(url);
-
-    parsed.hash =
-      "";
-
-    parsed.pathname =
-      parsed.pathname.replace(
-        /\/+$/,
-        ""
-      );
-
-    return parsed.href
-      .toLowerCase();
-
-  } catch {
-    return url
-      .toLowerCase()
-      .replace(
-        /\/+$/,
-        ""
-      );
-  }
-}
-
-for (
-  const [name, list]
-  of Object.entries(GROUPS)
-) {
-
-  const section =
-    document.createElement(
-      "section"
-    );
-
-  section.className =
-    "category";
-
-
-  const heading =
-    document.createElement(
-      "h2"
-    );
-
-  heading.innerHTML =
-    `${icons[name] || "🔗"} ${esc(name)}`;
-
-
-  const grid =
-    document.createElement(
-      "div"
-    );
-
-  grid.className =
-    "grid";
-
-
-  let number =
+let chatReconnectAttempts =
     0;
 
 
-  for (
-    const raw of list
-  ) {
+/* =========================================================
+   HELPERS
+========================================================= */
 
-    const normalized =
-      normalizeURL(
-        raw
-      );
-
-
-    if (
-      seen.has(
-        normalized
-      )
-    ) {
-      continue;
-    }
-
-
-    seen.add(
-      normalized
-    );
-
-
-    number++;
-
-
-    const incomplete =
-      raw.includes(
-        "..."
-      );
-
-
-    const card =
-      document.createElement(
-        incomplete
-          ? "button"
-          : "a"
-      );
-
-
-    card.className =
-      "card";
-
-
-    card.dataset.url =
-      raw;
-
-
-    card.innerHTML = `
-      <div class="num">
-        ${String(number).padStart(2,"0")}
-      </div>
-
-      <div class="url">
-        ${esc(raw)}
-      </div>
-
-      ${
-        incomplete
-          ? `
-            <div
-              style="
-                margin-top:8px;
-                color:var(--warn);
-                font-size:11px;
-              "
-            >
-              ⚠️ Incomplete URL
-            </div>
-          `
-          : ""
-      }
-    `;
-
-
-    if (
-      incomplete
-    ) {
-
-      card.type =
-        "button";
-
-      card.style.width =
-        "100%";
-
-
-      card.addEventListener(
-        "click",
-        () =>
-          toast(
-            "⚠️ That entry appears incomplete."
-          )
-      );
-
-    } else {
-
-      card.href =
-        /^https?:\/\//i.test(
-          raw
-        )
-          ? raw
-          : "https://" + raw;
-
-
-      card.target =
-        "_blank";
-
-
-      card.rel =
-        "noopener noreferrer";
-
-
-      card.addEventListener(
-        "mousemove",
-        event => {
-
-          const rect =
-            card.getBoundingClientRect();
-
-
-          card.style.setProperty(
-            "--mx",
-            `${event.clientX - rect.left}px`
-          );
-
-
-          card.style.setProperty(
-            "--my",
-            `${event.clientY - rect.top}px`
-          );
-
-        }
-      );
-
-    }
-
-
-    grid.appendChild(
-      card
-    );
-
-  }
-
-
-  if (
-    grid.children.length
-  ) {
-
-    section.appendChild(
-      heading
-    );
-
-    section.appendChild(
-      grid
-    );
-
-    container.appendChild(
-      section
-    );
-
-  }
-
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 }
 
 
-/* ================= ACCESS ================= */
+function showToast(message) {
 
-function enterHub() {
+    const toast =
+        document.getElementById(
+            "toast"
+        );
 
-  document.getElementById(
-    "access"
-  ).style.display =
-    "none";
+    toast.textContent =
+        message;
 
+    toast.style.display =
+        "block";
 
-  document.getElementById(
-    "app"
-  ).style.display =
-    "block";
-
-}
-
-async function gate() {
-
-  try {
-
-    const result =
-      await api(
-        "/api/me"
-      );
-
-
-    if (
-      result.response.ok &&
-      result.data.success &&
-      result.data.user &&
-      result.data.user.verified
-    ) {
-
-      user =
-        result.data.user;
-
-
-      enterHub();
-
-
-      restoreSession();
-
-
-      return;
-
-    }
-
-  } catch {}
-
-
-  if (
-    accessPass.value
-      .trim()
-      .toLowerCase() ===
-    ACCESS_PASSWORD
-  ) {
-
-    enterHub();
-
-    restoreSession();
-
-    return;
-
-  }
-
-
-  tries++;
-
-  accessPass.value =
-    "";
-
-
-  if (
-    tries >= 3
-  ) {
-
-    enterBtn.disabled =
-      true;
-
-    accessPass.disabled =
-      true;
-
-    show(
-      "accessUnavailable"
+    clearTimeout(
+        toast._timer
     );
 
-  } else {
-
-    errorBox.style.display =
-      "block";
-
-  }
-
+    toast._timer =
+        setTimeout(
+            () => {
+                toast.style.display =
+                    "none";
+            },
+            3200
+        );
 }
 
-enterBtn.addEventListener(
-  "click",
-  gate
-);
 
-accessPass.addEventListener(
-  "keydown",
-  event => {
+function showModal(id) {
 
-    if (
-      event.key ===
-      "Enter"
-    ) {
-      gate();
+    const element =
+        document.getElementById(
+            id
+        );
+
+    if (element) {
+        element.classList.add(
+            "show"
+        );
     }
-
-  }
-);
+}
 
 
-/* ================= SEARCH ================= */
+function hideModal(id) {
 
-document
-  .getElementById(
-    "search"
-  )
-  .addEventListener(
-    "input",
-    event => {
+    const element =
+        document.getElementById(
+            id
+        );
 
-      const query =
-        event.target.value
-          .toLowerCase()
-          .trim();
+    if (element) {
+        element.classList.remove(
+            "show"
+        );
+    }
+}
 
 
-      document
+function setActiveNav(id) {
+
+    document
         .querySelectorAll(
-          ".card"
+            ".navButton"
         )
         .forEach(
-          card => {
-
-            card.classList.toggle(
-              "hidden",
-              !card.innerText
-                .toLowerCase()
-                .includes(
-                  query
+            button =>
+                button.classList.remove(
+                    "active"
                 )
-            );
-
-          }
         );
 
+    const target =
+        document.getElementById(
+            id
+        );
 
-      document
-        .querySelectorAll(
-          ".category"
+    if (target) {
+        target.classList.add(
+            "active"
+        );
+    }
+}
+
+
+function isAdmin() {
+    return Boolean(
+        currentUser &&
+        currentUser.role ===
+            "admin"
+    );
+}
+
+
+function getHostname(url) {
+
+    try {
+        return new URL(
+            /^https?:\/\//i.test(url)
+                ? url
+                : "https://" + url
+        ).hostname;
+    } catch {
+        return "unknown";
+    }
+}
+
+
+async function api(
+    path,
+    options = {}
+) {
+
+    const headers = {
+        "Content-Type":
+            "application/json",
+        ...(options.headers || {})
+    };
+
+    const response =
+        await fetch(
+            API + path,
+            {
+                ...options,
+                headers,
+                credentials:
+                    "include"
+            }
+        );
+
+    let data = {};
+
+    try {
+        data =
+            await response.json();
+    } catch {}
+
+    return {
+        response,
+        data
+    };
+}
+
+
+/* =========================================================
+   LINK DATA
+========================================================= */
+
+const LINK_GROUPS = {
+
+    Solara: [
+        "solaraname.robertschulze.name",
+        "like.krepche.com",
+        "no.deepee.com",
+        "just.flyredwing.ru",
+        "home.ayresinn.com",
+        "questionme.mrvillain.com",
+        "solara.glamourfreaks.com",
+        "schoolbook.berugy.hu",
+        "okiwell.adijaya.id",
+        "question.worldmicroscope.com",
+        "long.volticsolar.co.za",
+        "hmm.gynauto.ro",
+        "solora.blackmunk.com",
+        "club.claravia.cl",
+        "wouldget.priestella.xyz"
+    ],
+
+    "Triple T HD": [
+        "muchbe.robertschulze.name",
+        "okmuchok.krepche.com",
+        "cow.deepee.com",
+        "flyingcan.flyredwing.ru",
+        "armor.ayresinn.com",
+        "forthe.mrvillain.com",
+        "triplethd.glamourfreaks.com",
+        "dome.berugy.hu",
+        "mathgood.adijaya.id",
+        "crossing.worldmicroscope.com",
+        "question.volticsolar.co.za",
+        "who.claravia.cl",
+        "gyro.gynauto.ro",
+        "black.blackmunk.com"
+    ],
+
+    "Study Hub": [
+        "hub.robertschulze.name",
+        "coming.krepche.com",
+        "longtime.deepee.com",
+        "wecan.flyredwing.ru",
+        "quickie.ayresinn.com",
+        "goodget.mrvillain.com",
+        "getme.glamourfreaks.com",
+        "push.berugy.hu",
+        "homeme.adijaya.id",
+        "wipe.worldmicroscope.com",
+        "hound.volticsolar.co.za",
+        "class.claravia.cl",
+        "study.blackmunk.com",
+        "ro.gynauto.ro"
+    ],
+
+    "TUNG TUNG": [
+        "name.robertschulze.name",
+        "getme.krepche.com",
+        "gameplay.deepee.com",
+        "drink.flyredwing.ru",
+        "ttung.ayresinn.com",
+        "might.mrvillain.com",
+        "glass.glamourfreaks.com",
+        "hungry.berugy.hu",
+        "weget.adijaya.id",
+        "scope.worldmicroscope.com",
+        "volume.volticsolar.co.za",
+        "tryit.claravia.cl",
+        "him.gynauto.ro",
+        "tung.blackmunk.com"
+    ],
+
+    Strawberry: [
+        "strawberry.robertschulze.name",
+        "message.krepche.com",
+        "deposit.deepee.com",
+        "run.flyredwing.ru",
+        "flying.ayresinn.com",
+        "following.mrvillain.com",
+        "cancel.adijaya.id",
+        "hillme.berugy.hu",
+        "stroberii.glamourfreaks.com",
+        "wider.worldmicroscope.com",
+        "coo.volticsolar.co.za",
+        "right.claravia.cl",
+        "hot.gynauto.ro",
+        "stroberri.blackmunk.com"
+    ],
+
+    Space: [
+        "space.robertschulze.name",
+        "himm.krepche.com",
+        "canu.deepee.com",
+        "questionme.flyredwing.ru",
+        "around.ayresinn.com",
+        "main.mrvillain.com",
+        "total.berugy.hu",
+        "newget.glamourfreaks.com",
+        "science.adijaya.id",
+        "k.worldmicroscope.com",
+        "good.volticsolar.co.za",
+        "home.gynauto.ro",
+        "school.claravia.cl",
+        "space.blackmunk.com"
+    ],
+
+    Utopia: [
+        "utopial.robertschulze.name",
+        "know.krepche.com",
+        "deeply.deepee.com",
+        "quickme.flyredwing.ru",
+        "com.ayresinn.com",
+        "zoomme.mrvillain.com",
+        "utopiame.glamourfreaks.com",
+        "matha.berugy.hu",
+        "andwe.adijaya.id",
+        "can.worldmicroscope.com",
+        "zoom.volticsolar.co.za",
+        "not.claravia.cl",
+        "work.gynauto.ro",
+        "utopia.blackmunk.com"
+    ],
+
+    Lunar: [
+        "line.robertschulze.name",
+        "cancan.krepche.com",
+        "cooll.flyredwing.ru",
+        "questionss.deepee.com",
+        "not.ayresinn.com",
+        "sciencei.mrvillain.com",
+        "doingme.glamourfreaks.com",
+        "hill.berugy.hu",
+        "usas.adijaya.id",
+        "okwell.worldmicroscope.com",
+        "cool.volticsolar.co.za",
+        "cell.claravia.cl",
+        "info.gynauto.ro",
+        "lunar.blackmunk.com"
+    ],
+
+    Voya: [
+        "voyame.robertschulze.name",
+        "butbut.krepche.com",
+        "quickquestion.flyredwing.ru",
+        "voyameem.deepee.com",
+        "letgo.ayresinn.com",
+        "voya.mrvillain.com",
+        "hillme.glamourfreaks.com",
+        "schoolmath.berugy.hu",
+        "questionme.adijaya.id",
+        "well.worldmicroscope.com",
+        "co.volticsolar.co.za",
+        "should.claravia.cl",
+        "in.gynauto.ro",
+        "science.blackmunk.com"
+    ],
+
+    Cherri: [
+        "bull.psotc.org",
+        "wzlju.psotc.org",
+        "expzc.psotc.org",
+        "vlvw.psotc.org",
+        "fbw.psotc.org",
+        "lrfc.berugy.hu",
+        "psr.ghallonline.com",
+        "jaqrc.ayresinn.com",
+        "lyinm.localcito.com",
+        "sht.deepee.com",
+        "behind.cryptparty.com",
+        "mathbd.poloniacruz.com"
+    ],
+
+    Infamous: [
+        "valoq.naturesciencenews.com",
+        "swiftnote10494.lilith.com.au",
+        "steadyroom54969.justinsteiger.com",
+        "boldscopefe.lastarria.cl",
+        "bravelab.lotossutra.at",
+        "quickdash494.lilith.com.au",
+        "finescope4281.lotossutra.at",
+        "calmprepa8.lilith.com.au",
+        "cleanhub25187.lastarria.cl",
+        "quickcore378.lotossutra.at",
+        "deepspan847.lilith.com.au",
+        "quick-plan.justinsteiger.com",
+        "solidlearn5100.lastarria.cl",
+        "nimblenode5084.lotossutra.at",
+        "rapidnet8760.b-cdn.net",
+        "litewave9206.b-cdn.net",
+        "litenet8394.b-cdn.net",
+        "meganode2515.b-cdn.net",
+        "primecache3991.b-cdn.net",
+        "megabeam3500.b-cdn.net",
+        "quickhost3591.b-cdn.net"
+    ],
+
+    Xylora: [
+        "xylora.huangqirui.xyz",
+        "muffin.love.grei-grei.lt"
+    ],
+
+    StudyHub: [
+        "vcsa.cneducation.site",
+        "vcsa.lumbinifashion.com.np",
+        "studyhub.heidibranlund.com"
+    ],
+
+    Ford: [
+        "ford.cneducation.site",
+        "cars.srivaishnavam.org.au",
+        "pnandvcsa.unionvillelacrosse.com",
+        "ford.heidibranlund.com"
+    ],
+
+    TungTung: [
+        "cneducation.site",
+        "vcsa.educationforall.sbs"
+    ],
+
+    "Yuki App": [
+        "yukios.edgeone.app",
+        "interesting-articles.pages.dev"
+    ],
+
+    T9: [
+        "t9os.space/class",
+        "matheducation2day.b-cdn.net/class"
+    ],
+
+    Equinox: [
+        "74.208.202.111.nip.io",
+        "alern.schoools.homes"
+    ],
+
+    Luicide: [
+        "kaleo.b-cdn.net",
+        "classroom.poloniacruz.com"
+    ],
+
+    Interstellar: [
+        "vcsaontop.unionvillelacrosse.com"
+    ],
+
+    Fern: [
+        "s3.amazonaws.com/glwithfinals...",
+        "glwithfinals.s3.amazonaws.com...",
+        "s3.amazonaws.com/fstudentsare...",
+        "fstudentsareinventors.s3.amazonaws.com..."
+    ],
+
+    "Galaxy V7": [
+        "citizenship.itecono.ar",
+        "abandoned.itecono.ar",
+        "crawford.ks11.ru",
+        "bacterial.marinelvis.com",
+        "trash.stadsbor.com"
+    ],
+
+    Galaxy: [
+        "galaxy.aletiatours.com",
+        "galaxy.bclib.org",
+        "galaxy.blueprintdigital.ca",
+        "galaxy.roje.com.br",
+        "galaxy.techiscitsmt.xyz"
+    ],
+
+    Overclocked: [
+        "over.jbworks.com",
+        "over.focusmarketing.us",
+        "over.itafricagroup.com",
+        "over.bryankrawetz.ca",
+        "over.chesan.com",
+        "over.corficap.net",
+        "over.ghallonline.com",
+        "over.veranda.co.id",
+        "over.blackmunk.com",
+        "over.claravia.cl",
+        "over.gynauto.ro",
+        "over.volticsolar.co.za",
+        "over.worldmicroscope.com",
+        "over.expo-vpa.ru",
+        "over.misem.or.id",
+        "over.nicodim-conta.ro",
+        "over.taminache.ru",
+        "over.valueromania.ro",
+        "over.bikalm.com.np",
+        "over.datafluvialtech.ch",
+        "over.prima-bel-canto.com",
+        "over.rako-bptechsolutions.ca",
+        "over.superiority.uk"
+    ],
+
+    Boredom: [
+        "littleshrimpcupcakenamedjames.global.ssl.fastly.net",
+        "malick-boredom.global.ssl.fastly.net",
+        "saugatrboredom-dcqjf.mdll.cl"
+    ],
+
+    Selenite: [
+        "selenite.adijaya.id",
+        "selenite.mantavyagajjar.com",
+        "selenite.nenadic.hr",
+        "selenite.studio16.ru",
+        "selenite.suliaotongwang.com"
+    ],
+
+    Velara: [
+        "diqu.educations.mytunnel.org",
+        "vurf.educations.mytunnel.org",
+        "fmqn.educations.mytunnel.org",
+        "lgqw.educations.mytunnel.org",
+        "khyj.educations.mytunnel.org",
+        "qijo.educations.mytunnel.org",
+        "byko.educations.mytunnel.org",
+        "kuln.educations.mytunnel.org",
+        "zvld.educations.mytunnel.org",
+        "history.math.drama.teacher.biology.mea-i.org",
+        "geometry.vocabulary.computer.physics.engineering.pilotrights.com",
+        "seminar.reading.student.lecture.learning.keycontact.co.za",
+        "teacher.calculus.literature.classroom.algebra.sonywarner.com"
+    ],
+
+    Rosin: [
+        "meow.bastaff.ru",
+        "curly.evaandering.com",
+        "booksnread.jashish.com.np",
+        "crepe.krepche.com",
+        "ideas.orchid-idea.com"
+    ],
+
+    Truffle: [
+        "grids.secret.ck.link.drewmcphee.com",
+        "grids.super.secret.ck.link.drewmcphee.com"
+    ],
+
+    Dogeub: [
+        "history.worksheets.krepche.com"
+    ],
+
+    "Frogie Arcade": [
+        "frogiesarcade.xyz"
+    ],
+
+    Petezah: [
+        "123moviesgo.cfd/verify",
+        "pay2win.ayresinn.com/verify",
+        "math-practice.myonlineportal....",
+        "pay2win.ayresinn.com",
+        "foxy.kasihinfo.com",
+        "smartguy.kasihinfo.com",
+        "bull.doremusiclessons.com",
+        "swzgf.doremusiclessons.com",
+        "rwgh.doremusiclessons.com",
+        "agh.doremusiclessons.com"
+    ],
+
+    Other: [
+        "s3.amazonaws.comnewyearnewfernindex.html",
+        "newyearnewfern.s3.amazonaws.comindex.html",
+        "s3.amazonaws.comsubtobullindex.html",
+        "s3.amazonaws.comvcsa-suxindex.html",
+        "vcsa-sux.s3.amazonaws.comindex.html",
+        "s3.amazonaws.combull-bestindex.html",
+        "bull-best.s3.amazonaws.comindex.html",
+        "goschool.priestella.xyz",
+        "tellme.priestella.xyz",
+        "forme.priestella.xyz",
+        "wowme.priestella.xyz",
+        "person.priestella.xyz",
+        "nocaptions.cfd",
+        "canwill.priestella.xyz",
+        "manget.priestella.xyz",
+        "private.priestella.xyz"
+    ]
+};
+
+
+const CATEGORY_ICONS = {
+    Solara:"☀️",
+    "Triple T HD":"📺",
+    "Study Hub":"📚",
+    StudyHub:"📖",
+    "TUNG TUNG":"🗿",
+    TungTung:"🔔",
+    Strawberry:"🍓",
+    Space:"🚀",
+    Utopia:"🌌",
+    Lunar:"🌙",
+    Voya:"🛸",
+    Cherri:"🌐",
+    Petezah:"🧩",
+    Infamous:"✨",
+    Xylora:"📚",
+    Ford:"🚗",
+    "Yuki App":"🌸",
+    T9:"9️⃣",
+    Equinox:"🌗",
+    Luicide:"💀",
+    Interstellar:"🌠",
+    Fern:"🌿",
+    "Galaxy V7":"🌌",
+    Galaxy:"🌌",
+    Overclocked:"⚡",
+    Boredom:"😴",
+    Selenite:"🔮",
+    Velara:"🪐",
+    Rosin:"🧪",
+    Truffle:"🍄",
+    Dogeub:"🐕",
+    "Frogie Arcade":"🐸",
+    Other:"📦"
+};
+
+
+/* =========================================================
+   LINK RENDERING + GLOBAL DEDUPE
+========================================================= */
+
+const linkContainer =
+    document.getElementById(
+        "links"
+    );
+
+const seenLinks =
+    new Set();
+
+
+function normalizeURL(
+    value
+) {
+
+    let url =
+        /^https?:\/\//i.test(
+            value
         )
-        .forEach(
-          section => {
-
-            section.classList.toggle(
-              "hidden",
-              !section.querySelector(
-                ".card:not(.hidden)"
-              )
-            );
-
-          }
-        );
-
-    }
-  );
-
-
-/* ================= REPORTING ================= */
-
-let holdTimer =
-  null;
-
-
-document.addEventListener(
-  "contextmenu",
-  event => {
-
-    const card =
-      event.target.closest(
-        ".card"
-      );
-
-
-    if (
-      !card ||
-      card.dataset.url.includes(
-        "..."
-      )
-    ) {
-      return;
-    }
-
-
-    event.preventDefault();
-
-
-    currentReport =
-      card.dataset.url;
-
-
-    reportUrlBox.textContent =
-      currentReport;
-
-
-    show(
-      "reportModal"
-    );
-
-  }
-);
-
-
-document.addEventListener(
-  "touchstart",
-  event => {
-
-    const card =
-      event.target.closest(
-        ".card"
-      );
-
-
-    if (
-      !card ||
-      card.dataset.url.includes(
-        "..."
-      )
-    ) {
-      return;
-    }
-
-
-    clearTimeout(
-      holdTimer
-    );
-
-
-    holdTimer =
-      setTimeout(
-        () => {
-
-          currentReport =
-            card.dataset.url;
-
-
-          reportUrlBox.textContent =
-            currentReport;
-
-
-          show(
-            "reportModal"
-          );
-
-        },
-        1200
-      );
-
-  },
-  {
-    passive: true
-  }
-);
-
-
-document.addEventListener(
-  "touchend",
-  () => {
-    clearTimeout(
-      holdTimer
-    );
-  }
-);
-
-
-document.addEventListener(
-  "touchcancel",
-  () => {
-    clearTimeout(
-      holdTimer
-    );
-  }
-);
-
-
-document.getElementById(
-  "cancelReport"
-).addEventListener(
-  "click",
-  () => {
-
-    currentReport =
-      null;
-
-    hide(
-      "reportModal"
-    );
-
-  }
-);
-
-
-document.getElementById(
-  "sendReport"
-).addEventListener(
-  "click",
-  async () => {
-
-    if (
-      !currentReport
-    ) {
-      return;
-    }
-
-
-    const button =
-      document.getElementById(
-        "sendReport"
-      );
-
-
-    button.disabled =
-      true;
-
-
-    button.textContent =
-      "Reporting...";
+            ? value
+            : "https://" +
+              value;
 
 
     try {
 
-      const result =
-        await api(
-          "/api/report",
-          {
-            method:
-              "POST",
+        const parsed =
+            new URL(
+                url
+            );
 
-            body:
-              JSON.stringify({
-                url:
-                  currentReport,
+        parsed.hash =
+            "";
 
-                name:
-                  (() => {
+        parsed.pathname =
+            parsed.pathname.replace(
+                /\/+$/,
+                ""
+            );
 
-                    try {
+        return parsed.href
+            .toLowerCase();
 
-                      return new URL(
-                        /^https?:\/\//i.test(
-                          currentReport
-                        )
-                          ? currentReport
-                          : "https://" +
-                            currentReport
-                      ).hostname;
+    } catch {
 
-                    } catch {
+        return url
+            .toLowerCase()
+            .replace(
+                /\/+$/,
+                ""
+            );
 
-                      return "unknown";
+    }
+}
 
-                    }
 
-                  })()
+for (
+    const [categoryName, links]
+    of Object.entries(
+        LINK_GROUPS
+    )
+) {
 
-              })
-
-          }
+    const section =
+        document.createElement(
+            "section"
         );
 
+    section.className =
+        "category";
 
-      if (
-        !result.response.ok ||
-        !result.data.success
-      ) {
 
-        throw new Error(
-          result.data.error ||
-          "Report failed"
+    const title =
+        document.createElement(
+            "h2"
         );
 
-      }
+    title.className =
+        "categoryTitle";
 
 
-      toast(
-        "✅ Link reported."
-      );
+    const icon =
+        CATEGORY_ICONS[
+            categoryName
+        ] || "🔗";
 
 
-      currentReport =
-        null;
+    title.innerHTML =
+        `<span>${icon}</span>${escapeHTML(
+            categoryName
+        )}`;
 
 
-      hide(
-        "reportModal"
-      );
+    const grid =
+        document.createElement(
+            "div"
+        );
+
+    grid.className =
+        "linkGrid";
 
 
-    } catch (
-      error
+    let number =
+        0;
+
+
+    for (
+        const rawURL
+        of links
     ) {
 
-      toast(
-        "❌ " +
-        error.message
-      );
-
-    } finally {
-
-      button.disabled =
-        false;
+        const normalized =
+            normalizeURL(
+                rawURL
+            );
 
 
-      button.textContent =
-        "Report";
+        if (
+            seenLinks.has(
+                normalized
+            )
+        ) {
+            continue;
+        }
+
+
+        seenLinks.add(
+            normalized
+        );
+
+
+        number++;
+
+
+        const isIncomplete =
+            rawURL.includes(
+                "..."
+            );
+
+
+        const card =
+            document.createElement(
+                isIncomplete
+                    ? "button"
+                    : "a"
+            );
+
+
+        card.className =
+            "linkCard";
+
+
+        if (
+            isIncomplete
+        ) {
+
+            card.classList.add(
+                "incomplete"
+            );
+
+            card.type =
+                "button";
+
+        }
+
+
+        card.dataset.url =
+            rawURL;
+
+
+        card.innerHTML = `
+            <div class="linkNumber">
+                ${String(number).padStart(2,"0")}
+            </div>
+
+            <div class="linkURL">
+                ${escapeHTML(rawURL)}
+            </div>
+
+            ${
+                isIncomplete
+                    ? `
+                        <div class="warningText">
+                            ⚠️ URL appears incomplete
+                        </div>
+                      `
+                    : ""
+            }
+        `;
+
+
+        if (
+            isIncomplete
+        ) {
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    showToast(
+                        "⚠️ That URL appears incomplete."
+                    );
+
+                }
+            );
+
+        } else {
+
+            card.href =
+                /^https?:\/\//i.test(
+                    rawURL
+                )
+                    ? rawURL
+                    : "https://" +
+                      rawURL;
+
+
+            card.target =
+                "_blank";
+
+
+            card.rel =
+                "noopener noreferrer";
+
+
+            card.addEventListener(
+                "mousemove",
+                event => {
+
+                    const rect =
+                        card.getBoundingClientRect();
+
+
+                    card.style.setProperty(
+                        "--mx",
+                        `${event.clientX - rect.left}px`
+                    );
+
+
+                    card.style.setProperty(
+                        "--my",
+                        `${event.clientY - rect.top}px`
+                    );
+
+                }
+            );
+
+        }
+
+
+        grid.appendChild(
+            card
+        );
 
     }
 
-  }
+
+    if (
+        grid.children.length
+    ) {
+
+        section.appendChild(
+            title
+        );
+
+        section.appendChild(
+            grid
+        );
+
+        linkContainer.appendChild(
+            section
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ACCESS
+========================================================= */
+
+const accessInput =
+    document.getElementById(
+        "accessPass"
+    );
+
+const enterButton =
+    document.getElementById(
+        "enter"
+    );
+
+const accessError =
+    document.getElementById(
+        "error"
+    );
+
+
+async function openHub() {
+
+    document.getElementById(
+        "access"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "app"
+    ).style.display =
+        "block";
+
+
+    await restoreSession();
+
+}
+
+
+async function checkVerifiedSession() {
+
+    try {
+
+        const result =
+            await api(
+                "/api/me"
+            );
+
+
+        if (
+            result.response.ok &&
+            result.data.success &&
+            result.data.user
+        ) {
+
+            currentUser =
+                result.data.user;
+
+
+            if (
+                currentUser.verified ||
+                currentUser.role === "admin"
+            ) {
+
+                await openHub();
+
+                return true;
+
+            }
+
+        }
+
+    } catch {}
+
+    return false;
+}
+
+
+async function handleAccess() {
+
+    const verified =
+        await checkVerifiedSession();
+
+
+    if (
+        verified
+    ) {
+        return;
+    }
+
+
+    if (
+        accessInput.value
+            .trim()
+            .toLowerCase() ===
+        ACCESS_PASSWORD
+    ) {
+
+        await openHub();
+
+        return;
+
+    }
+
+
+    accessAttempts++;
+
+    accessInput.value =
+        "";
+
+
+    if (
+        accessAttempts >=
+        MAX_ACCESS_ATTEMPTS
+    ) {
+
+        accessInput.disabled =
+            true;
+
+
+        enterButton.disabled =
+            true;
+
+
+        showModal(
+            "accessUnavailable"
+        );
+
+        return;
+
+    }
+
+
+    accessError.style.display =
+        "block";
+
+}
+
+
+enterButton.addEventListener(
+    "click",
+    handleAccess
 );
 
 
-/* ================= ACCOUNT ================= */
+accessInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key ===
+            "Enter"
+        ) {
+
+            handleAccess();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+document.getElementById(
+    "search"
+).addEventListener(
+    "input",
+    event => {
+
+        const query =
+            event.target.value
+                .trim()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(
+                ".linkCard"
+            )
+            .forEach(
+                card => {
+
+                    card.classList.toggle(
+                        "hidden",
+                        !card.innerText
+                            .toLowerCase()
+                            .includes(
+                                query
+                            )
+                    );
+
+                }
+            );
+
+
+        document
+            .querySelectorAll(
+                ".category"
+            )
+            .forEach(
+                category => {
+
+                    const visible =
+                        category.querySelector(
+                            ".linkCard:not(.hidden)"
+                        );
+
+
+                    category.classList.toggle(
+                        "hidden",
+                        !visible
+                    );
+
+                }
+            );
+
+    }
+);
+
+
+/* =========================================================
+   REPORTING
+========================================================= */
+
+let longPressTimer =
+    null;
+
+
+document.addEventListener(
+    "contextmenu",
+    event => {
+
+        const card =
+            event.target.closest(
+                ".linkCard"
+            );
+
+
+        if (
+            !card ||
+            !card.dataset.url ||
+            card.dataset.url.includes(
+                "..."
+            )
+        ) {
+            return;
+        }
+
+
+        event.preventDefault();
+
+
+        currentReport =
+            card.dataset.url;
+
+
+        document.getElementById(
+            "reportUrl"
+        ).textContent =
+            currentReport;
+
+
+        showModal(
+            "reportModal"
+        );
+
+    }
+);
+
+
+document.addEventListener(
+    "touchstart",
+    event => {
+
+        const card =
+            event.target.closest(
+                ".linkCard"
+            );
+
+
+        if (
+            !card ||
+            !card.dataset.url ||
+            card.dataset.url.includes(
+                "..."
+            )
+        ) {
+            return;
+        }
+
+
+        clearTimeout(
+            longPressTimer
+        );
+
+
+        longPressTimer =
+            setTimeout(
+                () => {
+
+                    currentReport =
+                        card.dataset.url;
+
+
+                    document.getElementById(
+                        "reportUrl"
+                    ).textContent =
+                        currentReport;
+
+
+                    showModal(
+                        "reportModal"
+                    );
+
+                },
+                1200
+            );
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+document.addEventListener(
+    "touchend",
+    () => {
+
+        clearTimeout(
+            longPressTimer
+        );
+
+    }
+);
+
+
+document.addEventListener(
+    "touchcancel",
+    () => {
+
+        clearTimeout(
+            longPressTimer
+        );
+
+    }
+);
+
+
+document.getElementById(
+    "cancelReport"
+).addEventListener(
+    "click",
+    () => {
+
+        currentReport =
+            null;
+
+        hideModal(
+            "reportModal"
+        );
+
+    }
+);
+
+
+document.getElementById(
+    "sendReport"
+).addEventListener(
+    "click",
+    async () => {
+
+        if (
+            !currentReport
+        ) {
+            return;
+        }
+
+
+        const button =
+            document.getElementById(
+                "sendReport"
+            );
+
+
+        button.disabled =
+            true;
+
+        button.textContent =
+            "Reporting...";
+
+
+        try {
+
+            const result =
+                await api(
+                    "/api/report",
+                    {
+                        method:
+                            "POST",
+
+                        body:
+                            JSON.stringify({
+                                url:
+                                    currentReport,
+
+                                name:
+                                    getHostname(
+                                        currentReport
+                                    )
+                            })
+                    }
+                );
+
+
+            if (
+                !result.response.ok ||
+                !result.data.success
+            ) {
+
+                throw new Error(
+                    result.data.error ||
+                    "Report failed"
+                );
+
+            }
+
+
+            showToast(
+                "✅ Link reported."
+            );
+
+
+            currentReport =
+                null;
+
+
+            hideModal(
+                "reportModal"
+            );
+
+
+        } catch (
+            error
+        ) {
+
+            showToast(
+                "❌ " +
+                error.message
+            );
+
+        } finally {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "Report";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
 
 function showSignup() {
 
-  document.getElementById(
-    "signup"
-  ).style.display =
-    "block";
+    document.getElementById(
+        "signup"
+    ).style.display =
+        "block";
 
 
-  document.getElementById(
-    "login"
-  ).style.display =
-    "none";
+    document.getElementById(
+        "login"
+    ).style.display =
+        "none";
 
 
-  document.getElementById(
-    "account"
-  ).style.display =
-    "none";
+    document.getElementById(
+        "account"
+    ).style.display =
+        "none";
 
 }
 
 
 function showLogin() {
 
-  document.getElementById(
-    "signup"
-  ).style.display =
-    "none";
+    document.getElementById(
+        "signup"
+    ).style.display =
+        "none";
 
 
-  document.getElementById(
-    "login"
-  ).style.display =
-    "block";
+    document.getElementById(
+        "login"
+    ).style.display =
+        "block";
 
 
-  document.getElementById(
-    "account"
-  ).style.display =
-    "none";
+    document.getElementById(
+        "account"
+    ).style.display =
+        "none";
 
 }
 
 
 function showAccount(
-  accountUser
+    accountUser
 ) {
 
-  document.getElementById(
-    "signup"
-  ).style.display =
-    "none";
+    document.getElementById(
+        "signup"
+    ).style.display =
+        "none";
 
 
-  document.getElementById(
-    "login"
-  ).style.display =
-    "none";
+    document.getElementById(
+        "login"
+    ).style.display =
+        "none";
 
 
-  document.getElementById(
-    "account"
-  ).style.display =
-    "block";
+    document.getElementById(
+        "account"
+    ).style.display =
+        "block";
 
 
-  document.getElementById(
-    "aU"
-  ).textContent =
-    accountUser.username ||
-    "";
+    document.getElementById(
+        "aU"
+    ).textContent =
+        accountUser.username ||
+        "";
 
 
-  document.getElementById(
-    "aD"
-  ).textContent =
-    accountUser.displayName ||
-    "";
+    document.getElementById(
+        "aD"
+    ).textContent =
+        accountUser.displayName ||
+        "";
 
 
-  document.getElementById(
-    "aR"
-  ).textContent =
-    accountUser.role ||
-    "user";
+    document.getElementById(
+        "aR"
+    ).textContent =
+        accountUser.role ||
+        "user";
 
 
-  document.getElementById(
-    "aS"
-  ).textContent =
-    accountUser.status ||
-    "active";
+    document.getElementById(
+        "aS"
+    ).textContent =
+        accountUser.status ||
+        "active";
 
 
-  document.getElementById(
-    "aV"
-  ).textContent =
-    accountUser.verified
-      ? "✅ Verified"
-      : "❌ Not verified";
+    document.getElementById(
+        "aV"
+    ).textContent =
+        accountUser.verified
+            ? "✅ Verified"
+            : "❌ Not verified";
 
 
-  document.getElementById(
-    "adminNav"
-  ).style.display =
-    accountUser.role ===
-    "admin"
-      ? "block"
-      : "none";
+    document.getElementById(
+        "adminNav"
+    ).style.display =
+        accountUser.role ===
+            "admin"
+            ? "block"
+            : "none";
 
 }
 
@@ -1820,1548 +3184,1910 @@ function showAccount(
 /* account navigation */
 
 document.getElementById(
-  "accountNav"
+    "accountNav"
 ).addEventListener(
-  "click",
-  () => {
+    "click",
+    () => {
 
-    active(
-      "accountNav"
-    );
-
-
-    show(
-      "accountModal"
-    );
+        setActiveNav(
+            "accountNav"
+        );
 
 
-    if (
-      user
-    ) {
+        showModal(
+            "accountModal"
+        );
 
-      showAccount(
-        user
-      );
 
-    } else {
+        if (
+            currentUser
+        ) {
 
-      showSignup();
+            showAccount(
+                currentUser
+            );
+
+        } else {
+
+            showSignup();
+
+        }
 
     }
-
-  }
-);
-
-
-/* signup/login switch */
-
-document.getElementById(
-  "toLogin"
-).addEventListener(
-  "click",
-  showLogin
 );
 
 
 document.getElementById(
-  "toSignup"
+    "toLogin"
 ).addEventListener(
-  "click",
-  showSignup
+    "click",
+    showLogin
+);
+
+
+document.getElementById(
+    "toSignup"
+).addEventListener(
+    "click",
+    showSignup
 );
 
 
 /* signup */
 
 document.getElementById(
-  "signupBtn"
+    "signupBtn"
 ).addEventListener(
-  "click",
-  async () => {
+    "click",
+    async () => {
 
-    const button =
-      document.getElementById(
-        "signupBtn"
-      );
-
-
-    button.disabled =
-      true;
+        const button =
+            document.getElementById(
+                "signupBtn"
+            );
 
 
-    button.textContent =
-      "Creating...";
+        button.disabled =
+            true;
+
+        button.textContent =
+            "Creating...";
 
 
-    try {
+        try {
 
-      const result =
-        await api(
-          "/api/register",
-          {
-            method:
-              "POST",
+            const result =
+                await api(
+                    "/api/register",
+                    {
+                        method:
+                            "POST",
 
-            body:
-              JSON.stringify({
-                username:
-                  su.value,
+                        body:
+                            JSON.stringify({
+                                username:
+                                    document.getElementById(
+                                        "su"
+                                    ).value,
 
-                displayName:
-                  sd.value,
+                                displayName:
+                                    document.getElementById(
+                                        "sd"
+                                    ).value,
 
-                realName:
-                  sr.value,
+                                realName:
+                                    document.getElementById(
+                                        "sr"
+                                    ).value,
 
-                password:
-                  sp.value
-              })
-          }
-        );
-
-
-      if (
-        !result.response.ok ||
-        !result.data.success
-      ) {
-
-        throw new Error(
-          result.data.error ||
-          "Signup failed"
-        );
-
-      }
+                                password:
+                                    document.getElementById(
+                                        "sp"
+                                    ).value
+                            })
+                    }
+                );
 
 
-      msg.textContent =
-        "✅ Account created. Log in below.";
+            if (
+                !result.response.ok ||
+                !result.data.success
+            ) {
+
+                throw new Error(
+                    result.data.error ||
+                    "Signup failed"
+                );
+
+            }
 
 
-      showLogin();
+            document.getElementById(
+                "msg"
+            ).textContent =
+                "✅ Account created. Log in below.";
 
 
-    } catch (
-      error
-    ) {
-
-      msg.textContent =
-        "❌ " +
-        error.message;
-
-    } finally {
-
-      button.disabled =
-        false;
+            showLogin();
 
 
-      button.textContent =
-        "Create Account";
+        } catch (
+            error
+        ) {
+
+            document.getElementById(
+                "msg"
+            ).textContent =
+                "❌ " +
+                error.message;
+
+        } finally {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "Create Account";
+
+        }
 
     }
-
-  }
 );
 
 
 /* login */
 
 document.getElementById(
-  "loginBtn"
+    "loginBtn"
 ).addEventListener(
-  "click",
-  async () => {
+    "click",
+    async () => {
 
-    const button =
-      document.getElementById(
-        "loginBtn"
-      );
-
-
-    button.disabled =
-      true;
+        const button =
+            document.getElementById(
+                "loginBtn"
+            );
 
 
-    button.textContent =
-      "Logging in...";
+        button.disabled =
+            true;
+
+        button.textContent =
+            "Logging in...";
 
 
-    try {
+        try {
 
-      const result =
-        await api(
-          "/api/login",
-          {
-            method:
-              "POST",
+            const result =
+                await api(
+                    "/api/login",
+                    {
+                        method:
+                            "POST",
 
-            body:
-              JSON.stringify({
-                username:
-                  lu.value,
+                        body:
+                            JSON.stringify({
+                                username:
+                                    document.getElementById(
+                                        "lu"
+                                    ).value,
 
-                password:
-                  lp.value
-              })
-          }
-        );
-
-
-      if (
-        !result.response.ok ||
-        !result.data.success
-      ) {
-
-        throw new Error(
-          result.data.error ||
-          "Login failed"
-        );
-
-      }
+                                password:
+                                    document.getElementById(
+                                        "lp"
+                                    ).value
+                            })
+                    }
+                );
 
 
-      user =
-        result.data.user;
+            if (
+                !result.response.ok ||
+                !result.data.success
+            ) {
+
+                throw new Error(
+                    result.data.error ||
+                    "Login failed"
+                );
+
+            }
 
 
-      showAccount(
-        user
-      );
+            currentUser =
+                result.data.user;
 
 
-      msg.textContent =
-        "✅ Logged in.";
+            showAccount(
+                currentUser
+            );
 
 
-      toast(
-        "✅ Welcome back."
-      );
+            document.getElementById(
+                "msg"
+            ).textContent =
+                "✅ Logged in.";
 
 
-      if (
-        user.verified
-      ) {
-
-        enterHub();
-
-      }
-
-    } catch (
-      error
-    ) {
-
-      msg.textContent =
-        "❌ " +
-        error.message;
-
-    } finally {
-
-      button.disabled =
-        false;
+            showToast(
+                "✅ Welcome back."
+            );
 
 
-      button.textContent =
-        "Login";
+            if (
+                currentUser.verified ||
+                currentUser.role ===
+                    "admin"
+            ) {
+
+                document.getElementById(
+                    "access"
+                ).style.display =
+                    "none";
+
+                document.getElementById(
+                    "app"
+                ).style.display =
+                    "block";
+
+            }
+
+
+            connectChat();
+
+        } catch (
+            error
+        ) {
+
+            document.getElementById(
+                "msg"
+            ).textContent =
+                "❌ " +
+                error.message;
+
+        } finally {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "Login";
+
+        }
 
     }
-
-  }
 );
 
 
 /* logout */
 
 document.getElementById(
-  "logout"
+    "logout"
 ).addEventListener(
-  "click",
-  async () => {
+    "click",
+    async () => {
 
-    try {
+        try {
 
-      await api(
-        "/api/logout",
-        {
-          method:
-            "POST"
-        }
-      );
+            await api(
+                "/api/logout",
+                {
+                    method:
+                        "POST"
+                }
+            );
 
-    } catch {}
-
-
-    user =
-      null;
+        } catch {}
 
 
-    document.getElementById(
-      "adminNav"
-    ).style.display =
-      "none";
+        currentUser =
+            null;
 
 
-    showSignup();
+        disconnectChat();
 
 
-    toast(
-      "Logged out."
-    );
+        document.getElementById(
+            "adminNav"
+        ).style.display =
+            "none";
 
-  }
+
+        showSignup();
+
+
+        hideModal(
+            "accountModal"
+        );
+
+
+        setActiveNav(
+            "linksNav"
+        );
+
+
+        showToast(
+            "Logged out."
+        );
+
+    }
 );
 
 
-/* restore cookie session */
+/* session restore */
 
 async function restoreSession() {
 
-  try {
+    try {
 
-    const result =
-      await api(
-        "/api/me"
-      );
+        const result =
+            await api(
+                "/api/me"
+            );
 
-
-    if (
-      !result.response.ok ||
-      !result.data.success
-    ) {
-
-      return;
-
-    }
-
-
-    user =
-      result.data.user;
-if (user) {
-  connectChat();
-}
-
-
-    if (
-      user.verified
-    ) {
-
-      enterHub();
-
-    }
-
-  } catch {}
-
-}
-
-
-/* ================= NAV ================= */
-
-document.getElementById(
-  "linksNav"
-).addEventListener(
-  "click",
-  () => {
-
-    active(
-      "linksNav"
-    );
-
-
-    window.scrollTo({
-      top:0,
-      behavior:"smooth"
-    });
-
-  }
-);
-
-
-document.getElementById(
-  "chatNav"
-).addEventListener(
-  "click",
-  () => {
-
-    active(
-      "chatNav"
-    );
-
-
-    show(
-      "chatModal"
-    );
-
-  }
-);
-
-
-document.getElementById(
-  "adminNav"
-).addEventListener(
-  "click",
-  () => {
-
-    if (
-      !admin()
-    ) {
-
-      toast(
-        "Admin access required."
-      );
-
-
-      return;
-
-    }
-
-
-    active(
-      "adminNav"
-    );
-
-
-    show(
-      "adminModal"
-    );
-
-
-    loadReports();
-
-  }
-);
-
-
-/* modal close */
-
-document.querySelectorAll(
-  "[data-close]"
-).forEach(
-  button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        hide(
-          button.dataset.close
-        );
-
-
-        active(
-          "linksNav"
-        );
-
-      }
-    );
-
-  }
-);
-
-
-document.querySelectorAll(
-  ".modal"
-).forEach(
-  modal => {
-
-    modal.addEventListener(
-      "click",
-      event => {
 
         if (
-          event.target ===
-          modal
+            !result.response.ok ||
+            !result.data.success
         ) {
 
-          modal.classList.remove(
-            "show"
-          );
+            currentUser =
+                null;
 
-
-          active(
-            "linksNav"
-          );
+            return;
 
         }
 
-      }
-    );
 
-  }
-);
+        currentUser =
+            result.data.user;
 
 
-/* ================= ADMIN ================= */
-
-document.querySelectorAll(
-  ".tab"
-).forEach(
-  tab => {
-
-    tab.addEventListener(
-      "click",
-      () => {
-
-        document
-          .querySelectorAll(
-            ".tab"
-          )
-          .forEach(
-            item =>
-              item.classList.remove(
-                "active"
-              )
-          );
-
-
-        document
-          .querySelectorAll(
-            ".section"
-          )
-          .forEach(
-            section =>
-              section.classList.remove(
-                "active"
-              )
-          );
-
-
-        tab.classList.add(
-          "active"
+        showAccount(
+            currentUser
         );
 
 
-        const target =
-          tab.dataset.tab;
-
-
-        document
-          .getElementById(
-            target +
-            "Section"
-          )
-          .classList.add(
-            "active"
-          );
+        connectChat();
 
 
         if (
-          target ===
-          "reports"
+            currentUser.verified ||
+            currentUser.role ===
+                "admin"
         ) {
 
-          loadReports();
+            document.getElementById(
+                "access"
+            ).style.display =
+                "none";
+
+
+            document.getElementById(
+                "app"
+            ).style.display =
+                "block";
+
+        }
+
+    } catch {
+
+        currentUser =
+            null;
+
+    }
+
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+const messages =
+    document.getElementById(
+        "messages"
+    );
+
+const chatInput =
+    document.getElementById(
+        "chatInput"
+    );
+
+const chatSend =
+    document.getElementById(
+        "chatSend"
+    );
+
+
+function clearChat() {
+
+    messages.innerHTML =
+        "";
+
+}
+
+
+function addChatMessage(
+    message
+) {
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+
+    element.className =
+        "chatMessage";
+
+
+    if (
+        currentUser &&
+        message.userId ===
+            currentUser.id
+    ) {
+
+        element.classList.add(
+            "mine"
+        );
+
+    }
+
+
+    const timestamp =
+        message.time
+            ? new Date(
+                message.time
+            ).toLocaleTimeString(
+                [],
+                {
+                    hour:
+                        "numeric",
+
+                    minute:
+                        "2-digit"
+                }
+            )
+            : "";
+
+
+    element.innerHTML = `
+        <div class="chatMeta">
+            ${escapeHTML(
+                message.displayName ||
+                message.username ||
+                "User"
+            )}
+            •
+            ${escapeHTML(
+                timestamp
+            )}
+        </div>
+
+        <div class="chatText">
+            ${escapeHTML(
+                message.text ||
+                ""
+            )}
+        </div>
+    `;
+
+
+    messages.appendChild(
+        element
+    );
+
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+function disconnectChat() {
+
+    clearTimeout(
+        chatReconnectTimer
+    );
+
+
+    if (
+        chatSocket
+    ) {
+
+        try {
+            chatSocket.close();
+        } catch {}
+
+
+        chatSocket =
+            null;
+
+    }
+
+}
+
+
+function connectChat() {
+
+    if (
+        !currentUser
+    ) {
+        return;
+    }
+
+
+    if (
+        chatSocket &&
+        (
+            chatSocket.readyState ===
+                WebSocket.OPEN ||
+
+            chatSocket.readyState ===
+                WebSocket.CONNECTING
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        location.protocol !==
+        "http:" &&
+        location.protocol !==
+        "https:"
+    ) {
+
+        return;
+
+    }
+
+
+    const websocketProtocol =
+        location.protocol ===
+            "https:"
+            ? "wss:"
+            : "ws:";
+
+
+    const socketURL =
+        websocketProtocol +
+        "//" +
+        location.host +
+        "/api/chat";
+
+
+    try {
+
+        chatSocket =
+            new WebSocket(
+                socketURL
+            );
+
+    } catch {
+
+        return;
+
+    }
+
+
+    chatSocket.addEventListener(
+        "open",
+        () => {
+
+            chatReconnectAttempts =
+                0;
+
+
+            chatSend.disabled =
+                false;
+
+            chatInput.disabled =
+                false;
+
+
+            chatInput.placeholder =
+                "Message the community...";
+
+        }
+    );
+
+
+    chatSocket.addEventListener(
+        "message",
+        event => {
+
+            let data;
+
+            try {
+
+                data =
+                    JSON.parse(
+                        event.data
+                    );
+
+            } catch {
+
+                return;
+
+            }
+
+
+            if (
+                data.type ===
+                    "history"
+            ) {
+
+                clearChat();
+
+
+                const history =
+                    Array.isArray(
+                        data.messages
+                    )
+                        ? data.messages
+                        : [];
+
+
+                history.forEach(
+                    addChatMessage
+                );
+
+
+                return;
+
+            }
+
+
+            if (
+                data.type ===
+                    "message"
+            ) {
+
+                addChatMessage(
+                    data
+                );
+
+
+                return;
+
+            }
+
+
+            if (
+                data.type ===
+                    "error"
+            ) {
+
+                showToast(
+                    "❌ " +
+                    (
+                        data.error ||
+                        "Chat error"
+                    )
+                );
+
+            }
+
+        }
+    );
+
+
+    chatSocket.addEventListener(
+        "close",
+        () => {
+
+            chatSend.disabled =
+                true;
+
+            chatInput.disabled =
+                true;
+
+
+            if (
+                !currentUser
+            ) {
+                return;
+            }
+
+
+            clearTimeout(
+                chatReconnectTimer
+            );
+
+
+            chatReconnectAttempts =
+                Math.min(
+                    chatReconnectAttempts + 1,
+                    5
+                );
+
+
+            const delay =
+                Math.min(
+                    1000 *
+                    Math.pow(
+                        2,
+                        chatReconnectAttempts - 1
+                    ),
+                    10000
+                );
+
+
+            chatReconnectTimer =
+                setTimeout(
+                    connectChat,
+                    delay
+                );
+
+        }
+    );
+
+
+    chatSocket.addEventListener(
+        "error",
+        () => {
+            chatSend.disabled =
+                true;
+            chatInput.disabled =
+                true;
+        }
+    );
+
+}
+
+
+function sendChatMessage() {
+
+    if (
+        !currentUser
+    ) {
+
+        showToast(
+            "Log in before using chat."
+        );
+
+
+        return;
+
+    }
+
+
+    if (
+        !chatSocket ||
+        chatSocket.readyState !==
+            WebSocket.OPEN
+    ) {
+
+        showToast(
+            "Chat is connecting..."
+        );
+
+
+        connectChat();
+
+
+        return;
+
+    }
+
+
+    const text =
+        chatInput.value
+            .trim();
+
+
+    if (
+        !text
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        text.length >
+            1000
+    ) {
+
+        showToast(
+            "Message is too long."
+        );
+
+
+        return;
+
+    }
+
+
+    chatSocket.send(
+        JSON.stringify({
+            type:
+                "chat",
+
+            text
+        })
+    );
+
+
+    chatInput.value =
+        "";
+
+    chatInput.focus();
+
+}
+
+
+chatSend.addEventListener(
+    "click",
+    sendChatMessage
+);
+
+
+chatInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key ===
+                "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendChatMessage();
+
+        }
+
+    }
+);
+
+
+/* chat nav */
+
+document.getElementById(
+    "chatNav"
+).addEventListener(
+    "click",
+    () => {
+
+        setActiveNav(
+            "chatNav"
+        );
+
+
+        showModal(
+            "chatModal"
+        );
+
+
+        if (
+            currentUser
+        ) {
+
+            connectChat();
 
         } else {
 
-          loadUsers();
+            showToast(
+                "Log in before using chat."
+            );
 
         }
 
-      }
-    );
-
-  }
+    }
 );
+
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+document.getElementById(
+    "adminNav"
+).addEventListener(
+    "click",
+    () => {
+
+        if (
+            !isAdmin()
+        ) {
+
+            showToast(
+                "Admin access required."
+            );
+
+
+            return;
+
+        }
+
+
+        setActiveNav(
+            "adminNav"
+        );
+
+
+        showModal(
+            "adminModal"
+        );
+
+
+        loadReports();
+
+    }
+);
+
+
+document
+    .querySelectorAll(
+        ".adminTab"
+    )
+    .forEach(
+        tab => {
+
+            tab.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            ".adminTab"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    document
+                        .querySelectorAll(
+                            ".adminSection"
+                        )
+                        .forEach(
+                            section =>
+                                section.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    tab.classList.add(
+                        "active"
+                    );
+
+
+                    const target =
+                        tab.dataset.tab;
+
+
+                    document
+                        .getElementById(
+                            target +
+                            "Section"
+                        )
+                        .classList.add(
+                            "active"
+                        );
+
+
+                    if (
+                        target ===
+                        "reports"
+                    ) {
+
+                        loadReports();
+
+                    } else {
+
+                        loadUsers();
+
+                    }
+
+                }
+            );
+
+        }
+    );
 
 
 async function loadReports() {
 
-  const list =
-    document.getElementById(
-      "reportsList"
-    );
-
-
-  list.textContent =
-    "Loading...";
-
-
-  try {
-
-    const result =
-      await api(
-        "/api/reports"
-      );
-
-
-    if (
-      !result.response.ok ||
-      !result.data.success
-    ) {
-
-      throw new Error(
-        result.data.error ||
-        "Could not load reports"
-      );
-
-    }
-
-
-    const reports =
-      result.data.reports ||
-      [];
-
-
-    rc.textContent =
-      reports.length;
-
-
-    tr.textContent =
-      reports.reduce(
-        (
-          total,
-          item
-        ) =>
-          total +
-          Number(
-            item.reports ||
-            0
-          ),
-        0
-      );
-
-
-    list.innerHTML =
-      "";
-
-
-    if (
-      reports.length ===
-      0
-    ) {
-
-      list.textContent =
-        "🟢 No reported links.";
-
-
-      return;
-
-    }
-
-
-    reports.forEach(
-      report => {
-
-        const item =
-          document.createElement(
-            "div"
-          );
-
-
-        item.className =
-          "item";
-
-
-        item.innerHTML = `
-          <div class="top">
-
-            <strong>
-              ${esc(
-                report.url
-              )}
-            </strong>
-
-            <span>
-              ${Number(
-                report.reports ||
-                0
-              )}
-            </span>
-
-          </div>
-
-          <div class="meta">
-            ${esc(
-              new Date(
-                report.lastReported ||
-                report.time
-              ).toLocaleString()
-            )}
-          </div>
-
-          <div class="mini-actions">
-
-            <button
-              class="secondary"
-              data-restore
-              type="button"
-            >
-              ♻️ Restore
-            </button>
-
-          </div>
-        `;
-
-
-        item
-          .querySelector(
-            "[data-restore]"
-          )
-          .addEventListener(
-            "click",
-            async () => {
-
-              const response =
-                await api(
-                  "/api/restore",
-                  {
-                    method:
-                      "POST",
-
-                    body:
-                      JSON.stringify({
-                        url:
-                          report.url
-                      })
-                  }
-                );
-
-
-              if (
-                response.response.ok &&
-                response.data.success
-              ) {
-
-                toast(
-                  "✅ Report restored."
-                );
-
-
-                loadReports();
-
-              } else {
-
-                toast(
-                  "❌ " +
-                  (
-                    response.data.error ||
-                    "Restore failed"
-                  )
-                );
-
-              }
-
-            }
-          );
-
-
-        list.appendChild(
-          item
+    const list =
+        document.getElementById(
+            "reportsList"
         );
 
-      }
-    );
-
-  } catch (
-    error
-  ) {
 
     list.textContent =
-      "❌ " +
-      error.message;
+        "Loading...";
 
-  }
+
+    try {
+
+        const result =
+            await api(
+                "/api/reports"
+            );
+
+
+        if (
+            !result.response.ok ||
+            !result.data.success
+        ) {
+
+            throw new Error(
+                result.data.error ||
+                "Couldn't load reports"
+            );
+
+        }
+
+
+        const reports =
+            result.data.reports ||
+            [];
+
+
+        document.getElementById(
+            "rc"
+        ).textContent =
+            reports.length;
+
+
+        document.getElementById(
+            "tr"
+        ).textContent =
+            reports.reduce(
+                (
+                    total,
+                    report
+                ) =>
+                    total +
+                    Number(
+                        report.reports ||
+                        0
+                    ),
+                0
+            );
+
+
+        list.innerHTML =
+            "";
+
+
+        if (
+            reports.length ===
+            0
+        ) {
+
+            list.textContent =
+                "🟢 No reported links.";
+
+
+            return;
+
+        }
+
+
+        reports.forEach(
+            report => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "adminItem";
+
+
+                item.innerHTML = `
+                    <div class="adminTop">
+                        <strong>
+                            ${escapeHTML(
+                                report.url
+                            )}
+                        </strong>
+
+                        <span>
+                            ${Number(
+                                report.reports ||
+                                0
+                            )}
+                        </span>
+                    </div>
+
+                    <div class="adminMeta">
+                        ${escapeHTML(
+                            new Date(
+                                report.lastReported ||
+                                report.time
+                            ).toLocaleString()
+                        )}
+                    </div>
+
+                    <div class="adminActions">
+
+                        <button
+                            class="restoreButton"
+                            type="button"
+                        >
+                            ♻️ Restore
+                        </button>
+
+                    </div>
+                `;
+
+
+                item
+                    .querySelector(
+                        ".restoreButton"
+                    )
+                    .addEventListener(
+                        "click",
+                        async () => {
+
+                            try {
+
+                                const result =
+                                    await api(
+                                        "/api/restore",
+                                        {
+                                            method:
+                                                "POST",
+
+                                            body:
+                                                JSON.stringify({
+                                                    url:
+                                                        report.url
+                                                })
+                                        }
+                                    );
+
+
+                                if (
+                                    !result.response.ok ||
+                                    !result.data.success
+                                ) {
+
+                                    throw new Error(
+                                        result.data.error ||
+                                        "Restore failed"
+                                    );
+
+                                }
+
+
+                                showToast(
+                                    "✅ Report restored."
+                                );
+
+
+                                loadReports();
+
+                            } catch (
+                                error
+                            ) {
+
+                                showToast(
+                                    "❌ " +
+                                    error.message
+                                );
+
+                            }
+
+                        }
+                    );
+
+
+                list.appendChild(
+                    item
+                );
+
+            }
+        );
+
+
+    } catch (
+        error
+    ) {
+
+        list.textContent =
+            "❌ " +
+            error.message;
+
+    }
 
 }
 
 
 async function loadUsers() {
 
-  const list =
-    document.getElementById(
-      "usersList"
-    );
-
-
-  list.textContent =
-    "Loading...";
-
-
-  try {
-
-    const result =
-      await api(
-        "/api/admin/users"
-      );
-
-
-    if (
-      !result.response.ok ||
-      !result.data.success
-    ) {
-
-      throw new Error(
-        result.data.error ||
-        "Could not load users"
-      );
-
-    }
-
-
-    const users =
-      result.data.users ||
-      [];
-
-
-    list.innerHTML =
-      "";
-
-
-    users.forEach(
-      accountUser => {
-
-        const item =
-          document.createElement(
-            "div"
-          );
-
-
-        item.className =
-          "item";
-
-
-        item.innerHTML = `
-          <div class="top">
-
-            <strong>
-              @${esc(
-                accountUser.username
-              )}
-            </strong>
-
-            <span>
-              ${esc(
-                accountUser.status ||
-                "active"
-              )}
-            </span>
-
-          </div>
-
-          <div class="meta">
-            ${esc(
-              accountUser.displayName ||
-              ""
-            )}
-          </div>
-
-          <div class="meta">
-            Role:
-            ${esc(
-              accountUser.role ||
-              "user"
-            )}
-            •
-            Verified:
-            ${
-              accountUser.verified
-                ? "Yes"
-                : "No"
-            }
-          </div>
-
-          <div class="mini-actions">
-
-            <button
-              data-action="verify"
-              type="button"
-            >
-              ✅ Verify
-            </button>
-
-            <button
-              data-action="unverify"
-              type="button"
-            >
-              ↩ Unverify
-            </button>
-
-            <button
-              data-action="block"
-              type="button"
-            >
-              🚫 Block
-            </button>
-
-            <button
-              data-action="unblock"
-              type="button"
-            >
-              ✅ Unblock
-            </button>
-
-            <button
-              data-action="ban"
-              type="button"
-            >
-              🔨 Ban
-            </button>
-
-            ${
-              accountUser.role !==
-              "admin"
-                ? `
-                  <button
-                    data-action="promote"
-                    type="button"
-                  >
-                    ⭐ Make Admin
-                  </button>
-                `
-                : ""
-            }
-
-          </div>
-        `;
-
-
-        item
-          .querySelectorAll(
-            "[data-action]"
-          )
-          .forEach(
-            button => {
-
-              button.addEventListener(
-                "click",
-                () =>
-                  adminUserAction(
-                    button.dataset.action,
-                    accountUser.id
-                  )
-              );
-
-            }
-          );
-
-
-        list.appendChild(
-          item
+    const list =
+        document.getElementById(
+            "usersList"
         );
 
-      }
-    );
-
-
-    if (
-      users.length ===
-      0
-    ) {
-
-      list.textContent =
-        "No accounts yet.";
-
-    }
-
-  } catch (
-    error
-  ) {
 
     list.textContent =
-      "❌ " +
-      error.message;
+        "Loading...";
 
-  }
+
+    try {
+
+        const result =
+            await api(
+                "/api/admin/users"
+            );
+
+
+        if (
+            !result.response.ok ||
+            !result.data.success
+        ) {
+
+            throw new Error(
+                result.data.error ||
+                "Couldn't load users"
+            );
+
+        }
+
+
+        const users =
+            result.data.users ||
+            [];
+
+
+        list.innerHTML =
+            "";
+
+
+        if (
+            users.length ===
+            0
+        ) {
+
+            list.textContent =
+                "No accounts yet.";
+
+
+            return;
+
+        }
+
+
+        users.forEach(
+            accountUser => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "adminItem";
+
+
+                item.innerHTML = `
+                    <div class="adminTop">
+
+                        <strong>
+                            @${escapeHTML(
+                                accountUser.username
+                            )}
+                        </strong>
+
+                        <span>
+                            ${escapeHTML(
+                                accountUser.status ||
+                                "active"
+                            )}
+                        </span>
+
+                    </div>
+
+                    <div class="adminMeta">
+                        ${escapeHTML(
+                            accountUser.displayName ||
+                            ""
+                        )}
+                    </div>
+
+                    <div class="adminMeta">
+                        Role:
+                        ${escapeHTML(
+                            accountUser.role ||
+                            "user"
+                        )}
+                        •
+                        Verified:
+                        ${
+                            accountUser.verified
+                                ? "Yes"
+                                : "No"
+                        }
+                    </div>
+
+                    <div class="adminActions">
+
+                        <button
+                            data-action="verify"
+                            type="button"
+                        >
+                            ✅ Verify
+                        </button>
+
+                        <button
+                            data-action="unverify"
+                            type="button"
+                        >
+                            ↩ Unverify
+                        </button>
+
+                        <button
+                            data-action="block"
+                            type="button"
+                        >
+                            🚫 Block
+                        </button>
+
+                        <button
+                            data-action="unblock"
+                            type="button"
+                        >
+                            ✅ Unblock
+                        </button>
+
+                        <button
+                            data-action="ban"
+                            type="button"
+                        >
+                            🔨 Ban
+                        </button>
+
+                        ${
+                            accountUser.role !==
+                            "admin"
+                                ? `
+                                    <button
+                                        data-action="promote"
+                                        type="button"
+                                    >
+                                        ⭐ Make Admin
+                                    </button>
+                                  `
+                                : ""
+                        }
+
+                    </div>
+                `;
+
+
+                item
+                    .querySelectorAll(
+                        "[data-action]"
+                    )
+                    .forEach(
+                        button => {
+
+                            button.addEventListener(
+                                "click",
+                                () =>
+                                    adminUserAction(
+                                        button.dataset.action,
+                                        accountUser.id
+                                    )
+                            );
+
+                        }
+                    );
+
+
+                list.appendChild(
+                    item
+                );
+
+            }
+        );
+
+
+    } catch (
+        error
+    ) {
+
+        list.textContent =
+            "❌ " +
+            error.message;
+
+    }
 
 }
 
 
 async function adminUserAction(
-  action,
-  userId
+    action,
+    userId
 ) {
 
-  const routes = {
+    const routes = {
 
-    verify:
-      "/api/admin/verify",
+        verify:
+            "/api/admin/verify",
 
-    unverify:
-      "/api/admin/unverify",
+        unverify:
+            "/api/admin/unverify",
 
-    block:
-      "/api/admin/block",
+        block:
+            "/api/admin/block",
 
-    unblock:
-      "/api/admin/unblock",
+        unblock:
+            "/api/admin/unblock",
 
-    ban:
-      "/api/admin/ban",
+        ban:
+            "/api/admin/ban",
 
-    promote:
-      "/api/admin/promote"
+        promote:
+            "/api/admin/promote"
 
-  };
-
-
-  if (
-    !routes[action]
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    const result =
-      await api(
-        routes[action],
-        {
-          method:
-            "POST",
-
-          body:
-            JSON.stringify({
-              userId
-            })
-        }
-      );
+    };
 
 
     if (
-      !result.response.ok ||
-      !result.data.success
+        !routes[action]
     ) {
 
-      throw new Error(
-        result.data.error ||
-        "Action failed"
-      );
-
-    }
-
-
-    toast(
-      "✅ " +
-      result.data.message
-    );
-
-
-    loadUsers();
-
-  } catch (
-    error
-  ) {
-
-    toast(
-      "❌ " +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* ================= CHAT UI ================= */
-
-let chatSocket = null;
-let chatReconnectTimer = null;
-
-const chatMessages =
-  document.getElementById("messages");
-
-const chatInput =
-  document.getElementById("chatInput");
-
-const chatSend =
-  document.getElementById("chatSend");
-
-function addChatMessage(message) {
-  const item =
-    document.createElement("div");
-
-  item.className =
-    "chatMsg";
-
-  if (
-    user &&
-    message.userId === user.id
-  ) {
-    item.classList.add("mine");
-  }
-
-  const time =
-    message.time
-      ? new Date(message.time).toLocaleTimeString([], {
-          hour: "numeric",
-          minute: "2-digit"
-        })
-      : "";
-
-  item.innerHTML = `
-    <div class="chatMeta">
-      ${esc(message.displayName || message.username || "User")}
-      • ${esc(time)}
-    </div>
-
-    <div class="chatText">
-      ${esc(message.text || "")}
-    </div>
-  `;
-
-  chatMessages.appendChild(item);
-  chatMessages.scrollTop =
-    chatMessages.scrollHeight;
-}
-
-function clearChat() {
-  chatMessages.innerHTML = "";
-}
-
-function connectChat() {
-  if (!user) {
-    return;
-  }
-
-  if (
-    chatSocket &&
-    (
-      chatSocket.readyState === WebSocket.OPEN ||
-      chatSocket.readyState === WebSocket.CONNECTING
-    )
-  ) {
-    return;
-  }
-
-  const protocol =
-    location.protocol === "https:"
-      ? "wss:"
-      : "ws:";
-
-  /*
-   * Your Worker is on the same domain as
-   * the deployed hub. This keeps the cookie
-   * session attached to the WebSocket request.
-   */
-  const socketURL =
-    `${protocol}//${location.host}/api/chat`;
-
-  chatSocket =
-    new WebSocket(socketURL);
-
-  chatSocket.addEventListener(
-    "open",
-    () => {
-      chatSend.disabled = false;
-      chatInput.disabled = false;
-
-      chatInput.placeholder =
-        "Type a message...";
-
-      toast(
-        "🟢 Connected to chat."
-      );
-    }
-  );
-
-  chatSocket.addEventListener(
-    "message",
-    event => {
-      let data;
-
-      try {
-        data = JSON.parse(event.data);
-      } catch {
         return;
-      }
 
-      if (
-        data.type === "history"
-      ) {
-        clearChat();
+    }
 
-        for (
-          const message
-          of data.messages || []
+
+    try {
+
+        const result =
+            await api(
+                routes[action],
+                {
+                    method:
+                        "POST",
+
+                    body:
+                        JSON.stringify({
+                            userId
+                        })
+                }
+            );
+
+
+        if (
+            !result.response.ok ||
+            !result.data.success
         ) {
-          addChatMessage(message);
+
+            throw new Error(
+                result.data.error ||
+                "Action failed"
+            );
+
         }
 
-        return;
-      }
 
-      if (
-        data.type === "message"
-      ) {
-        addChatMessage(data);
-        return;
-      }
-
-      if (
-        data.type === "error"
-      ) {
-        toast(
-          "❌ " +
-          (data.error || "Chat error")
+        showToast(
+            "✅ " +
+            (
+                result.data.message ||
+                "Done"
+            )
         );
-      }
-    }
-  );
 
-  chatSocket.addEventListener(
-    "close",
-    () => {
-      chatSend.disabled = true;
-      chatInput.disabled = true;
 
-      if (!user) {
-        return;
-      }
+        loadUsers();
 
-      clearTimeout(
-        chatReconnectTimer
-      );
 
-      chatReconnectTimer =
-        setTimeout(
-          connectChat,
-          2500
-        );
-    }
-  );
-
-  chatSocket.addEventListener(
-    "error",
-    () => {
-      toast(
-        "❌ Chat connection error."
-      );
-    }
-  );
-}
-
-function sendChatMessage() {
-  if (!user) {
-    toast(
-      "Log in before using chat."
-    );
-
-    return;
-  }
-
-  if (
-    !chatSocket ||
-    chatSocket.readyState !== WebSocket.OPEN
-  ) {
-    toast(
-      "❌ Chat isn't connected yet."
-    );
-
-    connectChat();
-
-    return;
-  }
-
-  const text =
-    chatInput.value.trim();
-
-  if (!text) {
-    return;
-  }
-
-  chatSocket.send(
-    JSON.stringify({
-      type: "chat",
-      text
-    })
-  );
-
-  chatInput.value = "";
-  chatInput.focus();
-}
-
-chatSend.addEventListener(
-  "click",
-  sendChatMessage
-);
-
-chatInput.addEventListener(
-  "keydown",
-  event => {
-    if (
-      event.key === "Enter" &&
-      !event.shiftKey
+    } catch (
+        error
     ) {
-      event.preventDefault();
-      sendChatMessage();
+
+        showToast(
+            "❌ " +
+            error.message
+        );
+
     }
-  }
-);
+
+}
+
+
+/* =========================================================
+   NAV + MODALS
+========================================================= */
 
 document.getElementById(
-  "chatNav"
+    "linksNav"
 ).addEventListener(
-  "click",
-  () => {
-    active("chatNav");
+    "click",
+    () => {
 
-    show("chatModal");
+        setActiveNav(
+            "linksNav"
+        );
 
-    if (user) {
-      connectChat();
-    } else {
-      toast(
-        "Log in before using chat."
-      );
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
     }
-  }
 );
 
 
-/* ================= STAR FIELD ================= */
+document.getElementById(
+    "accountNav"
+).addEventListener(
+    "click",
+    () => {
+
+        setActiveNav(
+            "accountNav"
+        );
+
+
+        showModal(
+            "accountModal"
+        );
+
+
+        if (
+            currentUser
+        ) {
+
+            showAccount(
+                currentUser
+            );
+
+        } else {
+
+            showSignup();
+
+        }
+
+    }
+);
+
+
+document
+    .querySelectorAll(
+        "[data-close]"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    hideModal(
+                        button.dataset.close
+                    );
+
+
+                    setActiveNav(
+                        "linksNav"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+document
+    .querySelectorAll(
+        ".modal"
+    )
+    .forEach(
+        modal => {
+
+            modal.addEventListener(
+                "click",
+                event => {
+
+                    if (
+                        event.target ===
+                        modal
+                    ) {
+
+                        modal.classList.remove(
+                            "show"
+                        );
+
+
+                        setActiveNav(
+                            "linksNav"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   STAR FIELD
+========================================================= */
 
 const canvas =
-  document.getElementById(
-    "stars"
-  );
+    document.getElementById(
+        "starCanvas"
+    );
 
-const context =
-  canvas.getContext(
-    "2d"
-  );
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
 
 const glow =
-  document.getElementById(
-    "glow"
-  );
+    document.getElementById(
+        "mouseGlow"
+    );
 
 
 let stars =
-  [];
+    [];
 
 let mouseX =
-  window.innerWidth / 2;
+    window.innerWidth /
+    2;
 
 let mouseY =
-  window.innerHeight / 2;
+    window.innerHeight /
+    2;
 
 
 function resizeStars() {
 
-  const ratio =
-    window.devicePixelRatio ||
-    1;
+    const ratio =
+        window.devicePixelRatio ||
+        1;
 
 
-  canvas.width =
-    window.innerWidth *
-    ratio;
+    canvas.width =
+        window.innerWidth *
+        ratio;
 
 
-  canvas.height =
-    window.innerHeight *
-    ratio;
+    canvas.height =
+        window.innerHeight *
+        ratio;
 
 
-  canvas.style.width =
-    window.innerWidth +
-    "px";
+    canvas.style.width =
+        window.innerWidth +
+        "px";
 
 
-  canvas.style.height =
-    window.innerHeight +
-    "px";
+    canvas.style.height =
+        window.innerHeight +
+        "px";
 
 
-  context.setTransform(
-    ratio,
-    0,
-    0,
-    ratio,
-    0,
-    0
-  );
-
-
-  const amount =
-    Math.min(
-      150,
-      Math.max(
-        70,
-        Math.floor(
-          window.innerWidth *
-          window.innerHeight /
-          12000
-        )
-      )
+    ctx.setTransform(
+        ratio,
+        0,
+        0,
+        ratio,
+        0,
+        0
     );
 
 
-  stars =
-    Array.from(
-      {
-        length:
-          amount
-      },
-      () => ({
-        x:
-          Math.random() *
-          window.innerWidth,
+    const count =
+        Math.min(
+            150,
+            Math.max(
+                65,
+                Math.floor(
+                    window.innerWidth *
+                    window.innerHeight /
+                    14000
+                )
+            )
+        );
 
-        y:
-          Math.random() *
-          window.innerHeight,
 
-        r:
-          Math.random() *
-          .65 +
-          .2,
+    stars =
+        Array.from(
+            {
+                length:
+                    count
+            },
+            () => ({
+                x:
+                    Math.random() *
+                    window.innerWidth,
 
-        a:
-          Math.random() *
-          .5 +
-          .18,
+                y:
+                    Math.random() *
+                    window.innerHeight,
 
-        speed:
-          Math.random() *
-          .12 +
-          .03
+                radius:
+                    Math.random() *
+                    .7 +
+                    .2,
 
-      })
-    );
+                alpha:
+                    Math.random() *
+                    .45 +
+                    .16,
+
+                speed:
+                    Math.random() *
+                    .11 +
+                    .025
+            })
+        );
 
 }
 
 
 window.addEventListener(
-  "resize",
-  resizeStars
+    "resize",
+    resizeStars
 );
 
 
 window.addEventListener(
-  "mousemove",
-  event => {
+    "mousemove",
+    event => {
 
-    mouseX =
-      event.clientX;
-
-    mouseY =
-      event.clientY;
+        mouseX =
+            event.clientX;
 
 
-    glow.style.left =
-      mouseX +
-      "px";
+        mouseY =
+            event.clientY;
 
-    glow.style.top =
-      mouseY +
-      "px";
 
-  }
+        glow.style.left =
+            mouseX +
+            "px";
+
+
+        glow.style.top =
+            mouseY +
+            "px";
+
+    }
 );
 
 
-function animateStars() {
+function drawStars() {
 
-  context.clearRect(
-    0,
-    0,
-    window.innerWidth,
-    window.innerHeight
-  );
-
-
-  for (
-    const star
-    of stars
-  ) {
-
-    star.y -=
-      star.speed;
+    ctx.clearRect(
+        0,
+        0,
+        window.innerWidth,
+        window.innerHeight
+    );
 
 
-    if (
-      star.y <
-      -2
+    for (
+        const star
+        of stars
     ) {
 
-      star.y =
-        window.innerHeight +
-        2;
+        star.y -=
+            star.speed;
 
-      star.x =
-        Math.random() *
-        window.innerWidth;
+
+        if (
+            star.y <
+            -2
+        ) {
+
+            star.y =
+                window.innerHeight +
+                2;
+
+
+            star.x =
+                Math.random() *
+                window.innerWidth;
+
+        }
+
+
+        const dx =
+            mouseX -
+            star.x;
+
+
+        const dy =
+            mouseY -
+            star.y;
+
+
+        const distance =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+
+
+        const influence =
+            Math.max(
+                0,
+                1 -
+                distance /
+                145
+            );
+
+
+        const radius =
+            star.radius +
+            influence *
+            1.2;
+
+
+        const alpha =
+            Math.min(
+                .82,
+                star.alpha +
+                influence *
+                .38
+            );
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            star.x,
+            star.y,
+            radius,
+            0,
+            Math.PI * 2
+        );
+
+
+        ctx.fillStyle =
+            `rgba(212,222,255,${alpha})`;
+
+
+        ctx.fill();
 
     }
 
 
-    const dx =
-      mouseX -
-      star.x;
-
-
-    const dy =
-      mouseY -
-      star.y;
-
-
-    const distance =
-      Math.hypot(
-        dx,
-        dy
-      );
-
-
-    const influence =
-      Math.max(
-        0,
-        1 -
-        distance /
-        150
-      );
-
-
-    const radius =
-      star.r +
-      influence *
-      1.35;
-
-
-    const alpha =
-      Math.min(
-        .85,
-        star.a +
-        influence *
-        .36
-      );
-
-
-    context.beginPath();
-
-
-    context.arc(
-      star.x,
-      star.y,
-      radius,
-      0,
-      Math.PI * 2
+    requestAnimationFrame(
+        drawStars
     );
-
-
-    context.fillStyle =
-      `rgba(210,220,255,${alpha})`;
-
-
-    context.fill();
-
-  }
-
-
-  requestAnimationFrame(
-    animateStars
-  );
 
 }
 
 
-/* ================= START ================= */
-
 resizeStars();
+drawStars();
 
-animateStars();
+
+/* =========================================================
+   START
+========================================================= */
 
 restoreSession();
 
