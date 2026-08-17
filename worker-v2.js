@@ -2,141 +2,42 @@ import legacyWorker, { ChatRoom } from "./worker.js";
 
 export { ChatRoom };
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization"
-};
-
+const CORS = {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"GET, POST, OPTIONS","Access-Control-Allow-Headers":"Content-Type, Authorization"};
 const MAX_AVATAR_LENGTH = 180000;
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+    if (request.method === "OPTIONS") return new Response(null,{status:204,headers:CORS});
     try {
-      if (url.pathname === "/api/profile" && request.method === "POST") return await updateProfile(request, env);
-      if (url.pathname === "/api/users/search" && request.method === "GET") return await searchUsers(request, env);
-      if (url.pathname === "/api/dms" && request.method === "GET") return await listDMs(request, env);
-      if (url.pathname === "/api/dm/create" && request.method === "POST") return await createDM(request, env);
-      if (url.pathname === "/api/groups" && request.method === "GET") return await listGroups(request, env);
-      if (url.pathname === "/api/group/create" && request.method === "POST") return await createGroup(request, env);
-      if (url.pathname === "/api/dm/ws" && isWebSocket(request)) return await chatRoomSocket(request, env, "dm");
-      if (url.pathname === "/api/group/ws" && isWebSocket(request)) return await chatRoomSocket(request, env, "group");
-
-      if (request.method === "GET" && acceptsHtml(request)) {
-        const asset = await env.ASSETS.fetch(request);
-        if (asset.ok) {
-          return new HTMLRewriter().on("body", {
-            element(el) { el.append('<script src="/app-enhance-v4.js?v=1" defer></script>', { html: true }); }
-          }).transform(asset);
-        }
+      if(url.pathname==="/api/profile"&&request.method==="POST")return await updateProfile(request,env);
+      if(url.pathname==="/api/users/search"&&request.method==="GET")return await searchUsers(request,env);
+      if(url.pathname==="/api/dms"&&request.method==="GET")return await listDMs(request,env);
+      if(url.pathname==="/api/dm/create"&&request.method==="POST")return await createDM(request,env);
+      if(url.pathname==="/api/groups"&&request.method==="GET")return await listGroups(request,env);
+      if(url.pathname==="/api/group/create"&&request.method==="POST")return await createGroup(request,env);
+      if(url.pathname==="/api/dm/ws"&&isWebSocket(request))return await chatRoomSocket(request,env,"dm");
+      if(url.pathname==="/api/group/ws"&&isWebSocket(request))return await chatRoomSocket(request,env,"group");
+      if(request.method==="GET"&&acceptsHtml(request)){
+        const asset=await env.ASSETS.fetch(request);
+        if(asset.ok)return new HTMLRewriter().on("body",{element(el){el.append('<script src="/app-enhance-v4.js?v=1" defer></script><script src="/ui-patch.js?v=1" defer></script>',{html:true})}}).transform(asset);
       }
-      return legacyWorker.fetch(request, env, ctx);
-    } catch (error) {
-      console.error("V2 WORKER ERROR:", error?.stack || error);
-      return json({ success: false, error: "Internal server error" }, 500);
-    }
+      return legacyWorker.fetch(request,env,ctx);
+    }catch(error){console.error("V2 WORKER ERROR:",error?.stack||error);return json({success:false,error:"Internal server error"},500)}
   }
 };
-
-function isWebSocket(request) { return request.headers.get("Upgrade")?.toLowerCase() === "websocket"; }
-function acceptsHtml(request) { return (request.headers.get("Accept") || "").includes("text/html"); }
-
-async function auth(request, env) {
-  const token = getToken(request);
-  if (!token) return { success: false, status: 401, error: "Not authenticated" };
-  const session = await env.SESSIONS.get(`session:${token}`, "json");
-  if (!session || Date.now() >= Number(session.expiresAt || 0)) {
-    if (session) await env.SESSIONS.delete(`session:${token}`);
-    return { success: false, status: 401, error: "Session expired" };
-  }
-  const user = await env.USERS.get(`id:${session.userId}`, "json");
-  if (!user) return { success: false, status: 401, error: "Account not found" };
-  if (user.status === "blocked" || user.status === "banned") return { success: false, status: 403, error: "Account access is disabled" };
-  return { success: true, user, token };
-}
-
-async function updateProfile(request, env) {
-  const a = await auth(request, env);
-  if (!a.success) return json({ success: false, error: a.error }, a.status);
-  const data = await safeJson(request);
-  const user = a.user;
-  if (typeof data.displayName === "string") { const n = data.displayName.trim().slice(0, 80); if (n) user.displayName = n; }
-  const profile = user.profile && typeof user.profile === "object" ? user.profile : {};
-  if (typeof data.avatar === "string") {
-    if (data.avatar.length > MAX_AVATAR_LENGTH) return json({ success: false, error: "Profile picture is too large" }, 413);
-    if (data.avatar && !/^(data:image\/(?:jpeg|jpg|png|webp|gif);base64,|https?:\/\/)/i.test(data.avatar) && data.avatar.length > 8) return json({ success: false, error: "Invalid profile picture" }, 400);
-    profile.avatar = data.avatar.slice(0, MAX_AVATAR_LENGTH);
-  }
-  if (typeof data.bio === "string") profile.bio = data.bio.trim().slice(0, 160);
-  if (typeof data.accent === "string" && /^#[0-9a-fA-F]{6}$/.test(data.accent)) profile.accent = data.accent;
-  if (["online", "idle", "dnd"].includes(data.status)) profile.status = data.status;
-  user.profile = profile;
-  await saveUser(env, user);
-  return json({ success: true, user: publicUser(user) });
-}
-
-async function searchUsers(request, env) {
-  const a = await auth(request, env); if (!a.success) return json({ success: false, error: a.error }, a.status);
-  const q = new URL(request.url).searchParams.get("q")?.trim().toLowerCase() || "";
-  const users = []; let cursor;
-  while (users.length < 25) {
-    const result = await env.USERS.list({ prefix: "id:", limit: 1000, ...(cursor ? { cursor } : {}) });
-    for (const item of result.keys) { const user = await env.USERS.get(item.name, "json"); if (!user || user.id === a.user.id) continue; if (!q || `${user.username} ${user.displayName || ""}`.toLowerCase().includes(q)) users.push(publicUser(user)); if (users.length >= 25) break; }
-    if (result.list_complete || users.length >= 25) break; cursor = result.cursor;
-  }
-  return json({ success: true, users });
-}
-
-async function createDM(request, env) {
-  const a = await auth(request, env); if (!a.success) return json({ success: false, error: a.error }, a.status);
-  const data = await safeJson(request); const targetId = typeof data.userId === "string" ? data.userId : "";
-  if (!targetId || targetId === a.user.id) return json({ success: false, error: "Invalid user" }, 400);
-  const target = await env.USERS.get(`id:${targetId}`, "json"); if (!target) return json({ success: false, error: "User not found" }, 404);
-  const members = [a.user.id, target.id].sort(); const key = `chat:dm:${members.join(":")}`; const existing = await env.USERS.get(key, "json");
-  if (existing) return json({ success: true, dm: existing });
-  const dm = { id: members.join("_"), type: "dm", members, createdAt: new Date().toISOString(), users: [publicUser(a.user), publicUser(target)] };
-  await env.USERS.put(key, JSON.stringify(dm)); return json({ success: true, dm });
-}
-
-async function listDMs(request, env) {
-  const a = await auth(request, env); if (!a.success) return json({ success: false, error: a.error }, a.status);
-  const dms = []; let cursor;
-  while (true) { const result = await env.USERS.list({ prefix: "chat:dm:", limit: 1000, ...(cursor ? { cursor } : {}) }); for (const item of result.keys) { const dm = await env.USERS.get(item.name, "json"); if (dm?.members?.includes(a.user.id)) dms.push(dm); } if (result.list_complete) break; cursor = result.cursor; }
-  return json({ success: true, dms });
-}
-
-async function createGroup(request, env) {
-  const a = await auth(request, env); if (!a.success) return json({ success: false, error: a.error }, a.status);
-  const data = await safeJson(request); const name = typeof data.name === "string" ? data.name.trim().slice(0, 60) : ""; const requested = Array.isArray(data.memberIds) ? data.memberIds.filter(x => typeof x === "string") : [];
-  if (!name) return json({ success: false, error: "Group name is required" }, 400);
-  const memberIds = [...new Set([a.user.id, ...requested])].slice(0, 50); const users = [];
-  for (const id of memberIds) { const user = await env.USERS.get(`id:${id}`, "json"); if (user) users.push(publicUser(user)); }
-  if (users.length < 2) return json({ success: false, error: "Add at least one other member" }, 400);
-  const group = { id: crypto.randomUUID(), type: "group", name, ownerId: a.user.id, members: users.map(u => u.id), users, createdAt: new Date().toISOString() };
-  await env.USERS.put(`chat:group:${group.id}`, JSON.stringify(group)); return json({ success: true, group });
-}
-
-async function listGroups(request, env) {
-  const a = await auth(request, env); if (!a.success) return json({ success: false, error: a.error }, a.status);
-  const groups = []; let cursor;
-  while (true) { const result = await env.USERS.list({ prefix: "chat:group:", limit: 1000, ...(cursor ? { cursor } : {}) }); for (const item of result.keys) { const group = await env.USERS.get(item.name, "json"); if (group?.members?.includes(a.user.id)) groups.push(group); } if (result.list_complete) break; cursor = result.cursor; }
-  return json({ success: true, groups });
-}
-
-async function chatRoomSocket(request, env, type) {
-  const a = await auth(request, env); if (!a.success) return new Response(a.error, { status: a.status });
-  const url = new URL(request.url); const id = url.searchParams.get("id") || ""; if (!id) return new Response("Missing chat id", { status: 400 });
-  let roomName;
-  if (type === "dm") { const dm = await env.USERS.get(`chat:dm:${id}`, "json"); if (!dm || !dm.members?.includes(a.user.id)) return new Response("Forbidden", { status: 403 }); roomName = `dm:${id}`; }
-  else { const group = await env.USERS.get(`chat:group:${id}`, "json"); if (!group || !group.members?.includes(a.user.id)) return new Response("Forbidden", { status: 403 }); roomName = `group:${id}`; }
-  const headers = new Headers(request.headers); headers.set("X-Chat-User-Id", a.user.id); headers.set("X-Chat-Username", a.user.username); headers.set("X-Chat-Display-Name", a.user.displayName || "");
-  const roomId = env.CHAT_ROOM.idFromName(roomName); return env.CHAT_ROOM.get(roomId).fetch(new Request(request, { headers }));
-}
-
-async function saveUser(env, user) { const value = JSON.stringify(user); await env.USERS.put(`id:${user.id}`, value); await env.USERS.put(`username:${user.username}`, value); }
-function publicUser(user) { return { id:user.id, username:user.username, displayName:user.displayName, createdAt:user.createdAt, status:user.status, role:user.role, verified:user.role === "admin" ? true : user.verified === true, profile:{ avatar:user.profile?.avatar || "", bio:user.profile?.bio || "", accent:user.profile?.accent || "#5865f2", status:user.profile?.status || "online" } }; }
-async function safeJson(request) { try { return await request.json(); } catch { return {}; } }
-function getToken(request) { const cookie=request.headers.get("Cookie")||""; for(const part of cookie.split(";")){const [name,...rest]=part.trim().split("=");if(name==="session"&&rest.length)return rest.join("=");} const auth=request.headers.get("Authorization")||""; return auth.startsWith("Bearer ")?auth.slice(7).trim():null; }
+function isWebSocket(request){return request.headers.get("Upgrade")?.toLowerCase()==="websocket"}
+function acceptsHtml(request){return(request.headers.get("Accept")||"").includes("text/html")}
+async function auth(request,env){const token=getToken(request);if(!token)return{success:false,status:401,error:"Not authenticated"};const session=await env.SESSIONS.get(`session:${token}`,"json");if(!session||Date.now()>=Number(session.expiresAt||0)){if(session)await env.SESSIONS.delete(`session:${token}`);return{success:false,status:401,error:"Session expired"}}const user=await env.USERS.get(`id:${session.userId}`,"json");if(!user)return{success:false,status:401,error:"Account not found"};if(user.status==="blocked"||user.status==="banned")return{success:false,status:403,error:"Account access is disabled"};return{success:true,user,token}}
+async function updateProfile(request,env){const a=await auth(request,env);if(!a.success)return json({success:false,error:a.error},a.status);const data=await safeJson(request),user=a.user; if(typeof data.displayName==="string"){const n=data.displayName.trim().slice(0,80);if(n)user.displayName=n}const profile=user.profile&&typeof user.profile==="object"?user.profile:{};if(typeof data.avatar==="string"){if(data.avatar.length>MAX_AVATAR_LENGTH)return json({success:false,error:"Profile picture is too large"},413);if(data.avatar&&!/^(data:image\/(?:jpeg|jpg|png|webp|gif);base64,|https?:\/\/)/i.test(data.avatar)&&data.avatar.length>8)return json({success:false,error:"Invalid profile picture"},400);if(data.avatar)profile.avatar=data.avatar.slice(0,MAX_AVATAR_LENGTH)}if(typeof data.bio==="string")profile.bio=data.bio.trim().slice(0,160);if(typeof data.accent==="string"&&/^#[0-9a-fA-F]{6}$/.test(data.accent))profile.accent=data.accent;if(["online","idle","dnd"].includes(data.status))profile.status=data.status;user.profile=profile;await saveUser(env,user);return json({success:true,user:publicUser(user)})}
+async function searchUsers(request,env){const a=await auth(request,env);if(!a.success)return json({success:false,error:a.error},a.status);const q=new URL(request.url).searchParams.get("q")?.trim().toLowerCase()||"",users=[];let cursor;while(users.length<25){const result=await env.USERS.list({prefix:"id:",limit:1000,...(cursor?{cursor}:{})});for(const item of result.keys){const user=await env.USERS.get(item.name,"json");if(!user||user.id===a.user.id)continue;if(!q||`${user.username} ${user.displayName||""}`.toLowerCase().includes(q))users.push(publicUser(user));if(users.length>=25)break}if(result.list_complete||users.length>=25)break;cursor=result.cursor}return json({success:true,users})}
+async function createDM(request,env){const a=await auth(request,env);if(!a.success)return json({success:false,error:a.error},a.status);const data=await safeJson(request),targetId=typeof data.userId==="string"?data.userId:"";if(!targetId||targetId===a.user.id)return json({success:false,error:"Invalid user"},400);const target=await env.USERS.get(`id:${targetId}`,"json");if(!target)return json({success:false,error:"User not found"},404);const members=[a.user.id,target.id].sort(),key=`chat:dm:${members.join(":")}`,existing=await env.USERS.get(key,"json");if(existing)return json({success:true,dm:existing});const dm={id:members.join("_"),type:"dm",members,createdAt:new Date().toISOString(),users:[publicUser(a.user),publicUser(target)]};await env.USERS.put(key,JSON.stringify(dm));return json({success:true,dm})}
+async function listDMs(request,env){const a=await auth(request,env);if(!a.success)return json({success:false,error:a.error},a.status);const dms=[];let cursor;while(true){const result=await env.USERS.list({prefix:"chat:dm:",limit:1000,...(cursor?{cursor}:{})});for(const item of result.keys){const dm=await env.USERS.get(item.name,"json");if(dm?.members?.includes(a.user.id))dms.push(dm)}if(result.list_complete)break;cursor=result.cursor}return json({success:true,dms})}
+async function createGroup(request,env){const a=await auth(request,env);if(!a.success)return json({success:false,error:a.error},a.status);const data=await safeJson(request),name=typeof data.name==="string"?data.name.trim().slice(0,60):"",requested=Array.isArray(data.memberIds)?data.memberIds.filter(x=>typeof x==="string"):[];if(!name)return json({success:false,error:"Group name is required"},400);const memberIds=[...new Set([a.user.id,...requested])].slice(0,50),users=[];for(const id of memberIds){const user=await env.USERS.get(`id:${id}`,"json");if(user)users.push(publicUser(user))}if(users.length<2)return json({success:false,error:"Add at least one other member"},400);const group={id:crypto.randomUUID(),type:"group",name,ownerId:a.user.id,members:users.map(u=>u.id),users,createdAt:new Date().toISOString()};await env.USERS.put(`chat:group:${group.id}`,JSON.stringify(group));return json({success:true,group})}
+async function listGroups(request,env){const a=await auth(request,env);if(!a.success)return json({success:false,error:a.error},a.status);const groups=[];let cursor;while(true){const result=await env.USERS.list({prefix:"chat:group:",limit:1000,...(cursor?{cursor}:{})});for(const item of result.keys){const group=await env.USERS.get(item.name,"json");if(group?.members?.includes(a.user.id))groups.push(group)}if(result.list_complete)break;cursor=result.cursor}return json({success:true,groups})}
+async function chatRoomSocket(request,env,type){const a=await auth(request,env);if(!a.success)return new Response(a.error,{status:a.status});const url=new URL(request.url),id=url.searchParams.get("id")||"";if(!id)return new Response("Missing chat id",{status:400});let roomName;if(type==="dm"){const dm=await env.USERS.get(`chat:dm:${id}`,"json");if(!dm||!dm.members?.includes(a.user.id))return new Response("Forbidden",{status:403});roomName=`dm:${id}`}else{const group=await env.USERS.get(`chat:group:${id}`,"json");if(!group||!group.members?.includes(a.user.id))return new Response("Forbidden",{status:403});roomName=`group:${id}`}const headers=new Headers(request.headers);headers.set("X-Chat-User-Id",a.user.id);headers.set("X-Chat-Username",a.user.username);headers.set("X-Chat-Display-Name",a.user.displayName||"");const roomId=env.CHAT_ROOM.idFromName(roomName);return env.CHAT_ROOM.get(roomId).fetch(new Request(request,{headers}))}
+async function saveUser(env,user){const value=JSON.stringify(user);await env.USERS.put(`id:${user.id}`,value);await env.USERS.put(`username:${user.username}`,value)}
+function publicUser(user){return{id:user.id,username:user.username,displayName:user.displayName,createdAt:user.createdAt,status:user.status,role:user.role,verified:user.role==="admin"?true:user.verified===true,profile:{avatar:user.profile?.avatar||"",bio:user.profile?.bio||"",accent:user.profile?.accent||"#5865f2",status:user.profile?.status||"online"}}}
+async function safeJson(request){try{return await request.json()}catch{return{}}}
+function getToken(request){const cookie=request.headers.get("Cookie")||"";for(const part of cookie.split(";")){const[name,...rest]=part.trim().split("=");if(name==="session"&&rest.length)return rest.join("=")}const auth=request.headers.get("Authorization")||"";return auth.startsWith("Bearer ")?auth.slice(7).trim():null}
 function json(data,status=200){return new Response(JSON.stringify(data),{status,headers:{...CORS,"Content-Type":"application/json; charset=UTF-8"}})}
