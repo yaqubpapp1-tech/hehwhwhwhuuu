@@ -7,14 +7,12 @@ export default {
     const response = await core.fetch(request, env, ctx);
     const type = response.headers.get("content-type") || "";
 
-    if (!response.ok || !type.includes("text/html")) {
-      return response;
-    }
+    if (!response.ok || !type.includes("text/html")) return response;
 
     const html = await response.text();
     const injected = html.replace(
       /<\/body>/i,
-      '<script src="/enhancements.js" defer></script></body>'
+      '<script src="/enhancements.js" defer></script><script src="/yaprxy-labels.js" defer></script></body>'
     );
 
     const headers = new Headers(response.headers);
