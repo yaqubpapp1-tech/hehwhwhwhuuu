@@ -10,7 +10,7 @@ if(url.pathname==="/api/dm/create"&&request.method==="POST")return await createD
 if(url.pathname==="/api/groups"&&request.method==="GET")return await listGroups(request,env);
 if(url.pathname==="/api/group/create"&&request.method==="POST")return await createGroup(request,env);
 if(url.pathname==="/api/chat"&&isWebSocket(request))return await chatRoomSocket(request,env);
-if(request.method==="GET"&&acceptsHtml(request)){const asset=await env.ASSETS.fetch(request);if(asset.ok)return new HTMLRewriter().on("body",{element(el){el.append('<script src="/app-enhance-v4.js?v=3" defer></script><script src="/ui-patch.js?v=3" defer></script><script src="/chat-ui-fix.js?v=3" defer></script><script src="/profile-fix.js?v=1" defer></script>',{html:true})}}).transform(asset)}
+if(request.method==="GET"&&acceptsHtml(request)){const asset=await env.ASSETS.fetch(request);if(asset.ok)return new HTMLRewriter().on("body",{element(el){el.append('<script src="/ws-route-fix.js?v=1" defer></script><script src="/app-enhance-v4.js?v=3" defer></script><script src="/ui-patch.js?v=3" defer></script><script src="/chat-ui-fix.js?v=3" defer></script><script src="/profile-fix.js?v=1" defer></script>',{html:true})}}).transform(asset)}
 return legacyWorker.fetch(request,env,ctx);
 }catch(error){console.error("V2 WORKER ERROR:",error?.stack||error);return json({success:false,error:"Internal server error"},500)}}};
 function isWebSocket(r){return r.method==="GET"&&r.headers.get("Upgrade")?.toLowerCase()==="websocket"}
