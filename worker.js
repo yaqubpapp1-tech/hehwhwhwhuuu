@@ -6,7 +6,7 @@ const CHAT_HISTORY_LIMIT=75;
 const CHAT_WINDOW_MS=1000;
 const CHAT_MAX_MESSAGES=5;
 const CHAT_MUTE_MS=5000;
-const CORS={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"GET, POST, OPTIONS","Access-Control-Allow-Headers":"Content-Type, Authorization"};
+const CORS={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"GET, POST, PUT, OPTIONS","Access-Control-Allow-Headers":"Content-Type, Authorization"};
 const json=(d,s=200,extra={})=>new Response(JSON.stringify(d),{status:s,headers:{...CORS,"Content-Type":"application/json;charset=UTF-8",...extra}});
 const token=()=>{const b=new Uint8Array(32);crypto.getRandomValues(b);return btoa(String.fromCharCode(...b)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/g,"")};
 const username=v=>typeof v==="string"?v.trim().toLowerCase():"";
@@ -20,7 +20,7 @@ if(url.pathname==="/api/register"&&request.method==="POST")return register(reque
 if(url.pathname==="/api/login"&&request.method==="POST")return login(request,env);
 if(url.pathname==="/api/logout"&&request.method==="POST"){const t=getToken(request);if(t)await env.SESSIONS.delete(`session:${t}`);return json({success:true,message:"Logged out"},200,{"Set-Cookie":"session=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Lax"})}
 if(url.pathname==="/api/me"&&request.method==="GET"){const a=await auth(request,env);return a.success?json({success:true,user:pub(a.user)}):json({success:false,error:a.error,errorCode:a.errorCode},a.status)}
-if(url.pathname==="/api/profile"&&request.method==="POST")return updateProfile(request,env);
+if(url.pathname==="/api/profile"&&(request.method==="POST"||request.method==="PUT"))return updateProfile(request,env);
 if(url.pathname==="/api/admin/setup"&&request.method==="POST")return setupOwner(request,env);
 if(url.pathname==="/api/report"&&request.method==="POST")return report(request,env);
 if(url.pathname==="/api/reports"&&request.method==="GET"){const a=await requireAdmin(request,env);return a.success?reports(env):json({success:false,error:a.error},a.status)}
