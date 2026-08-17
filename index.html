@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#0b0d12">
-<title>Yaqub's Hub</title>
+<title>yaprxy.</title>
 
 <style>
 :root{
@@ -951,6 +951,57 @@ a{
         scroll-behavior:auto !important;
     }
 }
+
+/* =========================================================
+   YAPRXY PROFILE / MODERATION UI
+========================================================= */
+#accountNav{
+    position:fixed;
+    left:16px;
+    bottom:16px;
+    z-index:6000;
+    width:230px;
+    flex:none;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    text-align:left;
+    background:rgba(17,20,27,.96);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 18px 55px rgba(0,0,0,.5);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+}
+#accountNav .navIcon{margin:0;flex:0 0 auto}
+#accountNav .navLabel{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#accountNav::after{content:'⚙️';margin-left:auto;opacity:.65}
+.accountDockAvatar,.profileAvatar{
+    width:40px;height:40px;border-radius:50%;object-fit:cover;display:grid;place-items:center;
+    background:linear-gradient(135deg,#7289da,#5865f2);color:#fff;font-weight:900;overflow:hidden;flex:0 0 auto;
+    border:1px solid rgba(255,255,255,.12);
+}
+.profileAvatar{width:86px;height:86px;font-size:30px;box-shadow:0 15px 35px rgba(88,101,242,.22)}
+.profileHero{display:flex;gap:16px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);margin-bottom:12px}
+.profileHeroInfo{min-width:0;flex:1}.profileName{font-size:21px;font-weight:950;letter-spacing:-.03em;word-break:break-word}.profileHandle{margin-top:3px;color:var(--muted);font-size:12px}.profileBio{margin-top:10px;color:#d5d8df;font-size:12px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.roleBadge{display:inline-flex;align-items:center;gap:5px;margin-left:6px;padding:3px 7px;border-radius:999px;font-size:9px;font-weight:950;letter-spacing:.04em;vertical-align:middle;white-space:nowrap}
+.roleBadge.admin{color:#111;background:#ffd33d;box-shadow:0 0 13px rgba(255,211,61,.28)}
+.roleBadge.owner{color:#fff;background:#ed4245;box-shadow:0 0 18px rgba(237,66,69,.65),0 0 34px rgba(237,66,69,.22)}
+.profileForm{display:grid;gap:9px;margin-top:12px}.profileForm textarea{width:100%;min-height:90px;resize:vertical;padding:12px 13px;border:1px solid var(--line);border-radius:11px;background:#0d1015;color:#fff;outline:none}.profileForm input{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:11px;background:#0d1015;color:#fff;outline:none}.profileForm input:focus,.profileForm textarea:focus{border-color:rgba(114,137,218,.55);box-shadow:0 0 0 4px rgba(114,137,218,.08)}
+.profilePreview{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02)}
+.adminUserClickable{cursor:pointer;transition:.18s var(--ease)}.adminUserClickable:hover{transform:translateY(-2px);border-color:rgba(114,137,218,.3);background:rgba(114,137,218,.06)}
+.adminUserHead{display:flex;align-items:center;gap:10px}.adminUserAvatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#252a34;display:grid;place-items:center;overflow:hidden;font-weight:900}
+.moderationNote{padding:10px 12px;margin-bottom:10px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.02);color:var(--muted);font-size:11px;line-height:1.5}
+.chatRate{display:none;margin:0 10px 8px;padding:8px 10px;border-radius:9px;background:rgba(237,66,69,.10);border:1px solid rgba(237,66,69,.2);color:#ff8d95;font-size:11px;font-weight:900}.chatRate.show{display:block}
+.bannedOverlay{position:fixed;inset:0;z-index:30000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,4,8,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.bannedOverlay.show{display:flex;animation:bannedFade .18s ease-out}.bannedCard{width:min(520px,100%);padding:34px 30px;text-align:center;border:1px solid rgba(237,66,69,.25);border-radius:24px;background:linear-gradient(180deg,rgba(31,19,23,.98),rgba(13,12,16,.98));box-shadow:0 35px 110px rgba(0,0,0,.65),0 0 45px rgba(237,66,69,.16);animation:bannedPop .32s var(--ease)}.bannedIcon{font-size:54px;line-height:1;margin-bottom:14px;filter:drop-shadow(0 0 18px rgba(237,66,69,.4))}.bannedCard h1{font-size:32px;letter-spacing:-.04em}.bannedCard p{margin-top:9px;color:#9fa6b4;line-height:1.5}.bannedCard .bannedReason{margin-top:15px;padding:10px;border-radius:10px;background:rgba(255,255,255,.04);color:#cdd1d9;font-size:12px}
+#app.bannedBlur{filter:blur(7px);transform:scale(.995);transition:.18s ease;pointer-events:none;user-select:none}.bannedBlur~#nav{filter:blur(7px)}
+#accountModal.forced .closeButton{display:none}#accountModal.forced{z-index:25000;background:rgba(4,5,8,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}#accountModal.forced .modalBox{animation:forcedAccountIn .25s var(--ease)}
+.forcedAccountNote{margin-bottom:12px;padding:10px 12px;border:1px solid rgba(114,137,218,.22);border-radius:11px;background:rgba(114,137,218,.07);color:#b8c4ee;font-size:11px;line-height:1.5;text-align:center}
+.chatComposer.rateLocked{opacity:.65}.chatComposer.rateLocked #chatInput{cursor:not-allowed}
+@keyframes bannedPop{from{opacity:0;transform:translateY(14px) scale(.88)}to{opacity:1;transform:none}}@keyframes bannedFade{from{opacity:0}to{opacity:1}}@keyframes forcedAccountIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+@media(max-width:760px){#accountNav{left:10px;bottom:10px;width:calc(100% - 20px);max-width:300px}.profileHero{align-items:flex-start}.profileAvatar{width:68px;height:68px}.bannedCard h1{font-size:27px}}
+
 </style>
 
 <canvas id="starCanvas"></canvas>
@@ -960,7 +1011,6 @@ a{
 <div id="access">
     <div class="accessBox">
 
-```
     <div class="accessLogo">🌐</div>
 
     <h1>Welcome back</h1>
@@ -982,7 +1032,7 @@ a{
         class="btn primary"
         type="button"
     >
-        Enter Hub
+        Enter yaprxy.
     </button>
 
     <div id="error">
@@ -990,19 +1040,17 @@ a{
     </div>
 
 </div>
-```
 
 </div>
 
 <div id="app">
 
-```
 <header class="topbar">
 
     <div class="brandBlock">
 
         <h1>
-            🌐 Yaqub's Hub
+            🌐 yaprxy.
         </h1>
 
         <p>
@@ -1035,15 +1083,13 @@ a{
 
 
 <footer>
-    Yaqub's Hub • Official Release
+    yaprxy. • Official Release
 </footer>
-```
 
 </div>
 
 <nav id="nav">
 
-```
 <button
     id="linksNav"
     class="navButton active"
@@ -1077,10 +1123,9 @@ a{
     class="navButton"
     type="button"
 >
-    <span class="navIcon">👤</span>
+    <span class="navIcon accountDockAvatar">👤</span>
     <span class="navLabel">Account</span>
 </button>
-```
 
 </nav>
 
@@ -1091,7 +1136,6 @@ a{
     class="modal"
 >
 
-```
 <div class="modalBox smallModal">
 
     <div class="modalHeader">
@@ -1308,6 +1352,27 @@ a{
                 </div>
 
 
+                <div
+                    class="profileForm"
+                    id="profileEditor"
+                >
+
+                    <div class="profilePreview">
+                        <div id="profileEditorAvatar" class="accountDockAvatar">👤</div>
+                        <div style="min-width:0">
+                            <strong id="profileEditorName">Profile</strong>
+                            <div style="margin-top:3px;color:var(--muted);font-size:10px">Customize your public profile</div>
+                        </div>
+                    </div>
+
+                    <input id="profileDisplayName" type="text" maxlength="40" placeholder="Display name">
+                    <textarea id="profileBio" maxlength="300" placeholder="Bio"></textarea>
+                    <input id="profilePfp" type="url" maxlength="500" placeholder="Profile picture URL">
+
+                    <button id="saveProfile" class="btn primary" type="button">Save Profile</button>
+
+                </div>
+
                 <div style="margin-top:14px">
 
                     <button
@@ -1327,7 +1392,6 @@ a{
     </div>
 
 </div>
-```
 
 </div>
 
@@ -1338,7 +1402,6 @@ a{
     class="modal"
 >
 
-```
 <div class="modalBox">
 
     <div class="modalHeader">
@@ -1422,6 +1485,8 @@ a{
             </div>
 
 
+            <div class="chatRate" id="chatRate">⚠️ Slow down — you sent too many messages. Chat is locked for <span id="chatRateSeconds">5</span>s.</div>
+
             <div class="chatComposer">
 
                 <textarea
@@ -1446,7 +1511,6 @@ a{
     </div>
 
 </div>
-```
 
 </div>
 
@@ -1457,7 +1521,6 @@ a{
     class="modal"
 >
 
-```
 <div class="modalBox smallModal">
 
     <div class="modalHeader">
@@ -1512,8 +1575,39 @@ a{
     </div>
 
 </div>
-```
 
+</div>
+
+<!-- PROFILE VIEWER -->
+<div id="profileModal" class="modal">
+    <div class="modalBox smallModal">
+        <div class="modalHeader">
+            <h2>👤 Profile</h2>
+            <button class="closeButton" data-close="profileModal" type="button">✕</button>
+        </div>
+        <div class="modalBody">
+            <div class="profileHero">
+                <div id="viewProfileAvatar" class="profileAvatar">👤</div>
+                <div class="profileHeroInfo">
+                    <div id="viewProfileName" class="profileName">User</div>
+                    <div id="viewProfileHandle" class="profileHandle">@user</div>
+                    <div id="viewProfileBio" class="profileBio">No bio yet.</div>
+                </div>
+            </div>
+            <div id="viewProfileRole" class="accountCard"></div>
+            <div id="viewProfileActions" class="adminActions"></div>
+        </div>
+    </div>
+</div>
+
+<!-- BANNED -->
+<div id="bannedOverlay" class="bannedOverlay" aria-hidden="true">
+    <div class="bannedCard">
+        <div class="bannedIcon">⛔</div>
+        <h1>You have been banned</h1>
+        <p>This account can no longer access yaprxy.</p>
+        <div id="bannedReason" class="bannedReason">Your access has been restricted by moderation.</div>
+    </div>
 </div>
 
 <!-- ADMIN -->
@@ -1523,7 +1617,6 @@ a{
     class="modal"
 >
 
-```
 <div class="modalBox">
 
     <div class="modalHeader">
@@ -1560,6 +1653,8 @@ a{
 
 
     <div class="modalBody">
+
+        <div class="moderationNote">🟡 <b>Admins</b> can verify and block users. 🔴 <b>Owners</b> can also ban, unblock, promote/demote, and permanently delete accounts.</div>
 
         <div class="adminTabs">
 
@@ -1645,7 +1740,6 @@ a{
     </div>
 
 </div>
-```
 
 </div>
 
@@ -1656,7 +1750,6 @@ a{
     class="modal"
 >
 
-```
 <div class="modalBox smallModal">
 
     <div
@@ -1695,7 +1788,6 @@ a{
     </div>
 
 </div>
-```
 
 </div>
 
@@ -1841,11 +1933,23 @@ function setActiveNav(id) {
 
 
 function isAdmin() {
-    return Boolean(
-        currentUser &&
-        currentUser.role ===
-            "admin"
-    );
+    return Boolean(currentUser && (currentUser.role === "admin" || currentUser.role === "owner"));
+}
+
+function isOwner(user = currentUser) {
+    return Boolean(user && user.role === "owner");
+}
+
+function roleBadgeHTML(user) {
+    if (!user) return "";
+    if (user.role === "owner") return '<span class="roleBadge owner">♛ OWNER</span>';
+    if (user.role === "admin") return '<span class="roleBadge admin">ADMIN</span>';
+    return "";
+}
+
+function avatarHTML(user, cls="accountDockAvatar") {
+    const p = user?.pfp || user?.avatar || user?.avatarUrl || "";
+    return p ? `<img class="${cls}" src="${escapeHTML(p)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'${cls}',textContent:'👤'}))">` : `<div class="${cls}">👤</div>`;
 }
 
 
@@ -2617,21 +2721,11 @@ const accessError =
 
 
 async function openHub() {
-
-    document.getElementById(
-        "access"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "app"
-    ).style.display =
-        "block";
-
-
-    await restoreSession();
-
+    document.getElementById("access").style.display="none";
+    document.getElementById("app").style.display="block";
+    const session=await restoreSession();
+    if(!currentUser){ forceAccountSetup(); } else { clearForcedAccount(); }
+    return session;
 }
 
 
@@ -3014,6 +3108,8 @@ document.getElementById(
                 );
 
 
+            if(handleBanData(result.data,result.response)) return;
+
             if (
                 !result.response.ok ||
                 !result.data.success
@@ -3112,74 +3208,23 @@ function showLogin() {
 }
 
 
-function showAccount(
-    accountUser
-) {
-
-    document.getElementById(
-        "signup"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "login"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "account"
-    ).style.display =
-        "block";
-
-
-    document.getElementById(
-        "aU"
-    ).textContent =
-        accountUser.username ||
-        "";
-
-
-    document.getElementById(
-        "aD"
-    ).textContent =
-        accountUser.displayName ||
-        "";
-
-
-    document.getElementById(
-        "aR"
-    ).textContent =
-        accountUser.role ||
-        "user";
-
-
-    document.getElementById(
-        "aS"
-    ).textContent =
-        accountUser.status ||
-        "active";
-
-
-    document.getElementById(
-        "aV"
-    ).textContent =
-        accountUser.verified
-            ? "✅ Verified"
-            : "❌ Not verified";
-
-
-    document.getElementById(
-        "adminNav"
-    ).style.display =
-        accountUser.role ===
-            "admin"
-            ? "block"
-            : "none";
-
+function showAccount(accountUser) {
+    document.getElementById("signup").style.display="none";
+    document.getElementById("login").style.display="none";
+    document.getElementById("account").style.display="block";
+    document.getElementById("aU").textContent=accountUser.username||"";
+    document.getElementById("aD").textContent=accountUser.displayName||"";
+    document.getElementById("aR").innerHTML=(accountUser.role||"user") + roleBadgeHTML(accountUser);
+    document.getElementById("aS").textContent=accountUser.status||"active";
+    document.getElementById("aV").textContent=accountUser.verified ? "✅ Verified" : "❌ Not verified";
+    document.getElementById("profileDisplayName").value=accountUser.displayName||"";
+    document.getElementById("profileBio").value=accountUser.bio||"";
+    document.getElementById("profilePfp").value=accountUser.pfp||accountUser.avatar||accountUser.avatarUrl||"";
+    document.getElementById("profileEditorName").textContent=accountUser.displayName||accountUser.username||"Profile";
+    document.getElementById("profileEditorAvatar").outerHTML=avatarHTML(accountUser,"accountDockAvatar");
+    document.getElementById("adminNav").style.display=isAdmin() ? "block" : "none";
+    updateAccountDock(accountUser);
 }
-
 
 /* account navigation */
 
@@ -3302,13 +3347,16 @@ document.getElementById(
             }
 
 
-            document.getElementById(
-                "msg"
-            ).textContent =
-                "✅ Account created. Log in below.";
-
-
-            showLogin();
+            if(result.data.user){
+                currentUser=result.data.user;
+                clearForcedAccount();
+                showAccount(currentUser);
+                showToast("✅ Account created.");
+                connectChat();
+            } else {
+                document.getElementById("msg").textContent="✅ Account created. Please log in.";
+                showLogin();
+            }
 
 
         } catch (
@@ -3398,9 +3446,8 @@ document.getElementById(
                 result.data.user;
 
 
-            showAccount(
-                currentUser
-            );
+            clearForcedAccount();
+            showAccount(currentUser);
 
 
             document.getElementById(
@@ -3525,6 +3572,7 @@ async function restoreSession() {
                 "/api/me"
             );
 
+        if(handleBanData(result.data,result.response)) return;
 
         if (
             !result.response.ok ||
@@ -3579,6 +3627,87 @@ async function restoreSession() {
 
 }
 
+
+
+/* =========================================================
+   PROFILE / ACCOUNT DOCK / ENFORCEMENT
+========================================================= */
+let accountSetupForced=false;
+
+function updateAccountDock(u){
+    const nav=document.getElementById("accountNav");
+    if(!nav)return;
+    const avatar=nav.querySelector(".accountDockAvatar");
+    if(avatar) avatar.outerHTML=avatarHTML(u,"accountDockAvatar");
+    const label=nav.querySelector(".navLabel");
+    if(label) label.innerHTML=`${escapeHTML(u?.displayName||u?.username||"Account")} ${roleBadgeHTML(u)}`;
+}
+
+function forceAccountSetup(){
+    accountSetupForced=true;
+    const modal=document.getElementById("accountModal");
+    modal.classList.add("forced");
+    document.getElementById("msg").innerHTML='<div class="forcedAccountNote">🔐 Your password is correct. Create or log into your account to continue.</div>';
+    showSignup();
+    showModal("accountModal");
+}
+
+function clearForcedAccount(){
+    accountSetupForced=false;
+    document.getElementById("accountModal")?.classList.remove("forced");
+}
+
+function showBanned(reason="Your access has been restricted by moderation."){
+    document.getElementById("bannedReason").textContent=reason;
+    document.getElementById("app")?.classList.add("bannedBlur");
+    document.getElementById("bannedOverlay")?.classList.add("show");
+    document.getElementById("bannedOverlay")?.setAttribute("aria-hidden","false");
+    disconnectChat();
+    currentUser=null;
+}
+
+function handleBanData(data,response){
+    if(data?.banned || data?.errorCode==="BANNED" || response?.status===403 && /banned/i.test(data?.error||"")){
+        showBanned(data.reason||data.message||data.error||undefined);
+        return true;
+    }
+    return false;
+}
+
+async function saveProfile(){
+    if(!currentUser)return showToast("Log in first.");
+    const button=document.getElementById("saveProfile");
+    button.disabled=true;button.textContent="Saving...";
+    const payload={displayName:document.getElementById("profileDisplayName").value.trim(),bio:document.getElementById("profileBio").value.trim(),pfp:document.getElementById("profilePfp").value.trim()};
+    try{
+        const r=await api("/api/profile",{method:"PUT",body:JSON.stringify(payload)});
+        if(handleBanData(r.data,r.response))return;
+        if(!r.response.ok||!r.data.success)throw new Error(r.data.error||"Profile update failed");
+        currentUser={...currentUser,...(r.data.user||payload)};
+        showAccount(currentUser);showToast("✅ Profile updated.");
+    }catch(e){showToast("❌ "+e.message)}finally{button.disabled=false;button.textContent="Save Profile"}
+}
+
+document.getElementById("saveProfile")?.addEventListener("click",saveProfile);
+
+document.getElementById("accountNav")?.addEventListener("click",()=>{if(currentUser)updateAccountDock(currentUser)});
+
+function renderProfileViewer(u, source="admin"){
+    if(!u)return;
+    document.getElementById("viewProfileAvatar").outerHTML=avatarHTML(u,"profileAvatar");
+    document.getElementById("viewProfileName").innerHTML=`${escapeHTML(u.displayName||u.username||"User")} ${roleBadgeHTML(u)}`;
+    document.getElementById("viewProfileHandle").textContent=`@${u.username||"user"}`;
+    document.getElementById("viewProfileBio").textContent=u.bio||"No bio yet.";
+    document.getElementById("viewProfileRole").innerHTML=`<div class="accountRow"><span class="accountLabel">Role</span><span class="accountValue">${escapeHTML(u.role||"user")} ${roleBadgeHTML(u)}</span></div><div class="accountRow"><span class="accountLabel">Status</span><span class="accountValue">${escapeHTML(u.status||"active")}</span></div><div class="accountRow"><span class="accountLabel">Verified</span><span class="accountValue">${u.verified?"✅ Verified":"❌ Not verified"}</span></div>`;
+    const actions=document.getElementById("viewProfileActions");actions.innerHTML="";
+    if(source==="admin" && isAdmin() && u.id!==currentUser?.id){
+        const defs=isOwner()?[["verify","✅ Verify"],["unverify","↩ Unverify"],["block","🚫 Block"],["unblock","✅ Unblock"],["ban","🔨 Ban"],["delete","🗑️ Delete Account"],["promote","⭐ Make Admin"],["demote","↩ Remove Admin"]]:[["verify","✅ Verify"],["block","🚫 Block"]];
+        defs.forEach(([a,label])=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.dataset.action=a;b.onclick=async()=>{await adminUserAction(a,u.id);hideModal("profileModal");loadUsers()};actions.appendChild(b)});
+    }
+    showModal("profileModal");
+}
+
+function openUserProfile(u){renderProfileViewer(u,"admin")}
 
 /* =========================================================
    CHAT
@@ -3658,7 +3787,7 @@ function addChatMessage(
                 message.displayName ||
                 message.username ||
                 "User"
-            )}
+            )}${roleBadgeHTML(message)}
             •
             ${escapeHTML(
                 timestamp
@@ -3940,6 +4069,23 @@ function connectChat() {
 }
 
 
+
+const chatSendTimes=[];
+let chatRateUntil=0;
+let chatRateTimer=null;
+function lockChatForSpam(){
+    chatRateUntil=Date.now()+5000;
+    chatInput.disabled=true;chatSend.disabled=true;
+    document.querySelector(".chatComposer")?.classList.add("rateLocked");
+    const box=document.getElementById("chatRate");box?.classList.add("show");
+    clearInterval(chatRateTimer);
+    chatRateTimer=setInterval(()=>{
+        const left=Math.max(0,chatRateUntil-Date.now());
+        const sec=Math.ceil(left/1000);if(document.getElementById("chatRateSeconds"))document.getElementById("chatRateSeconds").textContent=sec;
+        if(left<=0){clearInterval(chatRateTimer);box?.classList.remove("show");document.querySelector(".chatComposer")?.classList.remove("rateLocked");chatInput.disabled=false;chatSend.disabled=false;chatInput.focus()}
+    },100);
+}
+
 function sendChatMessage() {
 
     if (
@@ -3987,6 +4133,12 @@ function sendChatMessage() {
         return;
 
     }
+
+    if(Date.now()<chatRateUntil){showToast("⚠️ You are rate-limited for spam.");return;}
+    const now=Date.now();
+    while(chatSendTimes.length && now-chatSendTimes[0]>1000) chatSendTimes.shift();
+    if(chatSendTimes.length>=5){lockChatForSpam();showToast("⚠️ Too many messages. Chat locked for 5 seconds.");return;}
+    chatSendTimes.push(now);
 
 
     if (
@@ -4286,8 +4438,11 @@ async function loadReports() {
                     );
 
 
-                item.className =
-                    "adminItem";
+                item.className = "adminItem adminUserClickable";
+                item.addEventListener("click", event => {
+                    if(event.target.closest("button")) return;
+                    openUserProfile(accountUser);
+                });
 
 
                 item.innerHTML = `
@@ -4522,6 +4677,13 @@ async function loadUsers() {
                     <div class="adminActions">
 
                         <button
+                            data-profile="1"
+                            type="button"
+                        >
+                            👤 View Profile
+                        </button>
+
+                        <button
                             data-action="verify"
                             type="button"
                         >
@@ -4574,6 +4736,18 @@ async function loadUsers() {
                 `;
 
 
+                item.querySelector("[data-profile]")?.addEventListener("click", event => {
+                    event.stopPropagation();
+                    openUserProfile(accountUser);
+                });
+
+                if(!isOwner()){
+                    item.querySelector('[data-action="unverify"]')?.remove();
+                    item.querySelector('[data-action="unblock"]')?.remove();
+                    item.querySelector('[data-action="ban"]')?.remove();
+                    item.querySelector('[data-action="promote"]')?.remove();
+                }
+
                 item
                     .querySelectorAll(
                         "[data-action]"
@@ -4615,98 +4789,20 @@ async function loadUsers() {
 }
 
 
-async function adminUserAction(
-    action,
-    userId
-) {
-
-    const routes = {
-
-        verify:
-            "/api/admin/verify",
-
-        unverify:
-            "/api/admin/unverify",
-
-        block:
-            "/api/admin/block",
-
-        unblock:
-            "/api/admin/unblock",
-
-        ban:
-            "/api/admin/ban",
-
-        promote:
-            "/api/admin/promote"
-
-    };
-
-
-    if (
-        !routes[action]
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const result =
-            await api(
-                routes[action],
-                {
-                    method:
-                        "POST",
-
-                    body:
-                        JSON.stringify({
-                            userId
-                        })
-                }
-            );
-
-
-        if (
-            !result.response.ok ||
-            !result.data.success
-        ) {
-
-            throw new Error(
-                result.data.error ||
-                "Action failed"
-            );
-
-        }
-
-
-        showToast(
-            "✅ " +
-            (
-                result.data.message ||
-                "Done"
-            )
-        );
-
-
-        loadUsers();
-
-
-    } catch (
-        error
-    ) {
-
-        showToast(
-            "❌ " +
-            error.message
-        );
-
-    }
-
+async function adminUserAction(action,userId){
+    const ownerOnly=["unblock","ban","delete","promote","demote"];
+    if(ownerOnly.includes(action) && !isOwner()){showToast("🔒 Owner access required.");return false;}
+    const map={verify:"/api/admin/verify",unverify:"/api/admin/unverify",block:"/api/admin/block",unblock:"/api/admin/unblock",ban:"/api/admin/ban",delete:"/api/admin/delete",promote:"/api/admin/promote",demote:"/api/admin/demote"};
+    if(!map[action])return false;
+    if(action==="delete" && !confirm("Permanently delete this account? This cannot be undone."))return false;
+    try{
+        const r=await api(map[action],{method:"POST",body:JSON.stringify({userId})});
+        if(handleBanData(r.data,r.response))return false;
+        if(!r.response.ok||!r.data.success)throw new Error(r.data.error||"Action failed");
+        showToast("✅ "+(r.data.message||"Action completed."));
+        loadUsers();return true;
+    }catch(e){showToast("❌ "+e.message);return false}
 }
-
 
 /* =========================================================
    NAV + MODALS
@@ -4776,9 +4872,11 @@ document
             button.addEventListener(
                 "click",
                 () => {
+                    const targetId=button.dataset.close;
+                    if(targetId === "accountModal" && document.getElementById("accountModal")?.classList.contains("forced")) return;
 
                     hideModal(
-                        button.dataset.close
+                        targetId
                     );
 
 
@@ -4808,6 +4906,7 @@ document
                         event.target ===
                         modal
                     ) {
+                        if(modal.id === "accountModal" && modal.classList.contains("forced")) return;
 
                         modal.classList.remove(
                             "show"
@@ -5088,6 +5187,22 @@ drawStars();
 /* =========================================================
    START
 ========================================================= */
+
+
+/* =========================================================
+   FINAL YAPRXY INITIALIZATION
+========================================================= */
+(async()=>{
+    try{
+        const r=await api("/api/me");
+        if(handleBanData(r.data,r.response)) return;
+        if(r.response.ok && r.data.success && r.data.user){
+            currentUser=r.data.user;
+            showAccount(currentUser);
+            updateAccountDock(currentUser);
+        }
+    }catch{}
+})();
 
 restoreSession();
 
