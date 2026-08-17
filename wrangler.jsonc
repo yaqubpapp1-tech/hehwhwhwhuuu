@@ -1,11 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
 
-  "name": "yaqubs-link-hub",
-
-  "main": "worker.js",
-
-  "compatibility_date": "2026-08-16",
+  "name": "hehwhwhwhuuu",
+  "main": "worker-v2.js",
+  "compatibility_date": "2025-02-04",
 
   "observability": {
     "enabled": true
@@ -45,8 +43,6 @@
   "assets": {
     "directory": "./",
     "binding": "ASSETS",
-    "run_worker_first": [
-      "/api/*"
-    ]
+    "run_worker_first": true
   }
 }
