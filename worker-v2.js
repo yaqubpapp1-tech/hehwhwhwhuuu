@@ -8,14 +8,12 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization"
 };
 
+const MAX_AVATAR_LENGTH = 180000;
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-
-    if (request.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: CORS });
-    }
-
+    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
     try {
       if (url.pathname === "/api/profile" && request.method === "POST") return await updateProfile(request, env);
       if (url.pathname === "/api/users/search" && request.method === "GET") return await searchUsers(request, env);
@@ -30,11 +28,10 @@ export default {
         const asset = await env.ASSETS.fetch(request);
         if (asset.ok) {
           return new HTMLRewriter().on("body", {
-            element(el) { el.append('<script src="/app-enhance.js?v=2" defer></script>', { html: true }); }
+            element(el) { el.append('<script src="/app-enhance.js?v=3" defer></script>', { html: true }); }
           }).transform(asset);
         }
       }
-
       return legacyWorker.fetch(request, env, ctx);
     } catch (error) {
       console.error("V2 WORKER ERROR:", error?.stack || error);
@@ -65,9 +62,18 @@ async function updateProfile(request, env) {
   if (!a.success) return json({ success: false, error: a.error }, a.status);
   const data = await safeJson(request);
   const user = a.user;
-  if (typeof data.displayName === "string") { const n = data.displayName.trim().slice(0, 80); if (n) user.displayName = n; }
+  if (typeof data.displayName === "string") {
+    const n = data.displayName.trim().slice(0, 80);
+    if (n) user.displayName = n;
+  }
   const profile = user.profile && typeof user.profile === "object" ? user.profile : {};
-  if (typeof data.avatar === "string") profile.avatar = data.avatar.slice(0, 8);
+  if (typeof data.avatar === "string") {
+    if (data.avatar.length > MAX_AVATAR_LENGTH) return json({ success: false, error: "Profile picture is too large" }, 413);
+    if (data.avatar && !/^(data:image\/(?:jpeg|jpg|png|webp|gif);base64,|https?:\/\/)/i.test(data.avatar) && data.avatar.length > 8) {
+      return json({ success: false, error: "Invalid profile picture" }, 400);
+    }
+    profile.avatar = data.avatar.slice(0, MAX_AVATAR_LENGTH);
+  }
   if (typeof data.bio === "string") profile.bio = data.bio.trim().slice(0, 160);
   if (typeof data.accent === "string" && /^#[0-9a-fA-F]{6}$/.test(data.accent)) profile.accent = data.accent;
   if (["online", "idle", "dnd"].includes(data.status)) profile.status = data.status;
