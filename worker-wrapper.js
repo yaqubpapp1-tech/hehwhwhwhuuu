@@ -4,7 +4,7 @@ import { VoiceRoom } from "./voice-room.js";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization"
 };
 
@@ -16,14 +16,20 @@ const json = (data, status = 200) => new Response(JSON.stringify(data), {
 function getToken(request) {
   const cookie = request.headers.get("Cookie") || "";
   const match = cookie.match(/(?:^|;\s*)session=([^;]+)/);
-  return match ? decodeURIComponent(match[1]) : null;
+  if (match) return decodeURIComponent(match[1]);
+
+  const authorization = request.headers.get("Authorization") || "";
+  if (authorization.startsWith("Bearer ")) return authorization.slice(7).trim();
+  return null;
 }
 
 async function getUser(request, env) {
   const token = getToken(request);
   if (!token) return null;
+
   const session = await env.SESSIONS.get(`session:${token}`, "json");
   if (!session || Date.now() >= Number(session.expiresAt || 0)) return null;
+
   const user = await env.USERS.get(`id:${session.userId}`, "json");
   if (!user || user.status === "banned" || user.status === "blocked") return null;
   return user;
@@ -44,8 +50,10 @@ async function routeSocial(request, env) {
   if (request.headers.get("Upgrade")?.toLowerCase() !== "websocket") {
     return json({ success: false, error: "WebSocket required" }, 426);
   }
+
   const user = await getUser(request, env);
   if (!user) return json({ success: false, error: "Not authenticated" }, 401);
+
   const url = new URL(request.url);
   const room = url.searchParams.get("room") || "global";
   const id = env.SOCIAL_ROOM.idFromName(room);
@@ -56,12 +64,81 @@ async function routeVoice(request, env) {
   if (request.headers.get("Upgrade")?.toLowerCase() !== "websocket") {
     return json({ success: false, error: "WebSocket required" }, 426);
   }
+
   const user = await getUser(request, env);
   if (!user) return json({ success: false, error: "Not authenticated" }, 401);
+
   const url = new URL(request.url);
   const room = url.searchParams.get("room") || "global-voice";
   const id = env.VOICE_ROOM.idFromName(room);
   return env.VOICE_ROOM.get(id).fetch(request);
+}
+
+async function routeAnnouncement(request, env) {
+  const user = await getUser(request, env);
+  if (!user) return json({ success: false, error: "Not authenticated" }, 401);
+
+  const isAdmin = user.role === "admin" || user.role === "owner";
+  if (!isAdmin) return json({ success: false, error: "Admin access required" }, 403);
+
+  if (request.method === "GET") {
+    const announcement = await env.USERS.get("announcement:current", "json");
+    return json({
+      success: true,
+      announcement: announcement || null
+    });
+  }
+
+  if (request.method === "DELETE") {
+    await env.USERS.delete("announcement:current");
+    return json({
+      success: true,
+      message: "Announcement cleared",
+      announcement: null
+    });
+  }
+
+  if (request.method !== "POST") {
+    return json({ success: false, error: "Method not allowed" }, 405);
+  }
+
+  let body = {};
+  try {
+    body = await request.json();
+  } catch {
+    return json({ success: false, error: "Invalid JSON body" }, 400);
+  }
+
+  const message = typeof body.message === "string"
+    ? body.message.trim()
+    : typeof body.announcement === "string"
+      ? body.announcement.trim()
+      : "";
+
+  if (!message) {
+    return json({ success: false, error: "Announcement message is required" }, 400);
+  }
+
+  if (message.length > 500) {
+    return json({ success: false, error: "Announcement is too long (500 characters max)" }, 400);
+  }
+
+  const announcement = {
+    id: crypto.randomUUID(),
+    message,
+    authorId: user.id,
+    authorUsername: user.username,
+    authorDisplayName: user.displayName || user.username,
+    time: new Date().toISOString()
+  };
+
+  await env.USERS.put("announcement:current", JSON.stringify(announcement));
+
+  return json({
+    success: true,
+    message: "Announcement broadcast to all users",
+    announcement
+  });
 }
 
 // Wrangler uses this file as the Worker entrypoint. Every Durable Object
@@ -76,6 +153,10 @@ export default {
       }
 
       const url = new URL(request.url);
+
+      if (url.pathname === "/api/admin/announcement") {
+        return routeAnnouncement(request, env);
+      }
 
       if (
         url.pathname === "/api/chat" ||
