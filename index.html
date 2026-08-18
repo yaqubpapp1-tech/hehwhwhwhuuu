@@ -1514,6 +1514,20 @@ a{
 
 </div>
 
+<!-- SOCCER STREAM WARNING -->
+<div id="soccerWarningModal" class="modal">
+  <div class="modalBox smallModal">
+    <div class="modalHeader"><h2>⚠️ Warning</h2></div>
+    <div class="modalBody">
+      <p style="color:var(--muted);line-height:1.6;margin-bottom:18px">This Website has Popup ads and can take you somewhere else and this website is in Arabic.</p>
+      <div class="reportActions">
+        <button id="soccerCancel" class="btn secondary" type="button">Cancel</button>
+        <button id="soccerConfirm" class="btn primary" type="button">I understand</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- REPORT -->
 
 <div
@@ -2066,6 +2080,12 @@ function loadAnnouncement(){try{const a=JSON.parse(localStorage.getItem(ANNOUNCE
 ========================================================= */
 
 const LINK_GROUPS = {
+    "⚽ Soccer Streams": [
+        "https://livescore.news",
+        "https://www.liveiptvx.com",
+        "https://www.masrahtv.com"
+    ],
+
 
     Solara: [
         "solaraname.robertschulze.name",
@@ -2566,11 +2586,18 @@ for (
             categoryName
         ] || "🔗";
 
+    const isSoccerStreams =
+        categoryName === "⚽ Soccer Streams";
+
 
     title.innerHTML =
         `<span>${icon}</span>${escapeHTML(
-            categoryName
+            categoryName.replace(/^⚽\s*/,"")
         )}`;
+
+    if (isSoccerStreams) {
+        title.innerHTML += `<small style="display:block;width:100%;margin-top:5px;color:var(--muted);font-size:11px;font-weight:800">Live Streams</small>`;
+    }
 
 
     const grid =
@@ -2688,13 +2715,21 @@ for (
 
         } else {
 
-            card.href =
-                /^https?:\/\//i.test(
-                    rawURL
-                )
-                    ? rawURL
-                    : "https://" +
-                      rawURL;
+            if (isSoccerStreams) {
+                card.href = "#";
+                card.addEventListener("click", event => {
+                    event.preventDefault();
+                    window._soccerStreamUrl = /^https?:\/\//i.test(rawURL) ? rawURL : "https://" + rawURL;
+                    document.getElementById("soccerWarningModal").classList.add("show");
+                });
+            }
+
+            if (!isSoccerStreams) {
+                card.href =
+                    /^https?:\/\//i.test(rawURL)
+                        ? rawURL
+                        : "https://" + rawURL;
+            }
 
 
             card.target =
@@ -5311,6 +5346,18 @@ loadAnnouncement();
 restoreSession();
 
 })();
+
+
+document.getElementById("soccerCancel")?.addEventListener("click", () => {
+    document.getElementById("soccerWarningModal").classList.remove("show");
+    window._soccerStreamUrl = null;
+});
+document.getElementById("soccerConfirm")?.addEventListener("click", () => {
+    const url = window._soccerStreamUrl;
+    document.getElementById("soccerWarningModal").classList.remove("show");
+    window._soccerStreamUrl = null;
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
+});
 </script>
 
 </body>
