@@ -1,21 +1,20 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "yaqubs-link-hub",
-  "main": "worker-wrapper.js",
-  "compatibility_date": "2026-08-17",
-  "observability": {"enabled": true},
-  "kv_namespaces": [
+  "$schema":"node_modules/wrangler/config-schema.json",
+  "name":"yaqubs-link-hub",
+  "main":"worker-wrapper.js",
+  "compatibility_date":"2026-08-17",
+  "observability":{"enabled":true},
+  "kv_namespaces":[
     {"binding":"REPORTS","id":"c620acf8aacf4ee89ddd73bf3d449714"},
     {"binding":"SESSIONS","id":"cab8683b62194873a68790690e97f20e"},
     {"binding":"USERS","id":"b93ee107b4b9404cbb1342306d2fa009"}
   ],
-  "durable_objects": {"bindings": [
+  "durable_objects":{"bindings":[
     {"name":"CHAT_ROOM","class_name":"ChatRoom"},
     {"name":"VOICE_ROOM","class_name":"VoiceRoom"},
     {"name":"SOCIAL_ROOM","class_name":"SocialRoom"}
   ]},
-  "migrations": [{"tag":"v2","new_sqlite_classes":["SocialRoom"]}],
-  "exports": {
+  "exports":{
     "ChatRoom":{"type":"durable-object","storage":"sqlite"},
     "VoiceRoom":{"type":"durable-object","storage":"sqlite"},
     "SocialRoom":{"type":"durable-object","storage":"sqlite"}
