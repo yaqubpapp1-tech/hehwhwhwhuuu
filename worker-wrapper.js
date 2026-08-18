@@ -1,28 +1,13 @@
 import core, { ChatRoom } from "./worker.js";
-import { VoiceRoom } from "./voice-room.js";
-
-export { ChatRoom, VoiceRoom };
-
-export default {
-  async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-
-    if (url.pathname === "/api/voice" && request.headers.get("Upgrade")?.toLowerCase() === "websocket") {
-      const room = env.VOICE_ROOM.get(env.VOICE_ROOM.idFromName("general"));
-      return room.fetch(request);
-    }
-
-    const response = await core.fetch(request, env, ctx);
-    const type = response.headers.get("content-type") || "";
-    if (!response.ok || !type.includes("text/html")) return response;
-
-    const html = await response.text();
-    const injected = html.replace(
-      /<\/body>/i,
-      '<script src="/enhancements.js" defer></script><script src="/yaprxy-labels.js" defer></script><script src="/yachat-enhance.js" defer></script><script src="/admin-enhance.js" defer></script></body>'
-    );
-    const headers = new Headers(response.headers);
-    headers.set("Cache-Control", "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400");
-    return new Response(injected,{status:response.status,statusText:response.statusText,headers});
-  }
-};
+import { SocialRoom } from "./social-room.js";
+export { ChatRoom, SocialRoom };
+const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"GET,POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type"};
+const json=(d,s=200)=>new Response(JSON.stringify(d),{status:s,headers:{...cors,"Content-Type":"application/json;charset=UTF-8","Cache-Control":"no-store"}});
+const cookie=(req,name)=>{const m=(req.headers.get("Cookie")||"").match(new RegExp("(?:^|;\\s*)"+name+"=([^;]+)"));return m?.[1]||null};
+async function auth(req,env){const t=cookie(req,"session");if(!t)return null;const s=await env.SESSIONS.get(`session:${t}`,"json");if(!s||Date.now()>=s.expiresAt)return null;const u=await env.USERS.get(`id:${s.userId}`,"json");if(!u||u.status==="banned"||u.status==="blocked")return null;return u}
+const pub=u=>({id:u.id,username:u.username,displayName:u.displayName,pfp:u.pfp||"",bio:u.bio||"",role:u.role,verified:u.role==="owner"||u.role==="admin"||!!u.verified,status:u.status});
+async function socialSocket(req,env,user){const url=new URL(req.url),room=url.searchParams.get("room")||"global";if(room.startsWith("group:")||room.startsWith("dm:")){const c=await env.USERS.get(`conversation:${room.slice(room.indexOf(":")+1)}`,"json");if(c&&!c.members.includes(user.id))return new Response("Forbidden",{status:403,headers:cors})}const h=new Headers(req.headers);h.set("X-Social-User-Id",user.id);h.set("X-Social-Username",user.username);h.set("X-Social-Display-Name",user.displayName||"");h.set("X-Social-Pfp",user.pfp||"");h.set("X-Social-Role",user.role||"user");h.set("X-Social-Room",room);return env.SOCIAL_ROOM.get(env.SOCIAL_ROOM.idFromName(room)).fetch(new Request(req,{headers:h}))}
+async function users(req,env){const me=await auth(req,env);if(!me)return json({success:false,error:"Not authenticated"},401);const out=[];let cursor;do{const r=await env.USERS.list({prefix:"id:",limit:1000,...(cursor?{cursor}:{})});for(const k of r.keys){const u=await env.USERS.get(k.name,"json");if(u&&u.id!==me.id&&u.status==="active")out.push(pub(u))}cursor=r.list_complete?null:r.cursor}while(cursor);return json({success:true,users:out})}
+async function conversations(req,env){const me=await auth(req,env);if(!me)return json({success:false,error:"Not authenticated"},401);const ids=await env.USERS.get(`convos:${me.id}`,"json")||[],out=[];for(const id of ids){const c=await env.USERS.get(`conversation:${id}`,"json");if(c)out.push(c)}return json({success:true,conversations:out})}
+async function createConversation(req,env){const me=await auth(req,env);if(!me)return json({success:false,error:"Not authenticated"},401);const d=await req.json();let members=[me.id,...(Array.isArray(d.members)?d.members:[])].filter(Boolean);members=[...new Set(members)];if(members.length<2)return json({success:false,error:"Add at least one other user"},400);if(members.length===2){const key=`dm:${[...members].sort().join("_")}`;let c=await env.USERS.get(`conversation:${key}`,"json");if(!c)c={id:key,type:"dm",name:"",members,createdAt:new Date().toISOString()};await env.USERS.put(`conversation:${key}`,JSON.stringify(c));for(const uid of members){let list=await env.USERS.get(`convos:${uid}`,"json")||[];if(!list.includes(key)){list.push(key);await env.USERS.put(`convos:${uid}`,JSON.stringify(list.slice(-100)))}}return json({success:true,conversation:c})}const id=crypto.randomUUID(),c={id,type:"group",name:String(d.name||"New Group").trim().slice(0,60)||"New Group",members,createdAt:new Date().toISOString()};await env.USERS.put(`conversation:${id}`,JSON.stringify(c));for(const uid of members){let list=await env.USERS.get(`convos:${uid}`,"json")||[];list.push(id);await env.USERS.put(`convos:${uid}`,JSON.stringify([...new Set(list)].slice(-100)))}return json({success:true,conversation:c})}
+export default {async fetch(request,env,ctx){if(request.method==="OPTIONS")return new Response(null,{status:204,headers:cors});const url=new URL(request.url);try{if(url.pathname==="/api/social/users"&&request.method==="GET")return users(request,env);if(url.pathname==="/api/social/conversations"&&request.method==="GET")return conversations(request,env);if(url.pathname==="/api/social/conversation"&&request.method==="POST")return createConversation(request,env);if(url.pathname==="/api/social"&&request.headers.get("Upgrade")?.toLowerCase()==="websocket"){const u=await auth(request,env);if(!u)return new Response("Not authenticated",{status:401,headers:cors});return socialSocket(request,env,u)}const response=await core.fetch(request,env,ctx);const type=response.headers.get("content-type")||"";if(!response.ok||!type.includes("text/html"))return response;const html=await response.text();const injected=html.replace(/<\\/body>/i,'<script src="/enhancements.js" defer></script><script src="/yaprxy-labels.js" defer></script><script src="/yachat-enhance.js" defer></script><script src="/admin-enhance.js" defer></script></body>');const headers=new Headers(response.headers);headers.set("Cache-Control","public, max-age=300, s-maxage=3600, stale-while-revalidate=86400");return new Response(injected,{status:response.status,statusText:response.statusText,headers})}catch(e){console.error(e);return json({success:false,error:"Internal server error"},500)}}};
