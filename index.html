@@ -941,6 +941,54 @@ a{
     to{opacity:1;transform:none}
 }
 
+
+/* =========================================================
+   OWNER STATUS / ANNOUNCEMENTS / DISCORD CHAT / VOICE
+========================================================= */
+.statusPill{cursor:default;user-select:none}
+.statusPill .statusDot{transition:background .2s,box-shadow .2s}
+.ownerTools{display:none}
+.ownerTools.show{display:block}
+.announcementOverlay{position:fixed;inset:0;z-index:29000;display:none;align-items:center;justify-content:center;padding:22px;background:#000;opacity:0;transition:opacity .45s ease}
+.announcementOverlay.show{display:flex;opacity:1}
+.announcementOverlay.hiding{opacity:0}
+.announcementOverlay::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.announcementCard{position:relative;z-index:1;width:min(720px,100%);padding:30px;border:1px solid rgba(255,255,255,.12);border-radius:24px;background:linear-gradient(180deg,#111,#050505);box-shadow:0 40px 120px rgba(0,0,0,.8);animation:announcementIn .45s var(--ease)}
+.announcementBy{display:flex;align-items:center;gap:9px;color:#aeb4c1;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.announcementAvatar{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#252a34;display:grid;place-items:center;overflow:hidden}
+.announcementTitle{font-size:clamp(26px,5vw,42px);font-weight:950;letter-spacing:-.04em}
+.announcementDescription{margin-top:12px;color:#c7cbd4;font-size:15px;line-height:1.65;white-space:pre-wrap}
+.announcementClose{margin-top:22px;width:auto;min-width:120px}
+.adminToolsGrid{display:grid;gap:10px}
+.adminToolsCard{padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.adminToolsCard h3{font-size:14px;margin-bottom:9px}
+.adminToolsCard input,.adminToolsCard textarea,.adminToolsCard select{width:100%;padding:11px 12px;margin-top:7px;border:1px solid var(--line);border-radius:10px;background:#0d1015;color:#fff;outline:none}
+.adminToolsCard textarea{min-height:80px;resize:vertical}
+.adminInline{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.adminToolButtons{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.adminToolButtons .btn{width:auto;flex:1}
+.chatShell{display:grid;grid-template-columns:190px minmax(0,1fr);height:min(72vh,680px);border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#0d1015}
+.chatSidebar{padding:12px 8px;background:#101319;border-right:1px solid var(--line)}
+.chatServerName{padding:8px 10px 14px;font-size:13px;font-weight:950;border-bottom:1px solid var(--line);margin-bottom:9px}
+.chatChannel{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#9299a8;font-size:12px;font-weight:850}
+.chatChannel.active,.chatChannel:hover{background:rgba(114,137,218,.14);color:#fff}
+.chatMain{display:flex;flex-direction:column;min-width:0}
+.chatMain .chatWindow{height:auto;flex:1;border:0;border-radius:0}
+.chatToolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 13px;border-bottom:1px solid var(--line);background:#11141a}
+.chatToolbarTitle{font-weight:950}.chatToolbarSub{font-size:10px;color:var(--muted);margin-top:2px}
+.voiceButton{width:auto!important;padding:8px 10px!important}
+.voiceBar{display:none;align-items:center;gap:8px;padding:8px 10px;border-top:1px solid var(--line);background:#11141a;font-size:11px;font-weight:850}
+.voiceBar.show{display:flex}.voiceBar .btn{width:auto;padding:7px 10px}
+.voiceStatusDot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 10px rgba(67,181,129,.5)}
+.chatMessage{display:grid;grid-template-columns:36px minmax(0,1fr);gap:9px;max-width:100%;padding:7px 12px;border-radius:0;background:transparent}
+.chatMessage:hover{background:rgba(255,255,255,.025)}
+.chatMessage.mine{align-self:auto;background:transparent}
+.chatAvatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#252a34;display:grid;place-items:center;overflow:hidden;font-size:15px;font-weight:900}
+.chatBody{min-width:0}.chatMeta{margin:0 0 3px;font-size:11px}.chatText{font-size:13px}
+.chatComposer{padding:10px 12px}.chatComposer #chatSend{width:auto;min-width:70px}
+@keyframes announcementIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+@media(max-width:760px){.chatShell{grid-template-columns:1fr}.chatSidebar{display:none}.adminInline{grid-template-columns:1fr}}
+
 @media(prefers-reduced-motion:reduce){
     *,
     *::before,
@@ -1059,9 +1107,9 @@ a{
 
     </div>
 
-    <div class="statusPill">
-        <span class="statusDot"></span>
-        ONLINE
+    <div class="statusPill" id="statusPill">
+        <span class="statusDot" id="statusDot"></span>
+        <span id="statusText">ONLINE</span>
     </div>
 
 </header>
@@ -1438,76 +1486,28 @@ a{
 
 
     <div class="modalBody">
-
-        <div class="chatWindow">
-
-            <div
-                id="messages"
-            >
-
-                <div
-                    style="
-                        margin:auto;
-                        padding:25px;
-                        color:#697386;
-                        text-align:center;
-                    "
-                >
-                    <div
-                        style="
-                            font-size:34px;
-                            margin-bottom:9px;
-                        "
-                    >
-                        💬
-                    </div>
-
-                    <div
-                        style="
-                            color:#a3a9b5;
-                            font-weight:850;
-                        "
-                    >
-                        Welcome to chat
-                    </div>
-
-                    <div
-                        style="
-                            margin-top:5px;
-                            font-size:12px;
-                        "
-                    >
-                        Connect to start chatting.
-                    </div>
-
+        <div class="chatShell">
+            <aside class="chatSidebar">
+                <div class="chatServerName">🌐 yaprxy.</div>
+                <div class="chatChannel active"># <span>community</span></div>
+                <div class="chatChannel">🔊 <span>Voice</span></div>
+            </aside>
+            <div class="chatMain">
+                <div class="chatToolbar">
+                    <div><div class="chatToolbarTitle"># community</div><div class="chatToolbarSub">Community chat</div></div>
+                    <button id="voiceCall" class="btn secondary voiceButton" type="button">🔊 Join Voice</button>
                 </div>
-
+                <div class="chatWindow">
+                    <div id="messages"><div style="margin:auto;padding:25px;color:#697386;text-align:center"><div style="font-size:34px;margin-bottom:9px">💬</div><div style="color:#a3a9b5;font-weight:850">Welcome to chat</div><div style="margin-top:5px;font-size:12px">Connect to start chatting.</div></div></div>
+                    <div class="chatRate" id="chatRate">⚠️ Slow down — you sent too many messages. Chat is locked for <span id="chatRateSeconds">5</span>s.</div>
+                    <div class="chatComposer">
+                        <textarea id="chatInput" maxlength="1000" placeholder="Message #community..."></textarea>
+                        <button id="chatSend" class="btn primary" type="button">Send</button>
+                    </div>
+                </div>
+                <div class="voiceBar" id="voiceBar"><span class="voiceStatusDot"></span><span id="voiceStatus">Voice ready</span><button id="voiceMute" class="btn secondary" type="button">Mute</button><button id="voiceLeave" class="btn danger" type="button">Leave</button></div>
             </div>
-
-
-            <div class="chatRate" id="chatRate">⚠️ Slow down — you sent too many messages. Chat is locked for <span id="chatRateSeconds">5</span>s.</div>
-
-            <div class="chatComposer">
-
-                <textarea
-                    id="chatInput"
-                    maxlength="1000"
-                    placeholder="Message the community..."
-                ></textarea>
-
-
-                <button
-                    id="chatSend"
-                    class="btn primary"
-                    type="button"
-                >
-                    Send
-                </button>
-
-            </div>
-
         </div>
-
     </div>
 
 </div>
@@ -1675,6 +1675,8 @@ a{
                 👥 Users
             </button>
 
+            <button class="adminTab ownerOnlyTab" data-tab="ownerTools" type="button" style="display:none">⚙️ Owner</button>
+
         </div>
 
 
@@ -1737,6 +1739,31 @@ a{
 
         </section>
 
+        <section id="ownerToolsSection" class="adminSection ownerTools">
+            <div class="adminToolsGrid">
+                <div class="adminToolsCard">
+                    <h3>📢 Announcement</h3>
+                    <input id="announcementTitleInput" maxlength="120" placeholder="Announcement title">
+                    <textarea id="announcementDescriptionInput" maxlength="1000" placeholder="Announcement description"></textarea>
+                    <div class="adminToolButtons"><button id="publishAnnouncement" class="btn primary" type="button">Publish to everyone</button><button id="clearAnnouncement" class="btn secondary" type="button">Close announcement</button></div>
+                </div>
+                <div class="adminToolsCard">
+                    <h3>🟢 Online status</h3>
+                    <div class="adminInline"><input id="statusTextInput" maxlength="30" placeholder="ONLINE"><input id="statusColorInput" type="color" value="#43b581" title="Status dot color"></div>
+                    <div class="adminToolButtons"><button id="saveStatus" class="btn primary" type="button">Save status</button></div>
+                </div>
+                <div class="adminToolsCard">
+                    <h3>🔗 Create link section</h3>
+                    <input id="newSectionName" maxlength="60" placeholder="Section name (e.g. Triple T HD)">
+                    <input id="newSectionIcon" maxlength="4" placeholder="Icon (optional)">
+                    <input id="newLinkLabel" maxlength="100" placeholder="Link label / URL">
+                    <input id="newLinkUrl" maxlength="500" placeholder="URL">
+                    <div class="adminToolButtons"><button id="createLink" class="btn primary" type="button">Create link</button><button id="clearOwnerLinks" class="btn secondary" type="button">Clear owner links</button></div>
+                    <div id="ownerLinkList" class="adminMeta"></div>
+                </div>
+            </div>
+        </section>
+
     </div>
 
 </div>
@@ -1791,6 +1818,15 @@ a{
 
 </div>
 
+<div id="announcementOverlay" class="announcementOverlay" aria-hidden="true">
+    <div class="announcementCard">
+        <div class="announcementBy"><div id="announcementAvatar" class="announcementAvatar">👤</div><span id="announcementAuthor">Owner</span><span class="roleBadge owner">♛ OWNER</span></div>
+        <div id="announcementTitle" class="announcementTitle"></div>
+        <div id="announcementDescription" class="announcementDescription"></div>
+        <button id="announcementClose" class="btn secondary announcementClose" type="button">Continue</button>
+    </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -1832,6 +1868,13 @@ let chatReconnectTimer =
 
 let chatReconnectAttempts =
     0;
+
+let localOwnerLinks=[];
+let voiceLocalStream=null;
+let voicePeers=new Map();
+let voiceRoomId="community";
+let voiceClientId=Math.random().toString(36).slice(2);
+let voiceCallActive=false;
 
 
 /* =========================================================
@@ -2002,6 +2045,21 @@ async function api(
     };
 }
 
+
+/* =========================================================
+   SITE SETTINGS / OWNER CONTENT
+========================================================= */
+const SITE_SETTINGS_KEY="yaprxy.siteSettings.v1";
+const OWNER_LINKS_KEY="yaprxy.ownerLinks.v1";
+const ANNOUNCEMENT_KEY="yaprxy.announcement.v1";
+function getSiteSettings(){try{return JSON.parse(localStorage.getItem(SITE_SETTINGS_KEY)||"{}")||{}}catch{return {}}}
+function setSiteSettings(v){localStorage.setItem(SITE_SETTINGS_KEY,JSON.stringify(v))}
+function applySiteSettings(){const st=getSiteSettings();const text=st.statusText||"ONLINE";const color=st.statusColor||"#43b581";document.getElementById("statusText").textContent=text;const dot=document.getElementById("statusDot");dot.style.background=color;dot.style.boxShadow=`0 0 10px ${color}88`;}
+function ownerApi(path,body){return api(path,{method:"POST",body:JSON.stringify(body)})}
+function renderOwnerLinks(){const box=document.getElementById("ownerLinkList");if(!box)return;localOwnerLinks=(()=>{try{return JSON.parse(localStorage.getItem(OWNER_LINKS_KEY)||"[]")}catch{return []}})();box.textContent=localOwnerLinks.length?localOwnerLinks.map(x=>`${x.section}: ${x.label||x.url}`).join(" • "):"No owner-created links yet."}
+function renderAnnouncement(a){if(!a?.title)return;const overlay=document.getElementById("announcementOverlay");document.getElementById("announcementTitle").textContent=a.title;document.getElementById("announcementDescription").textContent=a.description||"";document.getElementById("announcementAuthor").textContent=a.authorName||currentUser?.displayName||currentUser?.username||"Owner";const av=document.getElementById("announcementAvatar");av.innerHTML="";av.appendChild(document.createTextNode("👤"));const p=a.authorPfp||currentUser?.pfp;if(p){const img=document.createElement("img");img.src=p;img.alt="";img.className="announcementAvatar";img.onerror=()=>img.replaceWith(document.createTextNode("👤"));av.replaceWith(img);img.id="announcementAvatar"}overlay.classList.remove("hiding");overlay.classList.add("show");overlay.setAttribute("aria-hidden","false")}
+function closeAnnouncement(){const overlay=document.getElementById("announcementOverlay");overlay.classList.add("hiding");setTimeout(()=>{overlay.classList.remove("show","hiding");overlay.setAttribute("aria-hidden","true")},450)}
+function loadAnnouncement(){try{const a=JSON.parse(localStorage.getItem(ANNOUNCEMENT_KEY)||"null");if(a)renderAnnouncement(a)}catch{}}
 
 /* =========================================================
    LINK DATA
@@ -2700,6 +2758,17 @@ for (
 }
 
 
+/* owner-created links are rendered after built-in sections */
+function renderOwnerLinksIntoPage(){
+    const grouped={};
+    localOwnerLinks.forEach(x=>{(grouped[x.section] ||= []).push(x)});
+    Object.entries(grouped).forEach(([sectionName,items])=>{
+        let section=[...document.querySelectorAll(".category")].find(x=>x.querySelector(".categoryTitle")?.innerText?.includes(sectionName));
+        if(!section){section=document.createElement("section");section.className="category";const title=document.createElement("h2");title.className="categoryTitle";title.innerHTML=`<span>${escapeHTML(items[0].icon||"🔗")}</span>${escapeHTML(sectionName)}`;section.appendChild(title);const grid=document.createElement("div");grid.className="linkGrid";section.appendChild(grid);linkContainer.appendChild(section)}
+        const grid=section.querySelector(".linkGrid");items.forEach((x,i)=>{const card=document.createElement("a");card.className="linkCard ownerLinkCard";card.href=/^https?:\/\//i.test(x.url)?x.url:"https://"+x.url;card.target="_blank";card.rel="noopener noreferrer";card.innerHTML=`<div class="linkNumber">${String(grid.children.length+1).padStart(2,"0")}</div><div class="linkURL">${escapeHTML(x.label||x.url)}</div>`;grid.appendChild(card)})
+    });
+}
+
 /* =========================================================
    ACCESS
 ========================================================= */
@@ -2751,7 +2820,7 @@ async function checkVerifiedSession() {
 
             if (
                 currentUser.verified ||
-                currentUser.role === "admin"
+                (currentUser.role === "admin" || currentUser.role === "owner")
             ) {
 
                 await openHub();
@@ -3223,6 +3292,7 @@ function showAccount(accountUser) {
     document.getElementById("profileEditorName").textContent=accountUser.displayName||accountUser.username||"Profile";
     document.getElementById("profileEditorAvatar").outerHTML=avatarHTML(accountUser,"accountDockAvatar");
     document.getElementById("adminNav").style.display=isAdmin() ? "block" : "none";
+    document.querySelector(".ownerOnlyTab")?.style.setProperty("display",isOwner(accountUser)?"block":"none");
     updateAccountDock(accountUser);
 }
 
@@ -3601,8 +3671,8 @@ async function restoreSession() {
 
         if (
             currentUser.verified ||
-            currentUser.role ===
-                "admin"
+            (currentUser.role ===
+                "admin" || currentUser.role === "owner")
         ) {
 
             document.getElementById(
@@ -3814,6 +3884,32 @@ function addChatMessage(
 }
 
 
+/* =========================================================
+   VOICE CHAT (WebRTC; signaling rides the existing chat socket)
+========================================================= */
+function sendVoiceSignal(payload){if(chatSocket?.readyState===WebSocket.OPEN)chatSocket.send(JSON.stringify({type:"voice-signal",room:voiceRoomId,from:voiceClientId,signal:payload}))}
+async function startVoice(){
+    if(!currentUser)return showToast("Log in before joining voice.");
+    if(voiceCallActive)return;
+    if(!window.isSecureContext && location.hostname!=="localhost")return showToast("Voice requires HTTPS.");
+    try{voiceLocalStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});voiceCallActive=true;document.getElementById("voiceBar")?.classList.add("show");document.getElementById("voiceStatus").textContent="Connected — waiting for peers";document.getElementById("voiceCall").textContent="🔊 In Voice";sendVoiceSignal({kind:"join"})}catch(e){showToast("❌ Microphone permission was denied or unavailable.")}
+}
+function stopVoice(){voiceCallActive=false;voicePeers.forEach(pc=>pc.close());voicePeers.clear();voiceLocalStream?.getTracks().forEach(t=>t.stop());voiceLocalStream=null;document.getElementById("voiceBar")?.classList.remove("show");document.getElementById("voiceCall").textContent="🔊 Join Voice";sendVoiceSignal({kind:"leave"})}
+function toggleMute(){if(!voiceLocalStream)return;const t=voiceLocalStream.getAudioTracks()[0];if(!t)return;t.enabled=!t.enabled;document.getElementById("voiceMute").textContent=t.enabled?"Mute":"Unmute"}
+async function handleVoiceSignal(data){
+    if(!data||data.from===voiceClientId)return;
+    if(data.signal?.kind==="join"&&voiceCallActive){const pc=new RTCPeerConnection({iceServers:[{urls:"stun:stun.l.google.com:19302"}]});voicePeers.set(data.from,pc);voiceLocalStream?.getTracks().forEach(t=>pc.addTrack(t,voiceLocalStream));pc.onicecandidate=e=>{if(e.candidate)sendVoiceSignal({kind:"ice",to:data.from,candidate:e.candidate})};pc.ontrack=e=>{let a=document.getElementById("voiceAudio-"+data.from);if(!a){a=document.createElement("audio");a.id="voiceAudio-"+data.from;a.autoplay=true;document.body.appendChild(a)}a.srcObject=e.streams[0]};const offer=await pc.createOffer();await pc.setLocalDescription(offer);sendVoiceSignal({kind:"offer",to:data.from,description:pc.localDescription});}
+    if(data.signal?.to!==voiceClientId)return;
+    let pc=voicePeers.get(data.from);if(!pc){pc=new RTCPeerConnection({iceServers:[{urls:"stun:stun.l.google.com:19302"}]});voicePeers.set(data.from,pc);voiceLocalStream?.getTracks().forEach(t=>pc.addTrack(t,voiceLocalStream));pc.onicecandidate=e=>{if(e.candidate)sendVoiceSignal({kind:"ice",to:data.from,candidate:e.candidate})};pc.ontrack=e=>{let a=document.getElementById("voiceAudio-"+data.from);if(!a){a=document.createElement("audio");a.id="voiceAudio-"+data.from;a.autoplay=true;document.body.appendChild(a)}a.srcObject=e.streams[0]}}
+    if(data.signal.kind==="offer"){await pc.setRemoteDescription(data.signal.description);const answer=await pc.createAnswer();await pc.setLocalDescription(answer);sendVoiceSignal({kind:"answer",to:data.from,description:pc.localDescription})}
+    else if(data.signal.kind==="answer")await pc.setRemoteDescription(data.signal.description);
+    else if(data.signal.kind==="ice")try{await pc.addIceCandidate(data.signal.candidate)}catch{}
+    else if(data.signal.kind==="leave"){pc.close();voicePeers.delete(data.from);document.getElementById("voiceAudio-"+data.from)?.remove()}
+}
+document.getElementById("voiceCall")?.addEventListener("click",()=>voiceCallActive?stopVoice():startVoice());
+document.getElementById("voiceMute")?.addEventListener("click",toggleMute);
+document.getElementById("voiceLeave")?.addEventListener("click",stopVoice);
+
 function disconnectChat() {
 
     clearTimeout(
@@ -3944,6 +4040,8 @@ function connectChat() {
 
             }
 
+
+            if (data.type === "voice-signal") { handleVoiceSignal(data); return; }
 
             if (
                 data.type ===
@@ -4271,6 +4369,8 @@ document.getElementById(
 
 
         loadReports();
+        const ownerTab=document.querySelector(".ownerOnlyTab");
+        if(ownerTab) ownerTab.style.display=isOwner()?"block":"none";
 
     }
 );
@@ -4330,18 +4430,9 @@ document
                         );
 
 
-                    if (
-                        target ===
-                        "reports"
-                    ) {
-
-                        loadReports();
-
-                    } else {
-
-                        loadUsers();
-
-                    }
+                    if (target === "reports") loadReports();
+                    else if (target === "users") loadUsers();
+                    else if (target === "ownerTools") { if(!isOwner()){showToast("🔒 Owner access required.");return;} applySiteSettings(); renderOwnerLinks(); }
 
                 }
             );
@@ -4349,6 +4440,24 @@ document
         }
     );
 
+
+function requireOwner(){if(!isOwner()){showToast("🔒 Owner access required.");return false}return true}
+async function publishAnnouncement(){
+    if(!requireOwner())return;
+    const title=document.getElementById("announcementTitleInput").value.trim();const description=document.getElementById("announcementDescriptionInput").value.trim();if(!title)return showToast("Enter an announcement title.");
+    const a={title,description,authorName:currentUser.displayName||currentUser.username||"Owner",authorPfp:currentUser.pfp||currentUser.avatar||currentUser.avatarUrl||"",time:Date.now()};
+    localStorage.setItem(ANNOUNCEMENT_KEY,JSON.stringify(a));renderAnnouncement(a);
+    try{const r=await ownerApi("/api/admin/announcement",a);if(!r.response.ok||!r.data.success)throw 0;showToast("📢 Announcement published to everyone.")}catch{showToast("📢 Announcement shown here. Add /api/admin/announcement to your Worker to broadcast it to all users.")}
+}
+async function saveStatus(){if(!requireOwner())return;const text=document.getElementById("statusTextInput").value.trim()||"ONLINE";const color=document.getElementById("statusColorInput").value;setSiteSettings({statusText:text,statusColor:color});applySiteSettings();try{const r=await ownerApi("/api/admin/site-settings",{statusText:text,statusColor:color});if(!r.response.ok||!r.data.success)throw 0;showToast("✅ Online status updated for everyone.")}catch{showToast("✅ Status updated on this device. Add /api/admin/site-settings to persist it for everyone.")}}
+function createOwnerLink(){if(!requireOwner())return;const section=document.getElementById("newSectionName").value.trim();const url=document.getElementById("newLinkUrl").value.trim();const label=document.getElementById("newLinkLabel").value.trim()||url;const icon=document.getElementById("newSectionIcon").value.trim()||"🔗";if(!section||!url)return showToast("Enter a section and URL.");localOwnerLinks=JSON.parse(localStorage.getItem(OWNER_LINKS_KEY)||"[]");localOwnerLinks.push({section,url,label,icon});localStorage.setItem(OWNER_LINKS_KEY,JSON.stringify(localOwnerLinks));document.getElementById("newLinkLabel").value="";document.getElementById("newLinkUrl").value="";renderOwnerLinks();showToast("🔗 Link created. Refresh to place it in the link list.");try{ownerApi("/api/admin/links",{section,url,label,icon}).catch(()=>{})}catch{}}
+function clearOwnerLinks(){if(!requireOwner())return;localStorage.removeItem(OWNER_LINKS_KEY);localOwnerLinks=[];renderOwnerLinks();document.querySelectorAll(".ownerLinkCard").forEach(x=>x.remove());showToast("Owner-created links cleared from this device.")}
+function clearPublishedAnnouncement(){if(!requireOwner())return;localStorage.removeItem(ANNOUNCEMENT_KEY);closeAnnouncement();try{ownerApi("/api/admin/announcement/clear",{}).catch(()=>{})}catch{} }
+document.getElementById("publishAnnouncement")?.addEventListener("click",publishAnnouncement);
+document.getElementById("clearAnnouncement")?.addEventListener("click",clearPublishedAnnouncement);
+document.getElementById("saveStatus")?.addEventListener("click",saveStatus);
+document.getElementById("createLink")?.addEventListener("click",createOwnerLink);
+document.getElementById("clearOwnerLinks")?.addEventListener("click",clearOwnerLinks);
 
 async function loadReports() {
 
@@ -4441,7 +4550,7 @@ async function loadReports() {
                 item.className = "adminItem adminUserClickable";
                 item.addEventListener("click", event => {
                     if(event.target.closest("button")) return;
-                    openUserProfile(accountUser);
+                    
                 });
 
 
@@ -5184,6 +5293,13 @@ resizeStars();
 drawStars();
 
 
+document.getElementById("announcementClose")?.addEventListener("click",closeAnnouncement);
+document.getElementById("announcementOverlay")?.addEventListener("click",e=>{if(e.target.id==="announcementOverlay")closeAnnouncement()});
+applySiteSettings();
+renderOwnerLinks();
+renderOwnerLinksIntoPage();
+loadAnnouncement();
+
 /* =========================================================
    START
 ========================================================= */
@@ -5192,18 +5308,6 @@ drawStars();
 /* =========================================================
    FINAL YAPRXY INITIALIZATION
 ========================================================= */
-(async()=>{
-    try{
-        const r=await api("/api/me");
-        if(handleBanData(r.data,r.response)) return;
-        if(r.response.ok && r.data.success && r.data.user){
-            currentUser=r.data.user;
-            showAccount(currentUser);
-            updateAccountDock(currentUser);
-        }
-    }catch{}
-})();
-
 restoreSession();
 
 })();
