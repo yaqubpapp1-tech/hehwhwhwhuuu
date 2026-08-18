@@ -41,7 +41,92 @@ const response=await env.ASSETS.fetch(request);if(response.status<400){const h=n
 async function register(request,env){try{const d=await request.json();const u=username(d.username),display=typeof d.displayName==="string"?d.displayName.trim().slice(0,80):"",rn=typeof d.realName==="string"?d.realName.trim().slice(0,120):"",pw=typeof d.password==="string"?d.password:"";if(!u||!display||!rn||!pw)return json({success:false,error:"Username, display name, real name, and password are required"},400);if(!/^[a-z0-9_]{3,30}$/.test(u))return json({success:false,error:"Username must be 3-30 characters and use letters, numbers, or underscores"},400);if(pw.length<8||pw.length>200)return json({success:false,error:"Password must be between 8 and 200 characters"},400);if(await env.USERS.get(`username:${u}`))return json({success:false,error:"That username is already taken"},409);const salt=token(),hash=await hashPw(pw,salt),conf=await env.USERS.get(`realname:${realName(rn)}`);const user={id:crypto.randomUUID(),username:u,displayName:display,realName:rn,bio:"",pfp:"",passwordHash:hash,passwordSalt:salt,createdAt:new Date().toISOString(),status:"active",role:"user",verified:false,realNameConflict:!!conf};await save(env,user);if(!conf)await env.USERS.put(`realname:${realName(rn)}`,JSON.stringify({firstUserId:user.id}));return await createSession(env,user)}catch(e){console.error("REGISTER",e);return json({success:false,error:"Could not create account"},500)}}
 async function login(request,env){try{const d=await request.json(),u=username(d.username),pw=typeof d.password==="string"?d.password:"",user=await env.USERS.get(`username:${u}`,"json");if(!user||!(await verifyPw(pw,user.passwordHash,user.passwordSalt)))return json({success:false,error:"Invalid credentials"},401);if(user.status==="banned")return json({success:false,error:"You have been banned",errorCode:"BANNED"},403);if(user.status==="blocked")return json({success:false,error:"This account is blocked",errorCode:"BLOCKED"},403);return createSession(env,user)}catch(e){console.error("LOGIN",e);return json({success:false,error:"Could not log in"},500)}}
 async function createSession(env,user){const t=token(),expiresAt=Date.now()+SESSION_TTL_SECONDS*1000;await env.SESSIONS.put(`session:${t}`,JSON.stringify({userId:user.id,createdAt:new Date().toISOString(),expiresAt}),{expirationTtl:SESSION_TTL_SECONDS});return json({success:true,message:"Login successful",user:pub(user)},200,{"Set-Cookie":`session=${t}; Max-Age=${SESSION_TTL_SECONDS}; Path=/; HttpOnly; Secure; SameSite=Lax`})}
-async function setupOwner(request,env){const d=await request.json();if(!env.ADMIN_SETUP_KEY||typeof d.setupKey!=="string"||d.setupKey!==env.ADMIN_SETUP_KEY)return json({success:false,error:"Invalid setup key"},403);if(await findRole(env,"owner"))return json({success:false,error:"An owner already exists"},409);const user=await env.USERS.get(`username:${username(d.username)}`,"json");if(!user)return json({success:false,error:"Account not found"},404);user.role="owner";user.verified=true;user.status="active";await save(env,user);return json({success:true,message:"Account promoted to owner",user:pub(user)})}
+async function setupOwner(request,env){const d=await request.json();async function setupOwner(request, env) {
+    try {
+        const d = await request.json().catch(() => ({}));
+
+        // Accept the setup key from either JSON or an Authorization header.
+        const suppliedKey =
+            typeof d.setupKey === "string"
+                ? d.setupKey.trim()
+                : (
+                    request.headers.get("Authorization")?.startsWith("Bearer ")
+                        ? request.headers.get("Authorization").slice(7).trim()
+                        : ""
+                );
+
+        // Wrangler secret.
+        const setupKey =
+            typeof env.ADMIN_SETUP_KEY === "string"
+                ? env.ADMIN_SETUP_KEY.trim()
+                : "";
+
+        if (!setupKey) {
+            return json({
+                success: false,
+                error: "ADMIN_SETUP_KEY is not configured on this Worker."
+            }, 500);
+        }
+
+        if (!suppliedKey || suppliedKey !== setupKey) {
+            return json({
+                success: false,
+                error: "Invalid setup key"
+            }, 403);
+        }
+
+        // Don't allow replacing an existing owner.
+        if (await findRole(env, "owner")) {
+            return json({
+                success: false,
+                error: "An owner already exists"
+            }, 409);
+        }
+
+        const requestedUsername =
+            username(d.username);
+
+        if (!requestedUsername) {
+            return json({
+                success: false,
+                error: "Username is required"
+            }, 400);
+        }
+
+        const user =
+            await env.USERS.get(
+                `username:${requestedUsername}`,
+                "json"
+            );
+
+        if (!user) {
+            return json({
+                success: false,
+                error: "Account not found"
+            }, 404);
+        }
+
+        user.role = "owner";
+        user.verified = true;
+        user.status = "active";
+
+        await save(env, user);
+
+        return json({
+            success: true,
+            message: "Account promoted to owner",
+            user: pub(user)
+        });
+
+    } catch (e) {
+        console.error("SETUP OWNER", e);
+
+        return json({
+            success: false,
+            error: "Could not set owner"
+        }, 500);
+    }
+}if(await findRole(env,"owner"))return json({success:false,error:"An owner already exists"},409);const user=await env.USERS.get(`username:${username(d.username)}`,"json");if(!user)return json({success:false,error:"Account not found"},404);user.role="owner";user.verified=true;user.status="active";await save(env,user);return json({success:true,message:"Account promoted to owner",user:pub(user)})}
 async function updateProfile(request,env){const a=await auth(request,env);if(!a.success)return json({success:false,error:a.error,errorCode:a.errorCode},a.status);const d=await request.json();if(typeof d.displayName==="string")a.user.displayName=d.displayName.trim().slice(0,80);if(typeof d.bio==="string")a.user.bio=d.bio.trim().slice(0,500);if(typeof d.pfp==="string")a.user.pfp=d.pfp.trim().slice(0,1000);await save(env,a.user);return json({success:true,user:pub(a.user)})}
 async function report(request,env){const d=await request.json();let u;try{u=new URL(d.url)}catch{return json({success:false,error:"Invalid URL"},400)}if(!["http:","https:"].includes(u.protocol))return json({success:false,error:"Invalid protocol"},400);const k=encodeURIComponent(u.href),old=await env.REPORTS.get(k,"json"),r=old||{url:u.href,name:typeof d.name==="string"?d.name.slice(0,500):u.hostname,time:new Date().toISOString(),reports:0};r.reports=Number(r.reports||0)+1;r.lastReported=new Date().toISOString();await env.REPORTS.put(k,JSON.stringify(r));return json({success:true,message:"Link reported"})}
 async function reports(env){const out=[];let cursor;do{const r=await env.REPORTS.list({limit:1000,...(cursor?{cursor}:{})});for(const k of r.keys){const v=await env.REPORTS.get(k.name,"json");if(v)out.push(v)}cursor=r.list_complete?null:r.cursor}while(cursor);out.sort((a,b)=>new Date(b.lastReported||b.time)-new Date(a.lastReported||a.time));return json({success:true,reports:out,count:out.length})}
