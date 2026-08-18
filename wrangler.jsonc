@@ -16,7 +16,7 @@
     ]
   },
   "migrations": [
-    {"tag":"v1","new_sqlite_classes":["ChatRoom","VoiceRoom"]}
+    {"tag":"v2","new_sqlite_classes":["VoiceRoom"]}
   ],
   "exports": {
     "ChatRoom":{"type":"durable-object","storage":"sqlite"},
