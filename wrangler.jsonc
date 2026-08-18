@@ -3,24 +3,50 @@
   "name": "yaqubs-link-hub",
   "main": "worker-wrapper.js",
   "compatibility_date": "2026-08-01",
-  "observability": {"enabled": true},
+
+  "observability": {
+    "enabled": true
+  },
+
   "kv_namespaces": [
-    {"binding":"REPORTS","id":"c620acf8aacf4ee89ddd73bf3d449714"},
-    {"binding":"SESSIONS","id":"cab8683b62194873a68790690e97f20e"},
-    {"binding":"USERS","id":"b93ee107b4b9404cbb1342306d2fa009"}
+    {
+      "binding": "REPORTS",
+      "id": "c620acf8aacf4ee89ddd73bf3d449714"
+    },
+    {
+      "binding": "SESSIONS",
+      "id": "cab8683b62194873a68790690e97f20e"
+    },
+    {
+      "binding": "USERS",
+      "id": "b93ee107b4b9404cbb1342306d2fa009"
+    }
   ],
+
   "durable_objects": {
-    "bindings":[
-      {"name":"CHAT_ROOM","class_name":"ChatRoom"},
-      {"name":"VOICE_ROOM","class_name":"VoiceRoom"}
+    "bindings": [
+      {
+        "name": "CHAT_ROOM",
+        "class_name": "ChatRoom"
+      },
+      {
+        "name": "VOICE_ROOM",
+        "class_name": "VoiceRoom"
+      }
     ]
   },
+
   "migrations": [
-    {"tag":"v2","new_sqlite_classes":["VoiceRoom"]}
+    {
+      "tag": "v2",
+      "new_sqlite_classes": [
+        "VoiceRoom"
+      ]
+    }
   ],
-  "exports": {
-    "ChatRoom":{"type":"durable-object","storage":"sqlite"},
-    "VoiceRoom":{"type":"durable-object","storage":"sqlite"}
-  },
-  "assets": {"directory":"./","binding":"ASSETS"}
+
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS"
+  }
 }
